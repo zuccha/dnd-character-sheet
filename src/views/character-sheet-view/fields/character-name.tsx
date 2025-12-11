@@ -10,7 +10,7 @@ export default function CharacterName() {
       name="character-name"
       onChange={setName}
       placeholder="Name..."
-      text={name}
+      value={name}
       w="full"
     />
   );

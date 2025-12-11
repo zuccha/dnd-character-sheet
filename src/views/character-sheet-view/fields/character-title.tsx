@@ -10,7 +10,7 @@ export default function CharacterTitle() {
       name="character-title"
       onChange={setTitle}
       placeholder="Species, class, and size..."
-      text={title}
+      value={title}
       w="full"
     />
   );

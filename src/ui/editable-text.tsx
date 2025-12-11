@@ -11,35 +11,35 @@ export type EditableTextProps = Omit<
   InputProps,
   "onBlur" | "onChange" | "value"
 > & {
-  onChange: (text: string) => void;
-  onValidate?: (text: string) => string | undefined;
-  text: string;
+  onChange: (value: string) => void;
+  onValidate?: (value: string) => string | undefined;
+  value: string;
 };
 
 export default function EditableText({
   onChange,
   onValidate = () => undefined,
-  text,
+  value,
   ...rest
 }: EditableTextProps) {
-  const [tempText, setTempText] = useState(text);
+  const [tempValue, setTempValue] = useState(value);
 
   const blur: React.FocusEventHandler<HTMLDivElement> = () => {
-    const error = onValidate(tempText);
+    const error = onValidate(tempValue);
 
     if (error) {
-      setTempText(text);
+      setTempValue(value);
       console.error(error); // TODO: Show toast.
     } else {
-      onChange(tempText);
+      onChange(tempValue);
     }
   };
 
   const change: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setTempText(e.target.value);
+    setTempValue(e.target.value);
   };
 
-  const invalid = !!onValidate(tempText);
+  const invalid = !!onValidate(tempValue);
   const _focus = invalid ? focusInvalidStyles : focusStyles;
   const _hover = invalid ? hoverInvalidStyles : hoverStyles;
 
@@ -53,7 +53,7 @@ export default function EditableText({
       {...rest}
       onBlur={blur}
       onChange={change}
-      value={tempText}
+      value={tempValue}
     />
   );
 }
