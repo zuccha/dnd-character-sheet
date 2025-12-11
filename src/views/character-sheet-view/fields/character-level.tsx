@@ -1,9 +1,11 @@
 import { Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
+import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { focusStyles } from "~/theme/common-styles";
-import EditableNumber from "../../../ui/editable-number";
+import EditableNumber from "~/ui/editable-number";
 
 export default function CharacterLevel() {
+  const { t } = useI18nLangContext(i18nContext);
   const [level, setLevel] = useState(1);
 
   return (
@@ -18,13 +20,14 @@ export default function CharacterLevel() {
       justify="center"
       position="relative"
     >
-      <Text fontSize="cs.h4">LVL</Text>
+      <Text fontSize="cs.h4">{t("level.label")}</Text>
 
       <EditableNumber
         fontSize="cs.value.md"
         integer
         max={20}
         min={0}
+        name="character-level"
         onChange={setLevel}
         textAlign="center"
         value={level}
@@ -33,3 +36,30 @@ export default function CharacterLevel() {
     </VStack>
   );
 }
+
+const i18nContext = {
+  "editable_number[character-level].error.int": {
+    en: "The level must be an integer",
+    it: "Il livello deve essere un numero intero",
+  },
+
+  "editable_number[character-level].error.max": {
+    en: "The level cannot be greater than 20",
+    it: "Il livello non può essere superiore a 20",
+  },
+
+  "editable_number[character-level].error.min": {
+    en: "The level cannot be lower than 0",
+    it: "Il livello non può essere inferiore a 0",
+  },
+
+  "editable_number[character-level].error.nan": {
+    en: "The level must be a number",
+    it: "Il livello deve essere un numero",
+  },
+
+  "level.label": {
+    en: "LVL",
+    it: "LVL",
+  },
+};
