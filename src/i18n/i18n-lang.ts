@@ -9,6 +9,8 @@ export const i18nLangSchema = z.enum(["en", "it"]);
 
 export type I18nLang = z.infer<typeof i18nLangSchema>;
 
+export const i18nLangs = i18nLangSchema.options;
+
 //------------------------------------------------------------------------------
 // I18n Lang Store
 //------------------------------------------------------------------------------
