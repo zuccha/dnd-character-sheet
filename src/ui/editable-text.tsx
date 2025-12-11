@@ -12,12 +12,14 @@ export type EditableTextProps = Omit<
   "onBlur" | "onChange" | "value"
 > & {
   onChange: (value: string) => void;
+  onError?: (error: string, value: string) => void;
   onValidate?: (value: string) => string | undefined;
   value: string;
 };
 
 export default function EditableText({
   onChange,
+  onError = console.error,
   onValidate = () => undefined,
   value,
   ...rest
@@ -29,7 +31,7 @@ export default function EditableText({
 
     if (error) {
       setTempValue(value);
-      console.error(error); // TODO: Show toast.
+      onError(error, value);
     } else {
       onChange(tempValue);
     }
