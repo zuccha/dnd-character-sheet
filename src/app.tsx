@@ -1,3 +1,5 @@
+import CharacterSheetView from "~/views/character-sheet-view/character-sheet-view";
+
 export default function App() {
-  return <div>Hello world.</div>;
+  return <CharacterSheetView />;
 }
