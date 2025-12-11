@@ -2,12 +2,18 @@ import { Box, type BoxProps } from "@chakra-ui/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { clamp } from "~/utils/math";
 
-export type PanZoomProps = BoxProps;
+export type PanZoomProps = BoxProps & {
+  initialTransform?: Transform;
+};
 
-export default function PanZoom({ children, ...rest }: PanZoomProps) {
+export default function PanZoom({
+  children,
+  initialTransform = { scale: 1, x: 0, y: 0 },
+  ...rest
+}: PanZoomProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState<Transform>(defaultTransform);
+  const [transform, setTransform] = useState<Transform>(initialTransform);
 
   useLayoutEffect(() => {
     const viewport = viewportRef.current;
@@ -95,7 +101,6 @@ type Transform = {
   scale: number;
 };
 
-const defaultTransform = { scale: 1, x: 0, y: 0 };
 const maxScale = 2.5;
 const minScale = 0.5;
 const zoomFactor = 0.01;
