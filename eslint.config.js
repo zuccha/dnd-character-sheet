@@ -16,17 +16,17 @@ export default tseslint.config(
       globals: globals.browser,
     },
     plugins: {
-      react: react,
+      "react": react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      import: imports,
+      "import": imports,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
       "import/order": [
         "error",
         {
-          groups: [
+          "groups": [
             "builtin",
             "external",
             "internal",
@@ -34,14 +34,14 @@ export default tseslint.config(
             "sibling",
             "index",
           ],
-          pathGroups: [
+          "pathGroups": [
             { pattern: "@/**", group: "external" },
             { pattern: "~/**", group: "internal" },
           ],
-          pathGroupsExcludedImportTypes: ["builtin"],
-          alphabetize: { order: "asc", caseInsensitive: false },
+          "pathGroupsExcludedImportTypes": ["builtin"],
+          "alphabetize": { order: "asc", caseInsensitive: false },
           "newlines-between": "never",
-          named: true,
+          "named": true,
         },
       ],
       "quote-props": ["error", "consistent"],
@@ -69,5 +69,5 @@ export default tseslint.config(
         version: "detect",
       },
     },
-  }
+  },
 );
