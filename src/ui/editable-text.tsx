@@ -9,7 +9,7 @@ import {
 
 export type EditableTextProps = Omit<
   InputProps,
-  "onBlur" | "onChange" | "value"
+  "onBlur" | "onChange" | "onError" | "value"
 > & {
   onChange: (value: string) => void;
   onError?: (error: string, value: string) => void;
