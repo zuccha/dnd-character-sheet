@@ -17,6 +17,7 @@ export default function EditableNumber({
   integer,
   max,
   min,
+  name,
   onChange,
   onValidate = () => undefined,
   value,
@@ -32,18 +33,19 @@ export default function EditableNumber({
   const validate = useCallback(
     (text: string): string | undefined => {
       const nextValue = Number(text);
-      if (Number.isNaN(nextValue)) return "error.nan";
-      if (integer && !Number.isInteger(nextValue)) return "error.integer";
-      if (max !== undefined && nextValue > max) return "error.max";
-      if (min !== undefined && nextValue < min) return "error.min";
+      if (Number.isNaN(nextValue)) return error(name, "nan");
+      if (integer && !Number.isInteger(nextValue)) return error(name, "int");
+      if (max !== undefined && nextValue > max) return error(name, "max");
+      if (min !== undefined && nextValue < min) return error(name, "min");
       return onValidate(nextValue);
     },
-    [integer, max, min, onValidate],
+    [integer, max, min, name, onValidate],
   );
 
   return (
     <EditableText
       {...rest}
+      name={name}
       onChange={change}
       onValidate={validate}
       placeholder="0"
@@ -51,3 +53,8 @@ export default function EditableNumber({
     />
   );
 }
+
+const error = (name: string | undefined, code: string): string =>
+  name ?
+    `editable_number[${name}].error.${code}`
+  : `editable_number.error.${code}`;
