@@ -65,6 +65,7 @@ export default function CharacterSheetView() {
 
   return (
     <Box
+      bgColor="bg.emphasized"
       h="100vh"
       overflow="hidden"
       position="relative"
