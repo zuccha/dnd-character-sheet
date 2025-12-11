@@ -1,8 +1,9 @@
 "use client";
 
-import { ChakraProvider, ClientOnly, defaultSystem } from "@chakra-ui/react";
+import { ChakraProvider, ClientOnly } from "@chakra-ui/react";
 import { ThemeProvider as NextThemesThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
+import { themeSystem } from "./theme-system";
 import useTheme from "./use-theme";
 
 //------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme] = useTheme();
 
   return (
-    <ChakraProvider value={defaultSystem}>
+    <ChakraProvider value={themeSystem}>
       <NextThemesThemeProvider
         attribute="class"
         disableTransitionOnChange
