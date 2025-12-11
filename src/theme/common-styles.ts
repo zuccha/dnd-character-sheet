@@ -1,12 +1,10 @@
 export const focusStyles = {
-  bgColor: "bg.muted",
   outlineColor: "blue.500",
   outlineStyle: "solid",
   outlineWidth: 2,
 };
 
 export const focusInvalidStyles = {
-  bgColor: "bg.muted",
   outlineColor: "red.500",
   outlineStyle: "solid",
   outlineWidth: 2,
