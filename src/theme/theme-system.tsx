@@ -6,6 +6,17 @@ import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
 const themeConfig = defineConfig({
   theme: {
+    semanticTokens: {
+      colors: {
+        bg: {
+          "cs.frame": gray("50", "700"),
+          "cs.page": gray("200", "800"),
+          "l1": gray("50", "800"),
+          "l2": gray("100", "900"),
+          "l3": gray("200", "950"),
+        },
+      },
+    },
     tokens: {
       fontSizes: {
         "cs.h1": { value: "2em" },
@@ -23,3 +34,16 @@ const themeConfig = defineConfig({
 //------------------------------------------------------------------------------
 
 export const themeSystem = createSystem(defaultConfig, themeConfig);
+
+//------------------------------------------------------------------------------
+// Gray Utility Function
+//------------------------------------------------------------------------------
+
+function gray(
+  light: string,
+  dark: string,
+): { value: { _dark: string; _light: string } } {
+  return {
+    value: { _dark: `{colors.gray.${dark}}`, _light: `{colors.gray.${light}}` },
+  };
+}
