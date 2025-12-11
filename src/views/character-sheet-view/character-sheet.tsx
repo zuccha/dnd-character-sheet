@@ -7,7 +7,7 @@ import CharacterTitle from "./fields/character-title";
 export default function CharacterSheet() {
   return (
     <VStack
-      bgColor="bg.muted"
+      bgColor="bg.cs.page"
       cursor="default"
       fontFamily="Mr Eaves Alt"
       height="29.7cm"

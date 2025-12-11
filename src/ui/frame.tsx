@@ -7,7 +7,7 @@ export type FrameProps = StackProps & {
 export default function Frame({ children, title, ...rest }: FrameProps) {
   return (
     <VStack
-      bgColor="bg"
+      bgColor="bg.cs.frame"
       borderColor="border.emphasized"
       borderWidth={1}
       gap={1}
