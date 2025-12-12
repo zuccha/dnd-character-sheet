@@ -105,11 +105,12 @@ export default function CharacterListItem({
       <Menu items={actions}>
         <IconButton
           Icon={EllipsisVerticalIcon}
-          _groupHover={{ visibility: "visible" }}
+          _focus={{ color: "revert" }}
+          _groupHover={{ color: "revert" }}
           borderRadius={4}
+          color="transparent"
           size="xs"
           variant="ghost"
-          visibility="hidden"
         />
       </Menu>
 
