@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCharacterTitle } from "~/character/character-store";
+import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableText from "~/ui/editable-text";
-import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
 //------------------------------------------------------------------------------
 // Character Sheet Title
@@ -8,14 +8,14 @@ import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
 export default function CharacterSheetTitle() {
   const { t } = useI18nLangContext(i18nContext);
-  const [title, setTitle] = useState(t("title.default"));
+  const [title, setTitle] = useCharacterTitle();
 
   return (
     <EditableText
       fontSize="cs.h2"
       name="character-title"
       onChange={setTitle}
-      placeholder="Species, class, and size..."
+      placeholder={t("title.placeholder")}
       value={title}
       w="full"
     />
@@ -27,11 +27,6 @@ export default function CharacterSheetTitle() {
 //------------------------------------------------------------------------------
 
 const i18nContext = {
-  "title.default": {
-    en: "Elf Ranger, Medium Size",
-    it: "Ranger Elfo, Taglia Media",
-  },
-
   "title.placeholder": {
     en: "Species, class, and size...",
     it: "Specie, classe, e taglia...",

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCharacterName } from "~/character/character-store";
+import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableText from "~/ui/editable-text";
-import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
 //------------------------------------------------------------------------------
 // Character Sheet Name
@@ -8,7 +8,7 @@ import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
 export default function CharacterSheetName() {
   const { t } = useI18nLangContext(i18nContext);
-  const [name, setName] = useState(t("name.default"));
+  const [name, setName] = useCharacterName();
 
   return (
     <EditableText
@@ -27,11 +27,6 @@ export default function CharacterSheetName() {
 //------------------------------------------------------------------------------
 
 const i18nContext = {
-  "name.default": {
-    en: "Gilear Faeth",
-    it: "Gilear Faeth",
-  },
-
   "name.placeholder": {
     en: "Name...",
     it: "Nome...",
