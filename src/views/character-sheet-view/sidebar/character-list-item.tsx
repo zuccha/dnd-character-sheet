@@ -39,6 +39,14 @@ export default function CharacterListItem({
   const activeCharacterId = useActiveCharacterId();
   const switchActiveCharacter = useSwitchActiveCharacter();
 
+  const [removeCharacterDialogOpen, setRemoveCharacterDialogOpen] =
+    useState(false);
+
+  const confirmRemoveCharacter = useCallback(() => {
+    removeCharacter(id);
+    setRemoveCharacterDialogOpen(false);
+  }, [id, removeCharacter]);
+
   const [renameCharacterDialogOpen, setRenameCharacterDialogOpen] =
     useState(false);
 
@@ -64,12 +72,11 @@ export default function CharacterListItem({
       {
         destructive: true,
         label: t("actions.remove_character"),
-        // TODO: Ask for confirmation.
-        onClick: () => removeCharacter(id),
+        onClick: () => setRemoveCharacterDialogOpen(true),
         value: "remove_character",
       },
     ],
-    [exportCharacterToJson, id, removeCharacter, t],
+    [exportCharacterToJson, id, t],
   );
 
   return (
@@ -128,6 +135,18 @@ export default function CharacterListItem({
           ref={renameCharacterInputRef}
         />
       </Dialog>
+
+      <Dialog
+        cancelText={t("dialog.remove_character.cancel_text")}
+        confirmText={t("dialog.remove_character.confirm_text")}
+        destructive
+        onConfirm={confirmRemoveCharacter}
+        onOpenChange={setRemoveCharacterDialogOpen}
+        open={removeCharacterDialogOpen}
+        title={ti("dialog.remove_character.title", displayName)}
+      >
+        {t("dialog.remove_character.description")}
+      </Dialog>
     </HStack>
   );
 }
@@ -155,6 +174,26 @@ const i18nContext = {
   "character.display_name.missing": {
     en: "Unnamed",
     it: "Senza nome",
+  },
+
+  "dialog.remove_character.cancel_text": {
+    en: "Cancel",
+    it: "Cancella",
+  },
+
+  "dialog.remove_character.confirm_text": {
+    en: "Remove",
+    it: "Rimuovi",
+  },
+
+  "dialog.remove_character.description": {
+    en: "The operation cannot be undone.",
+    it: "L'operazione non può essere annullata.",
+  },
+
+  "dialog.remove_character.title": {
+    en: "Remove <1>?",
+    it: "Rimuovi <1>?",
   },
 
   "dialog.rename_character.cancel_text": {
