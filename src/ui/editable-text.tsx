@@ -1,5 +1,5 @@
 import { Input, type InputProps } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import {
   focusInvalidStyles,
   focusStyles,
@@ -29,8 +29,9 @@ export default function EditableText({
   ...rest
 }: EditableTextProps) {
   const [tempValue, setTempValue] = useState(value);
+  useLayoutEffect(() => setTempValue(value), [value]);
 
-  const blur: React.FocusEventHandler<HTMLDivElement> = () => {
+  const blur: React.FocusEventHandler<HTMLDivElement> = useCallback(() => {
     const error = onValidate(tempValue);
 
     if (error) {
@@ -39,11 +40,12 @@ export default function EditableText({
     } else {
       onChange(tempValue);
     }
-  };
+  }, [onChange, onError, onValidate, tempValue, value]);
 
-  const change: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setTempValue(e.target.value);
-  };
+  const change: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => setTempValue(e.target.value),
+    [],
+  );
 
   const invalid = !!onValidate(tempValue);
   const _focus = invalid ? focusInvalidStyles : focusStyles;
