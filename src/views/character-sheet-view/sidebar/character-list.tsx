@@ -1,6 +1,7 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
 import {
   useCharacterMetadata,
   useCreateCharacter,
@@ -29,6 +30,8 @@ export default function CharacterList() {
   const importCharactersFromJson = useImportCharactersFromJson();
   const removeAllCharacters = useRemoveAllCharacters();
 
+  const unsavedChanges = useActiveCharacterHasUnsavedChanges();
+
   const [removeAllCharactersDialogOpen, setRemoveAllCharactersDialogOpen] =
     useState(false);
 
@@ -41,8 +44,10 @@ export default function CharacterList() {
     () => [
       {
         label: t("actions.create_character"),
-        // TODO: Verify that there are no unsaved changes.
-        onClick: () => createCharacter(t("character.display_name.default")),
+        onClick: () => {
+          if (!unsavedChanges || confirm(t("actions.create_character.warning")))
+            createCharacter(t("character.display_name.default"));
+        },
         value: "create_character",
       },
       {
@@ -76,6 +81,7 @@ export default function CharacterList() {
       importCharacterFromJson,
       importCharactersFromJson,
       t,
+      unsavedChanges,
     ],
   );
 
@@ -118,6 +124,11 @@ const i18nContext = {
   "actions.create_character": {
     en: "Create character",
     it: "Crea personaggio",
+  },
+
+  "actions.create_character.warning": {
+    en: "You have unsaved changes to this character. If you continue, those changes will be lost.",
+    it: "Ci sono modifiche non salvate a questo personaggio. Se continui, le modifiche andranno perse.",
   },
 
   "actions.export_all_characters_to_json": {

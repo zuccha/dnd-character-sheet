@@ -2,6 +2,7 @@ import { Button, Em, HStack, Input } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import {
+  useActiveCharacterHasUnsavedChanges,
   useActiveCharacterId,
   useSwitchActiveCharacter,
 } from "~/character/active-character";
@@ -38,6 +39,8 @@ export default function CharacterListItem({
 
   const activeCharacterId = useActiveCharacterId();
   const switchActiveCharacter = useSwitchActiveCharacter();
+
+  const unsavedChanges = useActiveCharacterHasUnsavedChanges();
 
   const [removeCharacterDialogOpen, setRemoveCharacterDialogOpen] =
     useState(false);
@@ -95,7 +98,10 @@ export default function CharacterListItem({
         cursor="pointer"
         flex={1}
         fontSize="sm"
-        onClick={() => switchActiveCharacter(id)}
+        onClick={() => {
+          if (!unsavedChanges || confirm(t("switch_active_character.warning")))
+            switchActiveCharacter(id);
+        }}
         onDoubleClick={() => setRenameCharacterDialogOpen(true)}
         overflow="hidden"
         px={2}
@@ -214,5 +220,10 @@ const i18nContext = {
   "dialog.rename_character.title": {
     en: "Rename <1>",
     it: "Rinomina <1>",
+  },
+
+  "switch_active_character.warning": {
+    en: "You have unsaved changes to this character. If you continue, those changes will be lost.",
+    it: "Ci sono modifiche non salvate a questo personaggio. Se continui, le modifiche andranno perse.",
   },
 };
