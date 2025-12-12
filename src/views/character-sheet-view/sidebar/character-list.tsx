@@ -1,4 +1,4 @@
-import { HStack, Heading, VStack } from "@chakra-ui/react";
+import { Em, HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
@@ -95,10 +95,10 @@ export default function CharacterList() {
         </Menu>
       </HStack>
 
-      <VStack gap={0} w="full">
-        {metadata.map((meta) => (
-          <CharacterListItem key={meta.id} {...meta} />
-        ))}
+      <VStack align="flex-start" gap={0} w="full">
+        {metadata.length ?
+          metadata.map((meta) => <CharacterListItem key={meta.id} {...meta} />)
+        : <Em fontSize="sm">{t("characters.empty")}</Em>}
       </VStack>
 
       <Dialog
@@ -154,6 +154,11 @@ const i18nContext = {
   "character.display_name.default": {
     en: "New character",
     it: "Nuovo personaggio",
+  },
+
+  "characters.empty": {
+    en: "None",
+    it: "Nessuno",
   },
 
   "dialog.remove_all_characters.cancel_text": {
