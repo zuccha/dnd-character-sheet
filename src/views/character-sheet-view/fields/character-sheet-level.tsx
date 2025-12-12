@@ -1,6 +1,6 @@
 import { Text, VStack } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { useActiveCharacterLevel } from "~/character/active-character-store";
+import { useActiveCharacterLevel } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { focusStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";

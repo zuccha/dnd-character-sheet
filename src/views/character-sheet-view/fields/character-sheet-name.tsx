@@ -1,4 +1,4 @@
-import { useActiveCharacterName } from "~/character/active-character-store";
+import { useActiveCharacterName } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableText from "~/ui/editable-text";
 
