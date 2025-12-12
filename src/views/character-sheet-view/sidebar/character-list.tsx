@@ -182,8 +182,8 @@ const i18nContext = {
   },
 
   "character.display_name.default": {
-    en: "Character",
-    it: "Personaggio",
+    en: "New character",
+    it: "Nuovo personaggio",
   },
 
   "title": {
