@@ -4,7 +4,9 @@ import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import {
   useActiveCharacterId,
+  useClearActiveCharacter,
   useSaveActiveCharacter,
+  useSwitchActiveCharacter,
 } from "./active-character";
 import {
   type CharacterMetadata,
@@ -46,13 +48,18 @@ export function useCharacterMetadata(): CharacterMetadata[] {
 //------------------------------------------------------------------------------
 
 export function useCreateCharacter() {
-  return useCallback((displayName: string) => {
-    const character = characterSchema.parse({ meta: { displayName } });
-    characterIdsStore.set((prev) => [...prev, character.meta.id]);
-    characterMetadataStore.set((prev) => [...prev, character.meta]);
-    saveCharacter(character.meta.id, character);
-    // TODO: Set as active character.
-  }, []);
+  const switchActiveCharacter = useSwitchActiveCharacter();
+
+  return useCallback(
+    (displayName: string) => {
+      const character = characterSchema.parse({ meta: { displayName } });
+      characterIdsStore.set((prev) => [...prev, character.meta.id]);
+      characterMetadataStore.set((prev) => [...prev, character.meta]);
+      saveCharacter(character.meta.id, character);
+      switchActiveCharacter(character.meta.id);
+    },
+    [switchActiveCharacter],
+  );
 }
 
 //------------------------------------------------------------------------------
@@ -100,12 +107,14 @@ export function useImportCharactersFromJson() {
 //------------------------------------------------------------------------------
 
 export function useRemoveAllCharacters() {
+  const clearActiveCharacter = useClearActiveCharacter();
+
   return useCallback(() => {
     characterIdsStore.get().forEach(clearCharacter);
     characterIdsStore.set([]);
     characterMetadataStore.set([]);
-    // TODO: Handle empty active character.
-  }, []);
+    clearActiveCharacter();
+  }, [clearActiveCharacter]);
 }
 
 //------------------------------------------------------------------------------
@@ -113,12 +122,17 @@ export function useRemoveAllCharacters() {
 //------------------------------------------------------------------------------
 
 export function useRemoveCharacter() {
-  return useCallback((id: string) => {
-    clearCharacter(id);
-    characterIdsStore.set((prev) => prev.filter((other) => other !== id));
-    characterMetadataStore.set((prev) => prev.filter((meta) => meta.id !== id));
-    // TODO: Change active character if the removed one was active.
-  }, []);
+  const clearActiveCharacter = useClearActiveCharacter();
+
+  return useCallback(
+    (id: string) => {
+      clearCharacter(id);
+      characterIdsStore.set((ids) => ids.filter((other) => other !== id));
+      characterMetadataStore.set((ids) => ids.filter((meta) => meta.id !== id));
+      clearActiveCharacter();
+    },
+    [clearActiveCharacter],
+  );
 }
 
 //------------------------------------------------------------------------------

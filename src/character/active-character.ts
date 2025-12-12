@@ -1,5 +1,23 @@
+import { useCallback } from "react";
+import z from "zod";
 import { create } from "zustand";
-import { type Character, defaultCharacter, saveCharacter } from "./character";
+import { createLocalStore } from "~/store/local-store";
+import {
+  type Character,
+  defaultCharacter,
+  loadCharacter,
+  saveCharacter,
+} from "./character";
+
+//------------------------------------------------------------------------------
+// Active Character Id Store
+//------------------------------------------------------------------------------
+
+const activeCharacterIdStore = createLocalStore<string | undefined>(
+  "character.active.id",
+  undefined,
+  z.uuid().parse,
+);
 
 //------------------------------------------------------------------------------
 // Active Character State
@@ -11,8 +29,8 @@ export type ActiveCharacterState = {
 
   setters: { [K in keyof Character]: (value: Character[K]) => void };
 
-  importCharacter: (character: Character) => void;
-  exportCharacter: () => Character;
+  import: (character: Character) => void;
+  export: () => Character;
 
   save: () => Character;
 };
@@ -21,43 +39,47 @@ export type ActiveCharacterState = {
 // Use Active Character Store
 //------------------------------------------------------------------------------
 
-export const useActiveCharacterStore = create<ActiveCharacterState>(
-  (set, get) => {
-    const createSetter = <F extends keyof Character>(field: F) => {
-      return (value: Character[F]) => {
-        set((state) =>
-          state.data[field] === value ?
-            state
-          : { data: { ...state.data, [field]: value }, unsavedChanges: true },
-        );
-      };
+const useActiveCharacterStore = create<ActiveCharacterState>((set, get) => {
+  const createSetter = <F extends keyof Character>(field: F) => {
+    return (value: Character[F]) => {
+      set((state) =>
+        state.data[field] === value ?
+          state
+        : { data: { ...state.data, [field]: value }, unsavedChanges: true },
+      );
     };
+  };
 
-    const setters = Object.fromEntries(
-      Object.keys(defaultCharacter).map((key) => [
-        key,
-        createSetter(key as keyof Character),
-      ]),
-    ) as { [K in keyof Character]: (value: Character[K]) => void };
+  const activeCharacterId = activeCharacterIdStore.get();
+  const activeCharacter =
+    activeCharacterId ?
+      (loadCharacter(activeCharacterId) ?? defaultCharacter)
+    : defaultCharacter;
 
-    return {
-      data: defaultCharacter,
-      unsavedChanges: false,
+  const setters = Object.fromEntries(
+    Object.keys(activeCharacter).map((key) => [
+      key,
+      createSetter(key as keyof Character),
+    ]),
+  ) as { [K in keyof Character]: (value: Character[K]) => void };
 
-      setters,
+  return {
+    data: activeCharacter,
+    unsavedChanges: false,
 
-      exportCharacter: () => get().data,
-      importCharacter: (next) => set({ data: next }),
+    setters,
 
-      save: () => {
-        const character = get().data;
-        saveCharacter(character.meta.id, character);
-        set((state) => ({ ...state, unsavedChanges: false }));
-        return character;
-      },
-    };
-  },
-);
+    export: () => get().data,
+    import: (data) => set({ data }),
+
+    save: () => {
+      const character = get().data;
+      saveCharacter(character.meta.id, character);
+      set({ unsavedChanges: false });
+      return character;
+    },
+  };
+});
 
 //------------------------------------------------------------------------------
 // Use Active Character Id
@@ -65,6 +87,36 @@ export const useActiveCharacterStore = create<ActiveCharacterState>(
 
 export function useActiveCharacterId(): string {
   return useActiveCharacterStore((s) => s.data.meta.id);
+}
+
+//------------------------------------------------------------------------------
+// Use Switch Active Character
+//------------------------------------------------------------------------------
+
+export function useSwitchActiveCharacter(): (id: string) => void {
+  const importData = useActiveCharacterStore((s) => s.import);
+
+  return useCallback(
+    (id: string) => {
+      const character = loadCharacter(id);
+      activeCharacterIdStore.set(character.meta.id);
+      importData(character);
+    },
+    [importData],
+  );
+}
+
+//------------------------------------------------------------------------------
+// Use Clear Active Character
+//------------------------------------------------------------------------------
+
+export function useClearActiveCharacter(): () => void {
+  const importData = useActiveCharacterStore((s) => s.import);
+
+  return useCallback(() => {
+    activeCharacterIdStore.set(undefined);
+    importData(defaultCharacter);
+  }, [importData]);
 }
 
 //------------------------------------------------------------------------------

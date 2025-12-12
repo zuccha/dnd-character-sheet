@@ -2,6 +2,10 @@ import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useMemo } from "react";
 import {
+  useActiveCharacterId,
+  useSwitchActiveCharacter,
+} from "~/character/active-character";
+import {
   useCharacterMetadata,
   useCreateCharacter,
   useExportAllCharactersToJson,
@@ -31,6 +35,9 @@ export default function CharacterList() {
   const importCharactersFromJson = useImportCharactersFromJson();
   const removeAllCharacters = useRemoveAllCharacters();
   const removeCharacter = useRemoveCharacter();
+
+  const activeCharacterId = useActiveCharacterId();
+  const switchActiveCharacter = useSwitchActiveCharacter();
 
   const actions = useMemo(
     () => [
@@ -89,8 +96,11 @@ export default function CharacterList() {
       <VStack gap={0} w="full">
         {metadata.map(({ displayName, id }) => (
           <HStack
-            _hover={{ bgColor: "bg.emphasized" }}
+            _hover={{
+              bgColor: activeCharacterId === id ? "blue.300" : "bg.emphasized",
+            }}
             align="center"
+            bgColor={activeCharacterId === id ? "blue.200" : undefined}
             borderRadius={4}
             className="group"
             gap={0}
@@ -101,6 +111,7 @@ export default function CharacterList() {
               cursor="pointer"
               flex={1}
               fontSize="sm"
+              onClick={() => switchActiveCharacter(id)}
               overflow="hidden"
               px={2}
               py={1}
