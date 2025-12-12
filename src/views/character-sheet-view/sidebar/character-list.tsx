@@ -1,6 +1,6 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   useCharacterMetadata,
   useCreateCharacter,
@@ -10,6 +10,7 @@ import {
   useRemoveAllCharacters,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
 import CharacterListItem from "./character-list-item";
@@ -27,6 +28,14 @@ export default function CharacterList() {
   const importCharacterFromJson = useImportCharacterFromJson();
   const importCharactersFromJson = useImportCharactersFromJson();
   const removeAllCharacters = useRemoveAllCharacters();
+
+  const [removeAllCharactersDialogOpen, setRemoveAllCharactersDialogOpen] =
+    useState(false);
+
+  const confirmRemoveAllCharacters = useCallback(() => {
+    removeAllCharacters();
+    setRemoveAllCharactersDialogOpen(false);
+  }, [removeAllCharacters]);
 
   const actions = useMemo(
     () => [
@@ -57,8 +66,7 @@ export default function CharacterList() {
       {
         destructive: true,
         label: t("actions.remove_all_characters"),
-        // TODO: Ask for confirmation.
-        onClick: removeAllCharacters,
+        onClick: () => setRemoveAllCharactersDialogOpen(true),
         value: "remove_all_characters",
       },
     ],
@@ -67,7 +75,6 @@ export default function CharacterList() {
       exportAllCharactersToJson,
       importCharacterFromJson,
       importCharactersFromJson,
-      removeAllCharacters,
       t,
     ],
   );
@@ -87,6 +94,18 @@ export default function CharacterList() {
           <CharacterListItem key={meta.id} {...meta} />
         ))}
       </VStack>
+
+      <Dialog
+        cancelText={t("dialog.remove_all_characters.cancel_text")}
+        confirmText={t("dialog.remove_all_characters.confirm_text")}
+        destructive
+        onConfirm={confirmRemoveAllCharacters}
+        onOpenChange={setRemoveAllCharactersDialogOpen}
+        open={removeAllCharactersDialogOpen}
+        title={t("dialog.remove_all_characters.title")}
+      >
+        {t("dialog.remove_all_characters.description")}
+      </Dialog>
     </VStack>
   );
 }
@@ -124,6 +143,26 @@ const i18nContext = {
   "character.display_name.default": {
     en: "New character",
     it: "Nuovo personaggio",
+  },
+
+  "dialog.remove_all_characters.cancel_text": {
+    en: "Cancel",
+    it: "Cancella",
+  },
+
+  "dialog.remove_all_characters.confirm_text": {
+    en: "Remove",
+    it: "Rimuovi",
+  },
+
+  "dialog.remove_all_characters.description": {
+    en: "The operation cannot be undone.",
+    it: "L'operazione non può essere annullata.",
+  },
+
+  "dialog.remove_all_characters.title": {
+    en: "Remove all characters?",
+    it: "Rimuovi tutti i personaggi?",
   },
 
   "title": {
