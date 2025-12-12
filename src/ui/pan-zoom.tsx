@@ -7,7 +7,9 @@ import { clamp } from "~/utils/math";
 //------------------------------------------------------------------------------
 
 export type PanZoomProps = BoxProps & {
-  initialTransform?: Transform;
+  initialScale?: number;
+  initialX?: number;
+  initialY?: number;
   maxScale?: number;
   minScale?: number;
   zoomFactor?: number;
@@ -15,7 +17,9 @@ export type PanZoomProps = BoxProps & {
 
 export default function PanZoom({
   children,
-  initialTransform = { scale: 1, x: 0, y: 0 },
+  initialScale = 1,
+  initialX = 0,
+  initialY = 0,
   maxScale = 2.5,
   minScale = 0.5,
   zoomFactor = 0.01,
@@ -23,6 +27,7 @@ export default function PanZoom({
 }: PanZoomProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
+  const initialTransform = { scale: initialScale, x: initialX, y: initialY };
   const [transform, setTransform] = useState<Transform>(initialTransform);
 
   useLayoutEffect(() => {
