@@ -6,10 +6,10 @@ import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 
 //------------------------------------------------------------------------------
-// Character Level
+// Character Sheet Level
 //------------------------------------------------------------------------------
 
-export default function CharacterLevel() {
+export default function CharacterSheetLevel() {
   const { t } = useI18nLangContext(i18nContext);
   const [level, setLevel] = useState(1);
 

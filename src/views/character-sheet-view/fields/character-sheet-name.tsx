@@ -3,10 +3,10 @@ import EditableText from "~/ui/editable-text";
 import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
 //------------------------------------------------------------------------------
-// Character Name
+// Character Sheet Name
 //------------------------------------------------------------------------------
 
-export default function CharacterName() {
+export default function CharacterSheetName() {
   const { t } = useI18nLangContext(i18nContext);
   const [name, setName] = useState(t("name.default"));
 
