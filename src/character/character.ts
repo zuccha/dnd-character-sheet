@@ -1,13 +1,25 @@
 import z from "zod";
 
 //------------------------------------------------------------------------------
+// Character Metadata
+//------------------------------------------------------------------------------
+
+export const characterMetadataSchema = z.object({
+  displayName: z.string().default(""),
+  id: z.uuid().default(() => crypto.randomUUID()),
+  version: z.number().default(1),
+});
+
+export type CharacterMetadata = z.infer<typeof characterMetadataSchema>;
+
+export const defaultCharacterMetadata = characterMetadataSchema.parse({});
+
+//------------------------------------------------------------------------------
 // Character
 //------------------------------------------------------------------------------
 
 export const characterSchema = z.object({
-  _id: z.uuid().default(() => crypto.randomUUID()),
-  _name: z.string().default(""),
-  _version: z.number().default(1),
+  meta: characterMetadataSchema.default(defaultCharacterMetadata),
 
   level: z.number().default(1),
   name: z.string().default(""),
