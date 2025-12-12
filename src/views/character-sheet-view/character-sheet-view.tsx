@@ -1,7 +1,7 @@
 import { HStack } from "@chakra-ui/react";
 import PanZoom from "~/ui/pan-zoom";
 import CharacterSheet from "./character-sheet";
-import Sidebar from "./sidebar";
+import Sidebar from "./sidebar/sidebar";
 
 //------------------------------------------------------------------------------
 // Character Sheet View
