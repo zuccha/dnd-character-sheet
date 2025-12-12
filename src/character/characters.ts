@@ -60,10 +60,10 @@ const characterMetadataStore = createMemoryStore<CharacterMetadata[]>(
 );
 
 //------------------------------------------------------------------------------
-// Use Character Metadata
+// Use Characters
 //------------------------------------------------------------------------------
 
-export function useCharacterMetadata(): [
+export function useCharacters(): [
   CharacterMetadata[],
   {
     createCharacter: (displayName: string) => void;

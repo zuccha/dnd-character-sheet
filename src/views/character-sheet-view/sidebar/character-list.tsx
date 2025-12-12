@@ -1,7 +1,7 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useCharacterMetadata } from "~/character/characters-metadata";
+import { useCharacters } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Button from "~/ui/button";
 import IconButton from "~/ui/icon-button";
@@ -25,12 +25,13 @@ export default function CharacterList() {
       removeAllCharacters,
       removeCharacter,
     },
-  ] = useCharacterMetadata();
+  ] = useCharacters();
 
   const actions = useMemo(
     () => [
       {
         label: t("actions.create_character"),
+        // TODO: Verify that there are no unsaved changes.
         onClick: () => createCharacter(t("character.display_name.default")),
         value: "create_character",
       },
