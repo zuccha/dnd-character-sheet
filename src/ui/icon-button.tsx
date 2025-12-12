@@ -12,9 +12,17 @@ export type IconButtonProps = Omit<ChakraIconButtonProps, "children"> & {
   Icon: LucideIcon;
 };
 
-export default function IconButton({ Icon, ...rest }: IconButtonProps) {
+export default function IconButton({ Icon, _focus, ...rest }: IconButtonProps) {
   return (
-    <ChakraIconButton rounded="full" {...rest}>
+    <ChakraIconButton
+      _focus={{
+        outlineColor: "blue.600",
+        outlineOffset: 0,
+        ..._focus,
+      }}
+      rounded="full"
+      {...rest}
+    >
       <Icon />
     </ChakraIconButton>
   );

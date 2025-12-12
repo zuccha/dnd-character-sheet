@@ -73,7 +73,9 @@ export default function Select<T extends string>({
     >
       <ChakraSelect.HiddenSelect aria-labelledby="" />
       <ChakraSelect.Control>
-        <ChakraSelect.Trigger>
+        <ChakraSelect.Trigger
+          _focusVisible={{ outlineColor: "blue.600", outlineOffset: 0 }}
+        >
           <ChakraSelect.ValueText placeholder={placeholder} />
         </ChakraSelect.Trigger>
         <ChakraSelect.IndicatorGroup>
