@@ -1,6 +1,6 @@
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, Em, HStack, Input } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   useActiveCharacterId,
   useSwitchActiveCharacter,
@@ -8,8 +8,10 @@ import {
 import {
   useExportCharacterToJson,
   useRemoveCharacter,
+  useRenameCharacter,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
 
@@ -26,20 +28,31 @@ export default function CharacterListItem({
   displayName,
   id,
 }: CharacterListItemProps) {
-  const { t } = useI18nLangContext(i18nContext);
+  const { t, ti } = useI18nLangContext(i18nContext);
+
+  const renameCharacterInputRef = useRef<HTMLInputElement>(null);
 
   const exportCharacterToJson = useExportCharacterToJson();
   const removeCharacter = useRemoveCharacter();
+  const renameCharacter = useRenameCharacter();
 
   const activeCharacterId = useActiveCharacterId();
   const switchActiveCharacter = useSwitchActiveCharacter();
+
+  const [renameCharacterDialogOpen, setRenameCharacterDialogOpen] =
+    useState(false);
+
+  const confirmRenameCharacter = useCallback(() => {
+    const nextDisplayName = renameCharacterInputRef.current?.value ?? "";
+    renameCharacter(id, nextDisplayName.trim());
+    setRenameCharacterDialogOpen(false);
+  }, [id, renameCharacter]);
 
   const actions = useMemo(
     () => [
       {
         label: t("actions.rename_character"),
-        // TODO: Download file.
-        onClick: () => console.log("renameCharacter", id),
+        onClick: () => setRenameCharacterDialogOpen(true),
         value: "rename_character",
       },
       {
@@ -76,6 +89,7 @@ export default function CharacterListItem({
         flex={1}
         fontSize="sm"
         onClick={() => switchActiveCharacter(id)}
+        onDoubleClick={() => setRenameCharacterDialogOpen(true)}
         overflow="hidden"
         px={2}
         py={1}
@@ -85,7 +99,7 @@ export default function CharacterListItem({
         variant="ghost"
         whiteSpace="nowrap"
       >
-        {displayName}
+        {displayName || <Em>{t("character.display_name.missing")}</Em>}
       </Button>
 
       <Menu items={actions}>
@@ -98,6 +112,21 @@ export default function CharacterListItem({
           visibility="hidden"
         />
       </Menu>
+
+      <Dialog
+        cancelText={t("dialog.rename_character.cancel_text")}
+        confirmText={t("dialog.rename_character.confirm_text")}
+        onConfirm={confirmRenameCharacter}
+        onOpenChange={setRenameCharacterDialogOpen}
+        open={renameCharacterDialogOpen}
+        title={ti("dialog.rename_character.title", displayName)}
+      >
+        <Input
+          defaultValue={displayName}
+          placeholder={t("dialog.rename_character.input.placeholder")}
+          ref={renameCharacterInputRef}
+        />
+      </Dialog>
     </HStack>
   );
 }
@@ -120,5 +149,30 @@ const i18nContext = {
   "actions.rename_character": {
     en: "Rename character",
     it: "Rinomina personaggio",
+  },
+
+  "character.display_name.missing": {
+    en: "Unnamed",
+    it: "Senza nome",
+  },
+
+  "dialog.rename_character.cancel_text": {
+    en: "Cancel",
+    it: "Cancella",
+  },
+
+  "dialog.rename_character.confirm_text": {
+    en: "Save",
+    it: "Salva",
+  },
+
+  "dialog.rename_character.input.placeholder": {
+    en: "Name",
+    it: "Nome",
+  },
+
+  "dialog.rename_character.title": {
+    en: "Rename <1>",
+    it: "Rinomina <1>",
   },
 };
