@@ -3,7 +3,12 @@ import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import {
+  useActiveCharacterId,
+  useSaveActiveCharacter,
+} from "./active-character";
+import {
   type CharacterMetadata,
+  characterExists,
   characterSchema,
   clearCharacter,
   loadCharacter,
@@ -42,9 +47,13 @@ export function useCharacters(): [
     importCharactersFromJson: (json: string) => void;
     removeAllCharacters: () => void;
     removeCharacter: (id: string) => void;
+    renameCharacter: (id: string, displayName: string) => void;
+    saveActiveCharacter: (defaultDisplayName?: string) => void;
   },
 ] {
   const [metadata] = characterMetadataStore.use();
+  const activeId = useActiveCharacterId();
+  const save = useSaveActiveCharacter();
 
   const createCharacter = useCallback((displayName: string) => {
     const character = characterSchema.parse({ meta: { displayName } });
@@ -84,6 +93,31 @@ export function useCharacters(): [
     // TODO: Change active character if the removed one was active.
   }, []);
 
+  const renameCharacter = useCallback((id: string, displayName: string) => {
+    characterMetadataStore.set((prev) =>
+      prev.map((meta) => (meta.id === id ? { ...meta, displayName } : meta)),
+    );
+    saveCharacter(id, (prev) => ({
+      ...prev,
+      meta: { ...prev.meta, displayName },
+    }));
+  }, []);
+
+  const saveActiveCharacter = useCallback(
+    (defaultDisplayName = "") => {
+      const exists = characterExists(activeId);
+      let character = save();
+      if (!exists) {
+        const displayName = character.name.trim() || defaultDisplayName;
+        character = { ...character, meta: { ...character.meta, displayName } };
+        characterIdsStore.set((prev) => [...prev, character.meta.id]);
+        characterMetadataStore.set((prev) => [...prev, character.meta]);
+        saveCharacter(character.meta.id, character);
+      }
+    },
+    [activeId, save],
+  );
+
   return [
     metadata,
     {
@@ -94,6 +128,8 @@ export function useCharacters(): [
       importCharactersFromJson,
       removeAllCharacters,
       removeCharacter,
+      renameCharacter,
+      saveActiveCharacter,
     },
   ];
 }

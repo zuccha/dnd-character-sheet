@@ -37,6 +37,14 @@ export const defaultCharacter = characterSchema.parse({});
 const storageId = (id: string) => `character[${id}]`;
 
 //------------------------------------------------------------------------------
+// Character Exists
+//------------------------------------------------------------------------------
+
+export function characterExists(id: string): boolean {
+  return !!localStorage.getItem(storageId(id));
+}
+
+//------------------------------------------------------------------------------
 // Load Character
 //------------------------------------------------------------------------------
 

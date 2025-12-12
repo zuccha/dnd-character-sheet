@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type Character, defaultCharacter } from "./character";
+import { type Character, defaultCharacter, saveCharacter } from "./character";
 
 //------------------------------------------------------------------------------
 // Active Character State
@@ -11,8 +11,10 @@ export type ActiveCharacterState = {
 
   setters: { [K in keyof Character]: (value: Character[K]) => void };
 
-  importCharacter: (next: Character) => void;
+  importCharacter: (character: Character) => void;
   exportCharacter: () => Character;
+
+  save: () => Character;
 };
 
 //------------------------------------------------------------------------------
@@ -46,9 +48,24 @@ export const useActiveCharacterStore = create<ActiveCharacterState>(
 
       exportCharacter: () => get().data,
       importCharacter: (next) => set({ data: next }),
+
+      save: () => {
+        const character = get().data;
+        saveCharacter(character.meta.id, character);
+        set((state) => ({ ...state, unsavedChanges: false }));
+        return character;
+      },
     };
   },
 );
+
+//------------------------------------------------------------------------------
+// Use Active Character Id
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterId(): string {
+  return useActiveCharacterStore((s) => s.data.meta.id);
+}
 
 //------------------------------------------------------------------------------
 // Use Active Character Has Unsaved Changes
@@ -56,6 +73,14 @@ export const useActiveCharacterStore = create<ActiveCharacterState>(
 
 export function useActiveCharacterHasUnsavedChanges(): boolean {
   return useActiveCharacterStore((s) => s.unsavedChanges);
+}
+
+//------------------------------------------------------------------------------
+// Use Save Active Character
+//------------------------------------------------------------------------------
+
+export function useSaveActiveCharacter(): () => Character {
+  return useActiveCharacterStore((s) => s.save);
 }
 
 //------------------------------------------------------------------------------
