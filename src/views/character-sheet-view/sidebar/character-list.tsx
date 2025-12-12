@@ -2,23 +2,17 @@ import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useMemo } from "react";
 import {
-  useActiveCharacterId,
-  useSwitchActiveCharacter,
-} from "~/character/active-character";
-import {
   useCharacterMetadata,
   useCreateCharacter,
   useExportAllCharactersToJson,
-  useExportCharacterToJson,
   useImportCharacterFromJson,
   useImportCharactersFromJson,
   useRemoveAllCharacters,
-  useRemoveCharacter,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
-import Button from "~/ui/button";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
+import CharacterListItem from "./character-list-item";
 
 //------------------------------------------------------------------------------
 // Character List
@@ -30,14 +24,9 @@ export default function CharacterList() {
   const metadata = useCharacterMetadata();
   const createCharacter = useCreateCharacter();
   const exportAllCharactersToJson = useExportAllCharactersToJson();
-  const exportCharacterToJson = useExportCharacterToJson();
   const importCharacterFromJson = useImportCharacterFromJson();
   const importCharactersFromJson = useImportCharactersFromJson();
   const removeAllCharacters = useRemoveAllCharacters();
-  const removeCharacter = useRemoveCharacter();
-
-  const activeCharacterId = useActiveCharacterId();
-  const switchActiveCharacter = useSwitchActiveCharacter();
 
   const actions = useMemo(
     () => [
@@ -94,69 +83,8 @@ export default function CharacterList() {
       </HStack>
 
       <VStack gap={0} w="full">
-        {metadata.map(({ displayName, id }) => (
-          <HStack
-            _hover={{
-              bgColor: activeCharacterId === id ? "blue.300" : "bg.emphasized",
-            }}
-            align="center"
-            bgColor={activeCharacterId === id ? "blue.200" : undefined}
-            borderRadius={4}
-            className="group"
-            gap={0}
-            key={id}
-            w="full"
-          >
-            <Button
-              cursor="pointer"
-              flex={1}
-              fontSize="sm"
-              onClick={() => switchActiveCharacter(id)}
-              overflow="hidden"
-              px={2}
-              py={1}
-              textAlign="left"
-              textOverflow="ellipsis"
-              unstyled
-              variant="ghost"
-              whiteSpace="nowrap"
-            >
-              {displayName}
-            </Button>
-
-            <Menu
-              items={[
-                {
-                  label: t("actions.rename_character"),
-                  // TODO: Download file.
-                  onClick: () => console.log("renameCharacter", id),
-                  value: "rename_character",
-                },
-                {
-                  label: t("actions.export_character_to_json"),
-                  // TODO: Download file.
-                  onClick: () => exportCharacterToJson(id),
-                  value: "export_character_to_json",
-                },
-                {
-                  destructive: true,
-                  label: t("actions.remove_character"),
-                  // TODO: Ask for confirmation.
-                  onClick: () => removeCharacter(id),
-                  value: "remove_character",
-                },
-              ]}
-            >
-              <IconButton
-                Icon={EllipsisVerticalIcon}
-                _groupHover={{ visibility: "visible" }}
-                borderRadius={4}
-                size="xs"
-                variant="ghost"
-                visibility="hidden"
-              />
-            </Menu>
-          </HStack>
+        {metadata.map((meta) => (
+          <CharacterListItem key={meta.id} {...meta} />
         ))}
       </VStack>
     </VStack>
@@ -178,11 +106,6 @@ const i18nContext = {
     it: "Esporta tutti i personaggi come JSON",
   },
 
-  "actions.export_character_to_json": {
-    en: "Export character as JSON",
-    it: "Esporta personaggio come JSON",
-  },
-
   "actions.import_character_from_json": {
     en: "Import character from JSON",
     it: "Importa personaggio da JSON",
@@ -196,16 +119,6 @@ const i18nContext = {
   "actions.remove_all_characters": {
     en: "Remove all characters",
     it: "Rimuovi tutti i personaggi",
-  },
-
-  "actions.remove_character": {
-    en: "Remove character",
-    it: "Rimuovi personaggio",
-  },
-
-  "actions.rename_character": {
-    en: "Rename character",
-    it: "Rinomina personaggio",
   },
 
   "character.display_name.default": {
