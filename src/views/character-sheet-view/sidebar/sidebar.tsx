@@ -1,7 +1,8 @@
 import { HStack, Text, VStack, createListCollection } from "@chakra-ui/react";
+import { useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
 import Select from "~/ui/select";
-import { useI18nLang } from "../../../i18n/i18n-lang";
+import CharacterList from "./character-list";
 
 //------------------------------------------------------------------------------
 // Sidebar
@@ -25,6 +26,8 @@ export default function Sidebar() {
       </HStack>
 
       <Select onValueChange={setLang} options={langOptions} value={lang} />
+
+      <CharacterList />
     </VStack>
   );
 }
