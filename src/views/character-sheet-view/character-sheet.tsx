@@ -1,5 +1,5 @@
 import { VStack } from "@chakra-ui/react";
-import Frame from "~/ui/frame";
+import Frame from "~/views/character-sheet-view/frame";
 import CharacterLevel from "./fields/character-level";
 import CharacterName from "./fields/character-name";
 import CharacterTitle from "./fields/character-title";
