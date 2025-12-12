@@ -13,6 +13,7 @@ import Button from "./button";
 export type DialogProps = Omit<ChakraDialogRootProps, "onOpenChange"> & {
   cancelText: string;
   confirmText: string;
+  destructive?: boolean;
   onConfirm: () => void;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -22,6 +23,7 @@ export default function Dialog({
   cancelText,
   children,
   confirmText,
+  destructive,
   onConfirm,
   onOpenChange,
   open,
@@ -50,7 +52,12 @@ export default function Dialog({
                 </Button>
               </ChakraDialog.ActionTrigger>
 
-              <Button onClick={onConfirm}>{confirmText}</Button>
+              <Button
+                colorPalette={destructive ? "red" : undefined}
+                onClick={onConfirm}
+              >
+                {confirmText}
+              </Button>
             </ChakraDialog.Footer>
 
             <ChakraDialog.CloseTrigger asChild>
