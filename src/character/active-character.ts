@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import z from "zod";
-import { create } from "zustand";
 import { createLocalStore } from "~/store/local-store";
+import { createMemoryStore } from "~/store/memory-store";
+import { createObservable } from "~/utils/observable";
 import {
   type Character,
   defaultCharacter,
@@ -20,73 +21,36 @@ const activeCharacterIdStore = createLocalStore<string | undefined>(
 );
 
 //------------------------------------------------------------------------------
-// Active Character State
+// Load Active Character
 //------------------------------------------------------------------------------
 
-export type ActiveCharacterState = {
-  data: Character;
-  unsavedChanges: boolean;
-
-  setters: { [K in keyof Character]: (value: Character[K]) => void };
-
-  import: (character: Character) => void;
-  export: () => Character;
-
-  save: () => Character;
-};
-
-//------------------------------------------------------------------------------
-// Use Active Character Store
-//------------------------------------------------------------------------------
-
-const useActiveCharacterStore = create<ActiveCharacterState>((set, get) => {
-  const createSetter = <F extends keyof Character>(field: F) => {
-    return (value: Character[F]) => {
-      set((state) =>
-        state.data[field] === value ?
-          state
-        : { data: { ...state.data, [field]: value }, unsavedChanges: true },
-      );
-    };
-  };
-
+function loadActiveCharacter(): Character {
   const activeCharacterId = activeCharacterIdStore.get();
-  const activeCharacter =
-    activeCharacterId ?
-      (loadCharacter(activeCharacterId) ?? defaultCharacter)
-    : defaultCharacter;
+  return activeCharacterId ?
+      loadCharacter(activeCharacterId)
+    : defaultCharacter();
+}
 
-  const setters = Object.fromEntries(
-    Object.keys(activeCharacter).map((key) => [
-      key,
-      createSetter(key as keyof Character),
-    ]),
-  ) as { [K in keyof Character]: (value: Character[K]) => void };
+//------------------------------------------------------------------------------
+// Active Character Store
+//------------------------------------------------------------------------------
 
-  return {
-    data: activeCharacter,
-    unsavedChanges: false,
+const activeCharacterStore = createMemoryStore(loadActiveCharacter());
 
-    setters,
+const activeCharacterObservable = createObservable<Character>();
 
-    export: () => get().data,
-    import: (data) => set({ data }),
+//------------------------------------------------------------------------------
+// Active Character Unsaved Changes Store
+//------------------------------------------------------------------------------
 
-    save: () => {
-      const character = get().data;
-      saveCharacter(character.meta.id, character);
-      set({ unsavedChanges: false });
-      return character;
-    },
-  };
-});
+const activeCharacterUnsavedChangesStore = createMemoryStore(false);
 
 //------------------------------------------------------------------------------
 // Use Active Character Id
 //------------------------------------------------------------------------------
 
-export function useActiveCharacterId(): string {
-  return useActiveCharacterStore((s) => s.data.meta.id);
+export function useActiveCharacterId(): string | undefined {
+  return activeCharacterIdStore.useValue();
 }
 
 //------------------------------------------------------------------------------
@@ -94,16 +58,12 @@ export function useActiveCharacterId(): string {
 //------------------------------------------------------------------------------
 
 export function useSwitchActiveCharacter(): (id: string) => void {
-  const importData = useActiveCharacterStore((s) => s.import);
-
-  return useCallback(
-    (id: string) => {
-      const character = loadCharacter(id);
-      activeCharacterIdStore.set(character.meta.id);
-      importData(character);
-    },
-    [importData],
-  );
+  return useCallback((id: string) => {
+    const character = loadCharacter(id);
+    activeCharacterIdStore.set(character.meta.id);
+    activeCharacterStore.set(character);
+    activeCharacterObservable.notify(character);
+  }, []);
 }
 
 //------------------------------------------------------------------------------
@@ -111,12 +71,12 @@ export function useSwitchActiveCharacter(): (id: string) => void {
 //------------------------------------------------------------------------------
 
 export function useClearActiveCharacter(): () => void {
-  const importData = useActiveCharacterStore((s) => s.import);
-
   return useCallback(() => {
+    const character = defaultCharacter();
     activeCharacterIdStore.set(undefined);
-    importData(defaultCharacter);
-  }, [importData]);
+    activeCharacterStore.set(character);
+    activeCharacterObservable.notify(character);
+  }, []);
 }
 
 //------------------------------------------------------------------------------
@@ -124,7 +84,7 @@ export function useClearActiveCharacter(): () => void {
 //------------------------------------------------------------------------------
 
 export function useActiveCharacterHasUnsavedChanges(): boolean {
-  return useActiveCharacterStore((s) => s.unsavedChanges);
+  return activeCharacterUnsavedChangesStore.useValue();
 }
 
 //------------------------------------------------------------------------------
@@ -132,7 +92,12 @@ export function useActiveCharacterHasUnsavedChanges(): boolean {
 //------------------------------------------------------------------------------
 
 export function useSaveActiveCharacter(): () => Character {
-  return useActiveCharacterStore((s) => s.save);
+  return useCallback(() => {
+    const character = activeCharacterStore.get();
+    saveCharacter(character.meta.id, character);
+    activeCharacterUnsavedChangesStore.set(false);
+    return character;
+  }, []);
 }
 
 //------------------------------------------------------------------------------
@@ -142,9 +107,32 @@ export function useSaveActiveCharacter(): () => Character {
 export function useActiveCharacterField<F extends keyof Character>(
   field: F,
 ): [Character[F], (value: Character[F]) => void] {
-  const value = useActiveCharacterStore((s) => s.data[field]);
-  const setValue = useActiveCharacterStore((s) => s.setters[field]);
-  return [value, setValue];
+  const [value, setValue] = useState(activeCharacterStore.get()[field]);
+
+  useLayoutEffect(() => {
+    const set = (character: Character) => setValue(character[field]);
+    activeCharacterStore.subscribe(set);
+    activeCharacterObservable.subscribe(set);
+    return () => {
+      activeCharacterStore.unsubscribe(set);
+      activeCharacterObservable.unsubscribe(set);
+    };
+  }, [field]);
+
+  return [
+    value,
+    useCallback(
+      (nextValue: Character[F]) => {
+        setValue(nextValue);
+        activeCharacterStore.set((prev) => {
+          if (prev[field] === nextValue) return prev;
+          activeCharacterUnsavedChangesStore.set(true);
+          return { ...prev, [field]: nextValue };
+        });
+      },
+      [field],
+    ),
+  ];
 }
 
 //------------------------------------------------------------------------------

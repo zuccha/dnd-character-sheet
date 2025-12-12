@@ -158,9 +158,11 @@ export function useRenameCharacter() {
 export function useCreateAndSaveActiveCharacter() {
   const activeId = useActiveCharacterId();
   const saveActiveCharacter = useSaveActiveCharacter();
+  const switchActiveCharacter = useSwitchActiveCharacter();
+
   return useCallback(
     (defaultDisplayName = "") => {
-      const exists = characterExists(activeId);
+      const exists = activeId && characterExists(activeId);
       let character = saveActiveCharacter();
       if (!exists) {
         const displayName = character.name.trim() || defaultDisplayName;
@@ -168,8 +170,9 @@ export function useCreateAndSaveActiveCharacter() {
         characterIdsStore.set((prev) => [...prev, character.meta.id]);
         characterMetadataStore.set((prev) => [...prev, character.meta]);
         saveCharacter(character.meta.id, character);
+        switchActiveCharacter(character.meta.id);
       }
     },
-    [activeId, saveActiveCharacter],
+    [activeId, saveActiveCharacter, switchActiveCharacter],
   );
 }

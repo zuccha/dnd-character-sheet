@@ -28,7 +28,7 @@ export const characterSchema = z.object({
 
 export type Character = z.infer<typeof characterSchema>;
 
-export const defaultCharacter = characterSchema.parse({});
+export const defaultCharacter = () => characterSchema.parse({});
 
 //------------------------------------------------------------------------------
 // Character Storage Id
@@ -51,11 +51,11 @@ export function characterExists(id: string): boolean {
 export function loadCharacter(id: string): Character {
   try {
     const value = localStorage.getItem(storageId(id));
-    if (value === null) return defaultCharacter;
+    if (value === null) return defaultCharacter();
     return characterSchema.parse(JSON.parse(value));
   } catch {
     localStorage.removeItem(id);
-    return defaultCharacter;
+    return defaultCharacter();
   }
 }
 
