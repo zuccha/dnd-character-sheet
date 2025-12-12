@@ -45,6 +45,7 @@ export default tseslint.config(
         },
       ],
       "quote-props": ["error", "consistent"],
+      "react-hooks/set-state-in-effect": "off",
       "react/jsx-sort-props": ["error"],
       "react-refresh/only-export-components": [
         "error",
