@@ -29,3 +29,47 @@ export const characterSchema = z.object({
 export type Character = z.infer<typeof characterSchema>;
 
 export const defaultCharacter = characterSchema.parse({});
+
+//------------------------------------------------------------------------------
+// Character Storage Id
+//------------------------------------------------------------------------------
+
+const storageId = (id: string) => `character[${id}]`;
+
+//------------------------------------------------------------------------------
+// Load Character
+//------------------------------------------------------------------------------
+
+export function loadCharacter(id: string): Character {
+  try {
+    const value = localStorage.getItem(storageId(id));
+    if (value === null) return defaultCharacter;
+    return characterSchema.parse(JSON.parse(value));
+  } catch {
+    localStorage.removeItem(id);
+    return defaultCharacter;
+  }
+}
+
+//------------------------------------------------------------------------------
+// Save Character
+//------------------------------------------------------------------------------
+
+export function saveCharacter(
+  id: string,
+  valueOrAction: Character | ((value: Character) => void),
+): void {
+  const value =
+    typeof valueOrAction === "function" ?
+      valueOrAction(loadCharacter(id))
+    : valueOrAction;
+  localStorage.setItem(storageId(id), JSON.stringify(value));
+}
+
+//------------------------------------------------------------------------------
+// Clear Character
+//------------------------------------------------------------------------------
+
+export function clearCharacter(id: string): void {
+  localStorage.removeItem(storageId(id));
+}

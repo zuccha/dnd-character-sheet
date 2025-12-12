@@ -3,43 +3,12 @@ import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import {
-  type Character,
   type CharacterMetadata,
   characterSchema,
-  defaultCharacter,
+  clearCharacter,
+  loadCharacter,
+  saveCharacter,
 } from "./character";
-
-//------------------------------------------------------------------------------
-// Character Local Storage
-//------------------------------------------------------------------------------
-
-const storageId = (id: string) => `character[${id}]`;
-
-function loadCharacter(id: string): Character {
-  try {
-    const value = localStorage.getItem(storageId(id));
-    if (value === null) return defaultCharacter;
-    return characterSchema.parse(JSON.parse(value));
-  } catch {
-    localStorage.removeItem(id);
-    return defaultCharacter;
-  }
-}
-
-function saveCharacter(
-  id: string,
-  valueOrAction: Character | ((value: Character) => void),
-): void {
-  const value =
-    typeof valueOrAction === "function" ?
-      valueOrAction(loadCharacter(id))
-    : valueOrAction;
-  localStorage.setItem(storageId(id), JSON.stringify(value));
-}
-
-function clearCharacter(id: string): void {
-  localStorage.removeItem(storageId(id));
-}
 
 //------------------------------------------------------------------------------
 // Character Ids Store
