@@ -3,6 +3,7 @@ import { useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
 import Select from "~/ui/select";
 import CharacterList from "./character-list";
+import SaveButton from "./save-button";
 
 //------------------------------------------------------------------------------
 // Sidebar
@@ -20,9 +21,13 @@ export default function Sidebar() {
       py={2}
       w="20em"
     >
-      <HStack align="center" justify="space-between" w="full">
-        <Text>D&D 5e 2024</Text>
-        <ThemeButton />
+      <HStack align="center" w="full">
+        <Text flex={1}>D&D 5e 2024</Text>
+
+        <HStack gap={0}>
+          <SaveButton size="sm" variant="ghost" />
+          <ThemeButton size="sm" variant="ghost" />
+        </HStack>
       </HStack>
 
       <Select onValueChange={setLang} options={langOptions} value={lang} />

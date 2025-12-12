@@ -7,6 +7,7 @@ import { type Character, defaultCharacter } from "./character";
 
 export type ActiveCharacterState = {
   data: Character;
+  unsavedChanges: boolean;
 
   setters: { [K in keyof Character]: (value: Character[K]) => void };
 
@@ -21,10 +22,13 @@ export type ActiveCharacterState = {
 export const useActiveCharacterStore = create<ActiveCharacterState>(
   (set, get) => {
     const createSetter = <F extends keyof Character>(field: F) => {
-      return (value: Character[F]) =>
-        set((s) =>
-          s.data[field] === value ? s : { data: { ...s.data, [field]: value } },
+      return (value: Character[F]) => {
+        set((state) =>
+          state.data[field] === value ?
+            state
+          : { data: { ...state.data, [field]: value }, unsavedChanges: true },
         );
+      };
     };
 
     const setters = Object.fromEntries(
@@ -36,6 +40,7 @@ export const useActiveCharacterStore = create<ActiveCharacterState>(
 
     return {
       data: defaultCharacter,
+      unsavedChanges: false,
 
       setters,
 
@@ -44,6 +49,14 @@ export const useActiveCharacterStore = create<ActiveCharacterState>(
     };
   },
 );
+
+//------------------------------------------------------------------------------
+// Use Active Character Has Unsaved Changes
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterHasUnsavedChanges(): boolean {
+  return useActiveCharacterStore((s) => s.unsavedChanges);
+}
 
 //------------------------------------------------------------------------------
 // Use Active Character Field
