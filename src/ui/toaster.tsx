@@ -9,6 +9,10 @@ import {
   createToaster,
 } from "@chakra-ui/react";
 
+//------------------------------------------------------------------------------
+// Toaster
+//------------------------------------------------------------------------------
+
 export const Toaster = () => {
   return (
     <Portal>
@@ -37,6 +41,10 @@ export const Toaster = () => {
     </Portal>
   );
 };
+
+//------------------------------------------------------------------------------
+// Toaster
+//------------------------------------------------------------------------------
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const toaster = createToaster({

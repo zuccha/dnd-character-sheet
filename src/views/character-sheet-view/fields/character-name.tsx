@@ -2,6 +2,10 @@ import { useState } from "react";
 import EditableText from "~/ui/editable-text";
 import { useI18nLangContext } from "../../../i18n/i18n-lang-context";
 
+//------------------------------------------------------------------------------
+// Character Name
+//------------------------------------------------------------------------------
+
 export default function CharacterName() {
   const { t } = useI18nLangContext(i18nContext);
   const [name, setName] = useState(t("name.default"));
@@ -17,6 +21,10 @@ export default function CharacterName() {
     />
   );
 }
+
+//------------------------------------------------------------------------------
+// I18n Context
+//------------------------------------------------------------------------------
 
 const i18nContext = {
   "name.default": {

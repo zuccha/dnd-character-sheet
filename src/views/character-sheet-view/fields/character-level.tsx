@@ -5,6 +5,10 @@ import { focusStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 
+//------------------------------------------------------------------------------
+// Character Level
+//------------------------------------------------------------------------------
+
 export default function CharacterLevel() {
   const { t } = useI18nLangContext(i18nContext);
   const [level, setLevel] = useState(1);
@@ -40,6 +44,10 @@ export default function CharacterLevel() {
     </VStack>
   );
 }
+
+//------------------------------------------------------------------------------
+// I18n Context
+//------------------------------------------------------------------------------
 
 const i18nContext = {
   "editable_number[character-level].error.int": {

@@ -7,6 +7,10 @@ import {
   hoverStyles,
 } from "../theme/common-styles";
 
+//------------------------------------------------------------------------------
+// Editable Text
+//------------------------------------------------------------------------------
+
 export type EditableTextProps = Omit<
   InputProps,
   "onBlur" | "onChange" | "onError" | "value"

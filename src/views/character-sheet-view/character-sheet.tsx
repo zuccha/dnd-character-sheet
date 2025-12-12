@@ -4,6 +4,10 @@ import CharacterLevel from "./fields/character-level";
 import CharacterName from "./fields/character-name";
 import CharacterTitle from "./fields/character-title";
 
+//------------------------------------------------------------------------------
+// Character Sheet
+//------------------------------------------------------------------------------
+
 export default function CharacterSheet() {
   return (
     <VStack

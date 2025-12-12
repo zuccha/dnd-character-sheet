@@ -1,7 +1,11 @@
-import { HStack, VStack, createListCollection } from "@chakra-ui/react";
+import { HStack, Text, VStack, createListCollection } from "@chakra-ui/react";
 import ThemeButton from "~/theme/theme-button";
 import Select from "~/ui/select";
 import { useI18nLang } from "../../i18n/i18n-lang";
+
+//------------------------------------------------------------------------------
+// Sidebar
+//------------------------------------------------------------------------------
 
 export default function Sidebar() {
   const [lang, setLang] = useI18nLang();
@@ -15,7 +19,8 @@ export default function Sidebar() {
       py={2}
       w="20em"
     >
-      <HStack justify="flex-end" w="full">
+      <HStack align="center" justify="space-between" w="full">
+        <Text>D&D 5e 2024</Text>
         <ThemeButton />
       </HStack>
 
@@ -23,6 +28,10 @@ export default function Sidebar() {
     </VStack>
   );
 }
+
+//------------------------------------------------------------------------------
+// Lang Options
+//------------------------------------------------------------------------------
 
 const langOptions = createListCollection({
   items: [

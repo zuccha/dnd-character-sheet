@@ -36,7 +36,7 @@ const themeConfig = defineConfig({
 export const themeSystem = createSystem(defaultConfig, themeConfig);
 
 //------------------------------------------------------------------------------
-// Gray Utility Function
+// Gray
 //------------------------------------------------------------------------------
 
 function gray(

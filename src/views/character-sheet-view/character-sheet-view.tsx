@@ -3,6 +3,10 @@ import PanZoom from "~/ui/pan-zoom";
 import CharacterSheet from "./character-sheet";
 import Sidebar from "./sidebar";
 
+//------------------------------------------------------------------------------
+// Character Sheet View
+//------------------------------------------------------------------------------
+
 export default function CharacterSheetView() {
   return (
     <HStack gap={0}>

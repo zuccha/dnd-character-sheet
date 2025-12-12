@@ -2,13 +2,23 @@ import { Box, type BoxProps } from "@chakra-ui/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { clamp } from "~/utils/math";
 
+//------------------------------------------------------------------------------
+// PanZoom
+//------------------------------------------------------------------------------
+
 export type PanZoomProps = BoxProps & {
   initialTransform?: Transform;
+  maxScale?: number;
+  minScale?: number;
+  zoomFactor?: number;
 };
 
 export default function PanZoom({
   children,
   initialTransform = { scale: 1, x: 0, y: 0 },
+  maxScale = 2.5,
+  minScale = 0.5,
+  zoomFactor = 0.01,
   ...rest
 }: PanZoomProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -68,7 +78,7 @@ export default function PanZoom({
 
     viewport.addEventListener("wheel", handleWheel, { passive: false });
     return () => viewport.removeEventListener("wheel", handleWheel);
-  }, []);
+  }, [maxScale, minScale, zoomFactor]);
 
   return (
     <Box
@@ -95,12 +105,12 @@ export default function PanZoom({
   );
 }
 
+//------------------------------------------------------------------------------
+// Transform
+//------------------------------------------------------------------------------
+
 type Transform = {
   x: number;
   y: number;
   scale: number;
 };
-
-const maxScale = 2.5;
-const minScale = 0.5;
-const zoomFactor = 0.01;

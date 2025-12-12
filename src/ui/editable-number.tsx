@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 import EditableText, { type EditableTextProps } from "./editable-text";
 
+//------------------------------------------------------------------------------
+// Editable Number
+//------------------------------------------------------------------------------
+
 export type EditableNumberProps = Omit<
   EditableTextProps,
   "onChange" | "onValidate" | "value"
@@ -53,6 +57,10 @@ export default function EditableNumber({
     />
   );
 }
+
+//------------------------------------------------------------------------------
+// Error
+//------------------------------------------------------------------------------
 
 const error = (name: string | undefined, code: string): string =>
   name ?
