@@ -11,15 +11,11 @@ import {
 // Create Local Store
 //------------------------------------------------------------------------------
 
-const fullId = (id: string) => `dnd/cs/${id}`;
-
 export function createLocalStore<T>(
   id: string,
   defaultValue: T,
   parse: (maybeT: unknown) => T,
 ): Store<T> {
-  id = fullId(id);
-
   const { notify, subscribe, unsubscribe } = createObservable<T>();
 
   let cache = get();
