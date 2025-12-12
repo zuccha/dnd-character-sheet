@@ -127,6 +127,12 @@ export default function CharacterList() {
             <Menu
               items={[
                 {
+                  label: t("actions.rename_character"),
+                  // TODO: Download file.
+                  onClick: () => console.log("renameCharacter", id),
+                  value: "rename_character",
+                },
+                {
                   label: t("actions.export_character_to_json"),
                   // TODO: Download file.
                   onClick: () => exportCharacterToJson(id),
@@ -195,6 +201,11 @@ const i18nContext = {
   "actions.remove_character": {
     en: "Remove character",
     it: "Rimuovi personaggio",
+  },
+
+  "actions.rename_character": {
+    en: "Rename character",
+    it: "Rinomina personaggio",
   },
 
   "character.display_name.default": {
