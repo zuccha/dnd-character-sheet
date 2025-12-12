@@ -1,6 +1,6 @@
 import { Text, VStack } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { useCharacterLevel } from "~/character/character-store";
+import { useActiveCharacterLevel } from "~/character/active-character-store";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { focusStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
@@ -12,7 +12,7 @@ import { toaster } from "~/ui/toaster";
 
 export default function CharacterSheetLevel() {
   const { t } = useI18nLangContext(i18nContext);
-  const [level, setLevel] = useCharacterLevel();
+  const [level, setLevel] = useActiveCharacterLevel();
 
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 

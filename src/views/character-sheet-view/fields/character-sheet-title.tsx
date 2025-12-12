@@ -1,4 +1,4 @@
-import { useCharacterTitle } from "~/character/character-store";
+import { useActiveCharacterTitle } from "~/character/active-character-store";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableText from "~/ui/editable-text";
 
@@ -8,7 +8,7 @@ import EditableText from "~/ui/editable-text";
 
 export default function CharacterSheetTitle() {
   const { t } = useI18nLangContext(i18nContext);
-  const [title, setTitle] = useCharacterTitle();
+  const [title, setTitle] = useActiveCharacterTitle();
 
   return (
     <EditableText
