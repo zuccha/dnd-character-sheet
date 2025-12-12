@@ -1,7 +1,7 @@
 import { SaveIcon } from "lucide-react";
 import { useCallback } from "react";
 import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
-import { useCharacters } from "~/character/characters";
+import { useCreateAndSaveActiveCharacter } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import IconButton, { type IconButtonProps } from "~/ui/icon-button";
 
@@ -15,17 +15,17 @@ export default function SaveButton(props: SaveButtonProps) {
   const { t } = useI18nLangContext(i18nContext);
 
   const unsavedChanges = useActiveCharacterHasUnsavedChanges();
-  const [, { saveActiveCharacter }] = useCharacters();
+  const createAndSaveActiveCharacter = useCreateAndSaveActiveCharacter();
 
-  const saveActiveCharacterWithDefaultName = useCallback(() => {
-    saveActiveCharacter(t("character.display_name.default"));
-  }, [saveActiveCharacter, t]);
+  const save = useCallback(() => {
+    createAndSaveActiveCharacter(t("character.display_name.default"));
+  }, [createAndSaveActiveCharacter, t]);
 
   return (
     <IconButton
       Icon={SaveIcon}
       disabled={!unsavedChanges}
-      onClick={saveActiveCharacterWithDefaultName}
+      onClick={save}
       {...props}
     />
   );

@@ -1,7 +1,16 @@
 import { HStack, Heading, VStack } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useCharacters } from "~/character/characters";
+import {
+  useCharacterMetadata,
+  useCreateCharacter,
+  useExportAllCharactersToJson,
+  useExportCharacterToJson,
+  useImportCharacterFromJson,
+  useImportCharactersFromJson,
+  useRemoveAllCharacters,
+  useRemoveCharacter,
+} from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Button from "~/ui/button";
 import IconButton from "~/ui/icon-button";
@@ -14,18 +23,14 @@ import Menu from "~/ui/menu";
 export default function CharacterList() {
   const { t } = useI18nLangContext(i18nContext);
 
-  const [
-    metadata,
-    {
-      createCharacter,
-      exportAllCharactersToJson,
-      exportCharacterToJson,
-      importCharacterFromJson,
-      importCharactersFromJson,
-      removeAllCharacters,
-      removeCharacter,
-    },
-  ] = useCharacters();
+  const metadata = useCharacterMetadata();
+  const createCharacter = useCreateCharacter();
+  const exportAllCharactersToJson = useExportAllCharactersToJson();
+  const exportCharacterToJson = useExportCharacterToJson();
+  const importCharacterFromJson = useImportCharacterFromJson();
+  const importCharactersFromJson = useImportCharactersFromJson();
+  const removeAllCharacters = useRemoveAllCharacters();
+  const removeCharacter = useRemoveCharacter();
 
   const actions = useMemo(
     () => [

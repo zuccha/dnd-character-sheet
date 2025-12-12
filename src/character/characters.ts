@@ -34,66 +34,99 @@ const characterMetadataStore = createMemoryStore<CharacterMetadata[]>(
 );
 
 //------------------------------------------------------------------------------
-// Use Characters
+// Use Character Metatata
 //------------------------------------------------------------------------------
 
-export function useCharacters(): [
-  CharacterMetadata[],
-  {
-    createCharacter: (displayName: string) => void;
-    exportAllCharactersToJson: () => void;
-    exportCharacterToJson: (id: string) => void;
-    importCharacterFromJson: (json: string) => void;
-    importCharactersFromJson: (json: string) => void;
-    removeAllCharacters: () => void;
-    removeCharacter: (id: string) => void;
-    renameCharacter: (id: string, displayName: string) => void;
-    saveActiveCharacter: (defaultDisplayName?: string) => void;
-  },
-] {
-  const [metadata] = characterMetadataStore.use();
-  const activeId = useActiveCharacterId();
-  const save = useSaveActiveCharacter();
+export function useCharacterMetadata(): CharacterMetadata[] {
+  return characterMetadataStore.useValue();
+}
 
-  const createCharacter = useCallback((displayName: string) => {
+//------------------------------------------------------------------------------
+// Use Create Character
+//------------------------------------------------------------------------------
+
+export function useCreateCharacter() {
+  return useCallback((displayName: string) => {
     const character = characterSchema.parse({ meta: { displayName } });
     characterIdsStore.set((prev) => [...prev, character.meta.id]);
     characterMetadataStore.set((prev) => [...prev, character.meta]);
     saveCharacter(character.meta.id, character);
     // TODO: Set as active character.
   }, []);
+}
 
-  const exportAllCharactersToJson = useCallback(() => {
+//------------------------------------------------------------------------------
+// Use Export All Characters To Json
+//------------------------------------------------------------------------------
+
+export function useExportAllCharactersToJson() {
+  return useCallback(() => {
     console.log("exportAllCharactersToJson"); // TODO
   }, []);
+}
 
-  const exportCharacterToJson = useCallback((id: string) => {
+//------------------------------------------------------------------------------
+// Use Export Character To Json
+//------------------------------------------------------------------------------
+
+export function useExportCharacterToJson() {
+  return useCallback((id: string) => {
     console.log("exportCharacterToJson", id); // TODO
   }, []);
+}
 
-  const importCharacterFromJson = useCallback((json: string) => {
+//------------------------------------------------------------------------------
+// Use Import Character From Json
+//------------------------------------------------------------------------------
+
+export function useImportCharacterFromJson() {
+  return useCallback((json: string) => {
     console.log("importCharacterFromJson", json); // TODO
   }, []);
+}
 
-  const importCharactersFromJson = useCallback((json: string) => {
+//------------------------------------------------------------------------------
+// Use Import Characters From Json
+//------------------------------------------------------------------------------
+
+export function useImportCharactersFromJson() {
+  return useCallback((json: string) => {
     console.log("importCharactersFromJson", json); // TODO
   }, []);
+}
 
-  const removeAllCharacters = useCallback(() => {
+//------------------------------------------------------------------------------
+// Use Remove All Characters
+//------------------------------------------------------------------------------
+
+export function useRemoveAllCharacters() {
+  return useCallback(() => {
     characterIdsStore.get().forEach(clearCharacter);
     characterIdsStore.set([]);
     characterMetadataStore.set([]);
     // TODO: Handle empty active character.
   }, []);
+}
 
-  const removeCharacter = useCallback((id: string) => {
+//------------------------------------------------------------------------------
+// Use Remove Character
+//------------------------------------------------------------------------------
+
+export function useRemoveCharacter() {
+  return useCallback((id: string) => {
     clearCharacter(id);
     characterIdsStore.set((prev) => prev.filter((other) => other !== id));
     characterMetadataStore.set((prev) => prev.filter((meta) => meta.id !== id));
     // TODO: Change active character if the removed one was active.
   }, []);
+}
 
-  const renameCharacter = useCallback((id: string, displayName: string) => {
+//------------------------------------------------------------------------------
+// Use Rename Character
+//------------------------------------------------------------------------------
+
+export function useRenameCharacter() {
+  return useCallback((id: string, displayName: string) => {
     characterMetadataStore.set((prev) =>
       prev.map((meta) => (meta.id === id ? { ...meta, displayName } : meta)),
     );
@@ -102,11 +135,19 @@ export function useCharacters(): [
       meta: { ...prev.meta, displayName },
     }));
   }, []);
+}
 
-  const saveActiveCharacter = useCallback(
+//------------------------------------------------------------------------------
+// Use Create And Save Active Character
+//------------------------------------------------------------------------------
+
+export function useCreateAndSaveActiveCharacter() {
+  const activeId = useActiveCharacterId();
+  const saveActiveCharacter = useSaveActiveCharacter();
+  return useCallback(
     (defaultDisplayName = "") => {
       const exists = characterExists(activeId);
-      let character = save();
+      let character = saveActiveCharacter();
       if (!exists) {
         const displayName = character.name.trim() || defaultDisplayName;
         character = { ...character, meta: { ...character.meta, displayName } };
@@ -115,21 +156,6 @@ export function useCharacters(): [
         saveCharacter(character.meta.id, character);
       }
     },
-    [activeId, save],
+    [activeId, saveActiveCharacter],
   );
-
-  return [
-    metadata,
-    {
-      createCharacter,
-      exportAllCharactersToJson,
-      exportCharacterToJson,
-      importCharacterFromJson,
-      importCharactersFromJson,
-      removeAllCharacters,
-      removeCharacter,
-      renameCharacter,
-      saveActiveCharacter,
-    },
-  ];
 }
