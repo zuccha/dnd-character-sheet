@@ -52,8 +52,10 @@ export default function CharacterList() {
       },
       {
         label: t("actions.export_all_characters_to_json"),
-        // TODO: Download file.
-        onClick: exportAllCharactersToJson,
+        onClick: () =>
+          exportAllCharactersToJson(
+            t("actions.export_all_characters_to_json.filename"),
+          ),
         value: "export_all_characters_to_json",
       },
       {
@@ -134,6 +136,11 @@ const i18nContext = {
   "actions.export_all_characters_to_json": {
     en: "Export all characters as JSON",
     it: "Esporta tutti i personaggi come JSON",
+  },
+
+  "actions.export_all_characters_to_json.filename": {
+    en: "Characters",
+    it: "Personaggi",
   },
 
   "actions.import_character_from_json": {

@@ -68,8 +68,12 @@ export function useCreateCharacter() {
 //------------------------------------------------------------------------------
 
 export function useExportAllCharactersToJson() {
-  return useCallback(() => {
-    console.log("exportAllCharactersToJson"); // TODO
+  return useCallback((filename: string) => {
+    const characters = characterMetadataStore
+      .get()
+      .map(({ id }) => loadCharacter(id));
+    const json = JSON.stringify(characters, null, 2);
+    downloadFile(json, `${filename}.json`, "json");
   }, []);
 }
 
