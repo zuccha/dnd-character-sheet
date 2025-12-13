@@ -19,7 +19,7 @@ export default function Frame({ children, title, ...rest }: FrameProps) {
       py={2}
       {...rest}
     >
-      {title && <Text>{title}</Text>}
+      {title && <Text fontSize="cs.h4">{title}</Text>}
       {children}
     </VStack>
   );
