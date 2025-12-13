@@ -2,6 +2,7 @@ import { HStack, VStack } from "@chakra-ui/react";
 import Frame from "~/views/character-sheet-view/frame";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
 import CharacterSheetLevel from "./fields/character-sheet-level";
+import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
 import CharacterSheetName from "./fields/character-sheet-name";
 import CharacterSheetTitle from "./fields/character-sheet-title";
 
@@ -31,6 +32,7 @@ export default function CharacterSheet() {
 
       <HStack w="full">
         <CharacterSheetArmorClass />
+        <CharacterSheetMaxHp />
       </HStack>
     </VStack>
   );
