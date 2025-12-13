@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
+import { downloadFile } from "~/utils/download";
 import {
   useActiveCharacterId,
   useClearActiveCharacter,
@@ -78,7 +79,9 @@ export function useExportAllCharactersToJson() {
 
 export function useExportCharacterToJson() {
   return useCallback((id: string) => {
-    console.log("exportCharacterToJson", id); // TODO
+    const character = loadCharacter(id);
+    const json = JSON.stringify(character, null, 2);
+    downloadFile(json, `${character.meta.displayName}.json`, "json");
   }, []);
 }
 

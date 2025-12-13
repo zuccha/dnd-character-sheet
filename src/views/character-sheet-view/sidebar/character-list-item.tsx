@@ -76,7 +76,6 @@ export default function CharacterListItem({
       },
       {
         label: t("actions.export_character_to_json"),
-        // TODO: Download file.
         onClick: () => exportCharacterToJson(id),
         value: "export_character_to_json",
       },
