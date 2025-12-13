@@ -21,6 +21,8 @@ export const defaultCharacterMetadata = characterMetadataSchema.parse({});
 export const characterSchema = z.object({
   meta: characterMetadataSchema.default(defaultCharacterMetadata),
 
+  armorClass: z.number().default(10),
+  armorClassShieldEquipped: z.boolean().default(false),
   level: z.number().default(1),
   name: z.string().default(""),
   title: z.string().default(""),

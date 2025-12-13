@@ -80,6 +80,10 @@ export function useActiveCharacterField<F extends keyof Character>(
   ];
 }
 
+export const useActiveCharacterArmorClass = () =>
+  useActiveCharacterField("armorClass");
+export const useActiveCharacterArmorClassShieldEquipped = () =>
+  useActiveCharacterField("armorClassShieldEquipped");
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 export const useActiveCharacterName = () => useActiveCharacterField("name");
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
