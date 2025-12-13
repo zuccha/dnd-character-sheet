@@ -1,5 +1,5 @@
 import { SaveIcon } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useLayoutEffect } from "react";
 import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
 import { useCreateAndSaveActiveCharacter } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
@@ -20,6 +20,18 @@ export default function SaveButton(props: SaveButtonProps) {
   const save = useCallback(() => {
     createAndSaveActiveCharacter(t("character.display_name.default"));
   }, [createAndSaveActiveCharacter, t]);
+
+  useLayoutEffect(() => {
+    const saveOnPressCtrlS = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        save();
+      }
+    };
+
+    window.addEventListener("keydown", saveOnPressCtrlS);
+    return () => window.removeEventListener("keydown", saveOnPressCtrlS);
+  }, [save]);
 
   return (
     <IconButton
