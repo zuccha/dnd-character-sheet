@@ -9,6 +9,7 @@ const themeConfig = defineConfig({
     semanticTokens: {
       colors: {
         bg: {
+          "cs.divider": color("gray.300", "gray.500"),
           "cs.frame": color("gray.50", "gray.700"),
           "cs.page": color("gray.200", "gray.800"),
           "highlight": color("blue.200", "blue.500"),
