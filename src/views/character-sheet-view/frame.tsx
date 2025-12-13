@@ -15,10 +15,11 @@ export default function Frame({ children, title, ...rest }: FrameProps) {
       borderColor="border.inverted"
       borderWidth={1}
       gap={1}
-      p={4}
+      px={3}
+      py={2}
       {...rest}
     >
-      {title && <Text fontFamily="Mr Eaves Alt">{title}</Text>}
+      {title && <Text>{title}</Text>}
       {children}
     </VStack>
   );
