@@ -23,6 +23,14 @@ export const characterSchema = z.object({
 
   armorClass: z.number().default(10),
   armorClassShieldEquipped: z.boolean().default(false),
+  hpDice: z
+    .object({
+      d6: z.number().default(0),
+      d8: z.number().default(1),
+      d10: z.number().default(0),
+      d12: z.number().default(0),
+    })
+    .default({ d6: 0, d8: 1, d10: 0, d12: 0 }),
   level: z.number().default(1),
   maxHp: z.number().default(10),
   name: z.string().default(""),

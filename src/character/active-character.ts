@@ -84,6 +84,7 @@ export const useActiveCharacterArmorClass = () =>
   useActiveCharacterField("armorClass");
 export const useActiveCharacterArmorClassShieldEquipped = () =>
   useActiveCharacterField("armorClassShieldEquipped");
+export const useActiveCharacterHpDice = () => useActiveCharacterField("hpDice");
 export const useActiveCharacterMaxHp = () => useActiveCharacterField("maxHp");
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 export const useActiveCharacterName = () => useActiveCharacterField("name");
