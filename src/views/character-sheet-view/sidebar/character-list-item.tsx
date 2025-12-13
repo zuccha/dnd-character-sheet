@@ -1,4 +1,6 @@
 import { Button, Em, HStack, Input } from "@chakra-ui/react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import {
@@ -41,6 +43,16 @@ export default function CharacterListItem({
   const switchActiveCharacter = useSwitchActiveCharacter();
 
   const active = activeCharacterId === id;
+
+  // Drag and Drop
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   // Unsaved Changes
 
@@ -95,12 +107,16 @@ export default function CharacterListItem({
 
   return (
     <HStack
+      {...attributes}
+      {...listeners}
       _hover={{ bgColor: active ? "bg.highlight.hover" : "bg.hover" }}
       align="center"
       bgColor={active ? "bg.highlight" : undefined}
       borderRadius={4}
       className="group"
       gap={0}
+      ref={setNodeRef}
+      style={style}
       w="full"
     >
       <Button

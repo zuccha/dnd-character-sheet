@@ -166,6 +166,34 @@ export function useImportCharactersFromJson() {
 // Use Remove All Characters
 //------------------------------------------------------------------------------
 
+export function useReorderCharacters() {
+  return useCallback(
+    (idsOrUpdateIds: string[] | ((ids: string[]) => string[])) => {
+      const prevMetadata = characterMetadataStore.get();
+      const prevIds = characterIdsStore.get();
+      const nextIds =
+        typeof idsOrUpdateIds === "function" ?
+          idsOrUpdateIds(prevIds)
+        : idsOrUpdateIds;
+
+      if (prevIds.length !== nextIds.length) return;
+      if (prevIds.some((id) => !nextIds.includes(id))) return;
+
+      const nextMetadata = nextIds
+        .map((id) => prevMetadata.find((meta) => meta.id === id))
+        .filter((meta) => meta !== undefined);
+
+      characterMetadataStore.set(nextMetadata);
+      characterIdsStore.set(nextIds);
+    },
+    [],
+  );
+}
+
+//------------------------------------------------------------------------------
+// Use Remove All Characters
+//------------------------------------------------------------------------------
+
 export function useRemoveAllCharacters() {
   const clearActiveCharacter = useClearActiveCharacter();
 

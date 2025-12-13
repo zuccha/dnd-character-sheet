@@ -1,4 +1,17 @@
 import { Em, HStack, Heading, VStack, useFileUpload } from "@chakra-ui/react";
+import {
+  DndContext,
+  type DragEndEvent,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
@@ -8,6 +21,7 @@ import {
   useExportAllCharactersToJson,
   useImportCharactersFromJson,
   useRemoveAllCharacters,
+  useReorderCharacters,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Dialog from "~/ui/dialog";
@@ -25,12 +39,38 @@ export default function CharacterList() {
   const { t } = useI18nLangContext(i18nContext);
 
   const metadata = useCharacterMetadata();
+  const ids = useMemo(() => metadata.map(({ id }) => id), [metadata]);
+
   const createCharacter = useCreateCharacter();
   const exportAllCharactersToJson = useExportAllCharactersToJson();
   const importCharactersFromJson = useImportCharactersFromJson();
+  const reorderCharacters = useReorderCharacters();
   const removeAllCharacters = useRemoveAllCharacters();
 
   const unsavedChanges = useActiveCharacterHasUnsavedChanges();
+
+  // Drag and Drop
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (over && active.id !== over.id) {
+        reorderCharacters((ids) => {
+          const oldIndex = ids.indexOf(`${active.id}`);
+          const newIndex = ids.indexOf(`${over.id}`);
+          return arrayMove(ids, oldIndex, newIndex);
+        });
+      }
+    },
+    [reorderCharacters],
+  );
+
+  // Import Characters from JSON
 
   const importCharactersFileUpload = useFileUpload({
     accept: ".json",
@@ -49,6 +89,8 @@ export default function CharacterList() {
     setImportCharactersFromJsonDialogOpen(false);
   }, [importCharactersFileUpload.acceptedFiles, importCharactersFromJson, t]);
 
+  // Remove All Characters
+
   const [removeAllCharactersDialogOpen, setRemoveAllCharactersDialogOpen] =
     useState(false);
 
@@ -56,6 +98,8 @@ export default function CharacterList() {
     removeAllCharacters();
     setRemoveAllCharactersDialogOpen(false);
   }, [removeAllCharacters]);
+
+  // Actions
 
   const actions = useMemo(
     () => [
@@ -99,6 +143,8 @@ export default function CharacterList() {
     ],
   );
 
+  // Render
+
   return (
     <VStack align="flex-start" gap={1} mt={2} w="full">
       <HStack justify="space-between" w="full">
@@ -111,7 +157,17 @@ export default function CharacterList() {
 
       <VStack align="flex-start" gap={0} w="full">
         {metadata.length ?
-          metadata.map((meta) => <CharacterListItem key={meta.id} {...meta} />)
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+          >
+            <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+              {metadata.map((meta) => (
+                <CharacterListItem key={meta.id} {...meta} />
+              ))}
+            </SortableContext>
+          </DndContext>
         : <Em fontSize="sm">{t("characters.empty")}</Em>}
       </VStack>
 
