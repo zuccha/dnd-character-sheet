@@ -1,4 +1,5 @@
 import { Box, Center, Span } from "@chakra-ui/react";
+import { useCallback } from "react";
 import {
   useActiveCharacterArmorClass,
   useActiveCharacterArmorClassShieldEquipped,
@@ -6,6 +7,7 @@ import {
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Checkbox from "~/ui/checkbox";
 import EditableNumber from "~/ui/editable-number";
+import { toaster } from "~/ui/toaster";
 import Frame from "../frame";
 
 //------------------------------------------------------------------------------
@@ -18,14 +20,18 @@ export default function CharacterSheetArmorClass() {
   const [armorClassShieldEquipped, setArmorClassShieldEquipped] =
     useActiveCharacterArmorClassShieldEquipped();
 
+  const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
+
   return (
     <Frame maxW="">
-      <Span fontSize="cs.h4">{t("title")}</Span>
+      <Span fontSize="cs.h4">{t("armor_class.label")}</Span>
       <EditableNumber
         fontSize="cs.value.md"
+        integer
         minH="1em"
         name="character-armor-class"
         onChange={setArmorClass}
+        onError={error}
         placeholder={t("armor_class.placeholder")}
         textAlign="center"
         value={armorClass}
@@ -34,7 +40,7 @@ export default function CharacterSheetArmorClass() {
 
       <Box bgColor="bg.cs.divider" h="1px" my={1} w="full" />
 
-      <Span fontSize="cs.h4">{t("shield")}</Span>
+      <Span fontSize="cs.h4">{t("armor_class_shield_equipped.label")}</Span>
       <Center fontSize="cs.value.md" minH="1em">
         <Checkbox
           checked={armorClassShieldEquipped}
@@ -51,18 +57,28 @@ export default function CharacterSheetArmorClass() {
 //------------------------------------------------------------------------------
 
 const i18nContext = {
-  "armor_class.placeholder": {
-    en: "Species, class, and size...",
-    it: "Specie, classe, e taglia...",
+  "armor_class.label": {
+    en: "AC",
+    it: "CA",
   },
 
-  "shield": {
+  "armor_class.placeholder": {
+    en: "10",
+    it: "10",
+  },
+
+  "armor_class_shield_equipped.label": {
     en: "Shield",
     it: "Scudo",
   },
 
-  "title": {
-    en: "AC",
-    it: "CA",
+  "editable_number[character-armor-class].error.int": {
+    en: "The armor class must be an integer",
+    it: "La classe armatura deve essere un numero intero",
+  },
+
+  "editable_number[character-armor-class].error.nan": {
+    en: "The armor class must be a number",
+    it: "La classe armatura deve essere un numero",
   },
 };
