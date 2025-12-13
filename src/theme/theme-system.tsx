@@ -9,11 +9,14 @@ const themeConfig = defineConfig({
     semanticTokens: {
       colors: {
         bg: {
-          "cs.frame": gray("50", "700"),
-          "cs.page": gray("200", "800"),
-          "l1": gray("50", "800"),
-          "l2": gray("100", "900"),
-          "l3": gray("200", "950"),
+          "cs.frame": color("gray.50", "gray.700"),
+          "cs.page": color("gray.200", "gray.800"),
+          "highlight": color("blue.200", "blue.500"),
+          "highlight.hover": color("blue.300", "blue.400"),
+          "hover": color("gray.200", "gray.950"),
+          "l1": color("gray.50", "gray.800"),
+          "l2": color("gray.100", "gray.900"),
+          "l3": color("gray.200", "gray.950"),
         },
       },
     },
@@ -36,14 +39,12 @@ const themeConfig = defineConfig({
 export const themeSystem = createSystem(defaultConfig, themeConfig);
 
 //------------------------------------------------------------------------------
-// Gray
+// Semantic Token
 //------------------------------------------------------------------------------
 
-function gray(
+function color(
   light: string,
   dark: string,
 ): { value: { _dark: string; _light: string } } {
-  return {
-    value: { _dark: `{colors.gray.${dark}}`, _light: `{colors.gray.${light}}` },
-  };
+  return { value: { _dark: `{colors.${dark}}`, _light: `{colors.${light}}` } };
 }

@@ -40,6 +40,8 @@ export default function CharacterListItem({
   const activeCharacterId = useActiveCharacterId();
   const switchActiveCharacter = useSwitchActiveCharacter();
 
+  const active = activeCharacterId === id;
+
   // Unsaved Changes
 
   const unsavedChanges = useActiveCharacterHasUnsavedChanges();
@@ -93,11 +95,9 @@ export default function CharacterListItem({
 
   return (
     <HStack
-      _hover={{
-        bgColor: activeCharacterId === id ? "blue.300" : "bg.emphasized",
-      }}
+      _hover={{ bgColor: active ? "bg.highlight.hover" : "bg.hover" }}
       align="center"
-      bgColor={activeCharacterId === id ? "blue.200" : undefined}
+      bgColor={active ? "bg.highlight" : undefined}
       borderRadius={4}
       className="group"
       gap={0}
