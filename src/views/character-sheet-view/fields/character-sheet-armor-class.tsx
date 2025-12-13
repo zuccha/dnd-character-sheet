@@ -23,7 +23,7 @@ export default function CharacterSheetArmorClass() {
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   return (
-    <Frame maxW="">
+    <Frame w="5.5em">
       <Span fontSize="cs.h4">{t("armor_class.label")}</Span>
       <EditableNumber
         fontSize="cs.value.md"
