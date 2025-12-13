@@ -46,12 +46,12 @@ export default function CharacterSheetMaxHp() {
 
 const i18nContext = {
   "editable_number[character-max-hp].error.int": {
-    en: "The maximum health points must be an integer",
+    en: "The maximum hit points must be an integer",
     it: "I punti ferita massimi devono essere un numero intero",
   },
 
   "editable_number[character-max-hp].error.nan": {
-    en: "The maximum health points must be a number",
+    en: "The maximum hit points must be a number",
     it: "I punti ferita massimi devono essere un numero",
   },
 
