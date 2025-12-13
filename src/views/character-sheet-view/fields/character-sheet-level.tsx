@@ -38,6 +38,7 @@ export default function CharacterSheetLevel() {
         name="character-level"
         onChange={setLevel}
         onError={error}
+        placeholder="1"
         textAlign="center"
         value={level}
         w="2em"

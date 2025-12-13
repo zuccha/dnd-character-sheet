@@ -37,6 +37,7 @@ export default function EditableNumber({
   const validate = useCallback(
     (text: string): string | undefined => {
       const nextValue = Number(text);
+      if (text.trim() === "") return error(name, "nan");
       if (Number.isNaN(nextValue)) return error(name, "nan");
       if (integer && !Number.isInteger(nextValue)) return error(name, "int");
       if (max !== undefined && nextValue > max) return error(name, "max");
@@ -52,7 +53,6 @@ export default function EditableNumber({
       name={name}
       onChange={change}
       onValidate={validate}
-      placeholder="0"
       value={`${value}`}
     />
   );
