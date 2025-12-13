@@ -3,6 +3,7 @@ import Frame from "~/views/character-sheet-view/frame";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
 import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-saving-throws";
 import CharacterSheetExhaustion from "./fields/character-sheet-exhaustion";
+import CharacterSheetHpDice from "./fields/character-sheet-hp-dice";
 import CharacterSheetLevel from "./fields/character-sheet-level";
 import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
 import CharacterSheetName from "./fields/character-sheet-name";
@@ -36,6 +37,7 @@ export default function CharacterSheet() {
         <CharacterSheetArmorClass />
         <CharacterSheetMaxHp />
         <Box flex={1} />
+        <CharacterSheetHpDice h="full" />
         <VStack align="stretch" h="full" justify="stretch">
           <CharacterSheetDeathSavingThrows flex={1} />
           <CharacterSheetExhaustion flex={1} />
