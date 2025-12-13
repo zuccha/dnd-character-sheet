@@ -40,7 +40,11 @@ export default function CharacterListItem({
   const activeCharacterId = useActiveCharacterId();
   const switchActiveCharacter = useSwitchActiveCharacter();
 
+  // Unsaved Changes
+
   const unsavedChanges = useActiveCharacterHasUnsavedChanges();
+
+  // Remove Character Dialog
 
   const [removeCharacterDialogOpen, setRemoveCharacterDialogOpen] =
     useState(false);
@@ -50,6 +54,8 @@ export default function CharacterListItem({
     setRemoveCharacterDialogOpen(false);
   }, [id, removeCharacter]);
 
+  // Rename Character Dialog
+
   const [renameCharacterDialogOpen, setRenameCharacterDialogOpen] =
     useState(false);
 
@@ -58,6 +64,8 @@ export default function CharacterListItem({
     renameCharacter(id, nextDisplayName.trim());
     setRenameCharacterDialogOpen(false);
   }, [id, renameCharacter]);
+
+  // Action
 
   const actions = useMemo(
     () => [
@@ -81,6 +89,8 @@ export default function CharacterListItem({
     ],
     [exportCharacterToJson, id, t],
   );
+
+  // Render
 
   return (
     <HStack
