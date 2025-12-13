@@ -1,5 +1,6 @@
-import { SquareIcon, SquareXIcon } from "lucide-react";
 import { useCallback } from "react";
+import CheckboxEmptyIcon from "~/icons/checkbox-empty-icon";
+import CheckboxFilledIcon from "~/icons/checkbox-filled-icon";
 import IconButton, { type IconButtonProps } from "./icon-button";
 
 //------------------------------------------------------------------------------
@@ -24,10 +25,12 @@ export default function Checkbox({
 
   return (
     <IconButton
-      Icon={checked ? SquareXIcon : SquareIcon}
+      Icon={checked ? CheckboxFilledIcon : CheckboxEmptyIcon}
+      aspectRatio={1}
       borderRadius={2}
       cursor={disabled ? "disabled" : "pointer"}
       disabled={disabled}
+      lineHeight={0}
       onClick={toggle}
       unstyled
       {...rest}
