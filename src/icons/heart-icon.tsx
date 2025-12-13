@@ -4,7 +4,7 @@ const HeartIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxHeart",
+  displayName: "Heart",
   path: (
     <>
       {/* Frame */}

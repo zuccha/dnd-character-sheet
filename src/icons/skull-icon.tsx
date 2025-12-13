@@ -4,7 +4,7 @@ const SkullIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxSkull",
+  displayName: "Skull",
   path: (
     <>
       {/* Frame */}
