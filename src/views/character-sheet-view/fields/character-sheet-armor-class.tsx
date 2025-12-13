@@ -11,7 +11,7 @@ import { toaster } from "~/ui/toaster";
 import Frame from "../frame";
 
 //------------------------------------------------------------------------------
-// Character Sheet ArmorClass
+// Character Sheet Armor Class
 //------------------------------------------------------------------------------
 
 export default function CharacterSheetArmorClass() {
