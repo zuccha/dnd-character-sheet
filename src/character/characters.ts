@@ -10,6 +10,7 @@ import {
   useSwitchActiveCharacter,
 } from "./active-character";
 import {
+  type Character,
   type CharacterMetadata,
   characterExists,
   characterSchema,
@@ -90,23 +91,75 @@ export function useExportCharacterToJson() {
 }
 
 //------------------------------------------------------------------------------
-// Use Import Character From Json
-//------------------------------------------------------------------------------
-
-export function useImportCharacterFromJson() {
-  return useCallback((json: string) => {
-    console.log("importCharacterFromJson", json); // TODO
-  }, []);
-}
-
-//------------------------------------------------------------------------------
 // Use Import Characters From Json
 //------------------------------------------------------------------------------
 
 export function useImportCharactersFromJson() {
-  return useCallback((json: string) => {
-    console.log("importCharactersFromJson", json); // TODO
-  }, []);
+  const switchActiveCharacter = useSwitchActiveCharacter();
+
+  return useCallback(
+    async (files: File[]): Promise<string | void> => {
+      if (!files.length) return "import_characters_from_json.error.none";
+
+      const metadata = characterMetadataStore.get();
+
+      const characters: Character[] = [];
+      const invalidDataErrors: string[] = [];
+      const duplicateErrors: string[] = [];
+
+      let firstCharacter: Character | undefined = undefined;
+      const nextIds: string[] = [];
+      const nextMetadata: CharacterMetadata[] = [];
+
+      for (const file of files) {
+        const text = await file.text();
+        const json = JSON.parse(text);
+
+        if (Array.isArray(json)) {
+          const result = z.array(characterSchema).safeParse(json);
+          if (result.success) characters.push(...result.data);
+          else invalidDataErrors.push(file.name);
+        } else {
+          const result = characterSchema.safeParse(json);
+          if (result.success) characters.push(result.data);
+          else invalidDataErrors.push(file.name);
+        }
+      }
+
+      for (const character of characters) {
+        if (
+          metadata.some(({ id }) => id === character.meta.id) ||
+          nextMetadata.some(({ id }) => id === character.meta.id)
+        ) {
+          duplicateErrors.push(character.meta.id);
+          continue;
+        }
+
+        nextIds.push(character.meta.id);
+        nextMetadata.push(character.meta);
+        saveCharacter(character.meta.id, character);
+        if (!firstCharacter) firstCharacter = character;
+      }
+
+      characterIdsStore.set((prev) => [...prev, ...nextIds]);
+      characterMetadataStore.set((prev) => [...prev, ...nextMetadata]);
+      if (firstCharacter) switchActiveCharacter(firstCharacter.meta.id);
+
+      if (invalidDataErrors.length && duplicateErrors.length)
+        return characters.length > 1 ?
+            "import_characters_from_json.error.multiple.invalid_and_duplicate"
+          : "import_characters_from_json.error.single.invalid_and_duplicate";
+      if (invalidDataErrors.length)
+        return characters.length > 1 ?
+            "import_characters_from_json.error.multiple.invalid"
+          : "import_characters_from_json.error.single.invalid";
+      if (duplicateErrors.length)
+        return characters.length > 1 ?
+            "import_characters_from_json.error.multiple.duplicate"
+          : "import_characters_from_json.error.single.duplicate";
+    },
+    [switchActiveCharacter],
+  );
 }
 
 //------------------------------------------------------------------------------

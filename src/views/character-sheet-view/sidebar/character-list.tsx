@@ -1,4 +1,4 @@
-import { Em, HStack, Heading, VStack } from "@chakra-ui/react";
+import { Em, HStack, Heading, VStack, useFileUpload } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useActiveCharacterHasUnsavedChanges } from "~/character/active-character";
@@ -6,14 +6,15 @@ import {
   useCharacterMetadata,
   useCreateCharacter,
   useExportAllCharactersToJson,
-  useImportCharacterFromJson,
   useImportCharactersFromJson,
   useRemoveAllCharacters,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Dialog from "~/ui/dialog";
+import Dropzone from "~/ui/dropzone";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
+import { toaster } from "~/ui/toaster";
 import CharacterListItem from "./character-list-item";
 
 //------------------------------------------------------------------------------
@@ -26,11 +27,27 @@ export default function CharacterList() {
   const metadata = useCharacterMetadata();
   const createCharacter = useCreateCharacter();
   const exportAllCharactersToJson = useExportAllCharactersToJson();
-  const importCharacterFromJson = useImportCharacterFromJson();
   const importCharactersFromJson = useImportCharactersFromJson();
   const removeAllCharacters = useRemoveAllCharacters();
 
   const unsavedChanges = useActiveCharacterHasUnsavedChanges();
+
+  const importCharactersFileUpload = useFileUpload({
+    accept: ".json",
+    maxFiles: 10,
+  });
+
+  const [
+    importCharactersFromJsonDialogOpen,
+    setImportCharactersFromJsonDialogOpen,
+  ] = useState(false);
+
+  const confirmImportCharactersFromJson = useCallback(async () => {
+    const files = importCharactersFileUpload.acceptedFiles;
+    const error = await importCharactersFromJson(files);
+    if (error) toaster.error({ title: t(`actions.${error}`) });
+    setImportCharactersFromJsonDialogOpen(false);
+  }, [importCharactersFileUpload.acceptedFiles, importCharactersFromJson, t]);
 
   const [removeAllCharactersDialogOpen, setRemoveAllCharactersDialogOpen] =
     useState(false);
@@ -59,15 +76,11 @@ export default function CharacterList() {
         value: "export_all_characters_to_json",
       },
       {
-        label: t("actions.import_character_from_json"),
-        // TODO: Open file browser.
-        onClick: () => importCharacterFromJson("TODO"),
-        value: "import_character_from_json",
-      },
-      {
         label: t("actions.import_characters_from_json"),
-        // TODO: Open file browser.
-        onClick: () => importCharactersFromJson("TODO"),
+        onClick: () => {
+          importCharactersFileUpload.clearFiles();
+          setImportCharactersFromJsonDialogOpen(true);
+        },
         value: "import_characters_from_json",
       },
       {
@@ -80,8 +93,7 @@ export default function CharacterList() {
     [
       createCharacter,
       exportAllCharactersToJson,
-      importCharacterFromJson,
-      importCharactersFromJson,
+      importCharactersFileUpload,
       t,
       unsavedChanges,
     ],
@@ -102,6 +114,23 @@ export default function CharacterList() {
           metadata.map((meta) => <CharacterListItem key={meta.id} {...meta} />)
         : <Em fontSize="sm">{t("characters.empty")}</Em>}
       </VStack>
+
+      <Dialog
+        cancelText={t("dialog.import_characters_from_json.cancel_text")}
+        confirmText={t("dialog.import_characters_from_json.confirm_text")}
+        onConfirm={confirmImportCharactersFromJson}
+        onOpenChange={setImportCharactersFromJsonDialogOpen}
+        open={importCharactersFromJsonDialogOpen}
+        title={t("dialog.import_characters_from_json.title")}
+      >
+        <Dropzone
+          description={t(
+            "dialog.import_characters_from_json.dropzone.description",
+          )}
+          limits={t("dialog.import_characters_from_json.dropzone.limits")}
+          value={importCharactersFileUpload}
+        />
+      </Dialog>
 
       <Dialog
         cancelText={t("dialog.remove_all_characters.cancel_text")}
@@ -143,14 +172,39 @@ const i18nContext = {
     it: "Personaggi",
   },
 
-  "actions.import_character_from_json": {
-    en: "Import character from JSON",
-    it: "Importa personaggio da JSON",
-  },
-
   "actions.import_characters_from_json": {
     en: "Import characters from JSON",
     it: "Importa personaggi da JSON",
+  },
+
+  "actions.import_characters_from_json.error.multiple.duplicate": {
+    en: "Some characters are already present.",
+    it: "Alcuni personaggi sono già presenti.",
+  },
+
+  "actions.import_characters_from_json.error.multiple.invalid": {
+    en: "Some files are invalid.",
+    it: "Alcuni file non sono validi.",
+  },
+
+  "actions.import_characters_from_json.error.multiple.invalid_and_duplicate": {
+    en: "Some files are invalid and some characters are already present.",
+    it: "Alcuni file non sono validi e alcuni personaggi sono già presenti.",
+  },
+
+  "actions.import_characters_from_json.error.single.duplicate": {
+    en: "The character is already present.",
+    it: "Il personaggio è già presente.",
+  },
+
+  "actions.import_characters_from_json.error.single.invalid": {
+    en: "The file is not valid.",
+    it: "Il file non è valido.",
+  },
+
+  "actions.import_characters_from_json.error.single.invalid_and_duplicate": {
+    en: "The file is not valid and the character is already present.",
+    it: "Il file non è valido e il personaggio è già presente.",
   },
 
   "actions.remove_all_characters": {
@@ -166,6 +220,31 @@ const i18nContext = {
   "characters.empty": {
     en: "None",
     it: "Nessuno",
+  },
+
+  "dialog.import_characters_from_json.cancel_text": {
+    en: "Cancel",
+    it: "Cancella",
+  },
+
+  "dialog.import_characters_from_json.confirm_text": {
+    en: "Import",
+    it: "Importa",
+  },
+
+  "dialog.import_characters_from_json.dropzone.description": {
+    en: "Drag and drop files here",
+    it: "Trascina i file qui",
+  },
+
+  "dialog.import_characters_from_json.dropzone.limits": {
+    en: ".json",
+    it: ".json",
+  },
+
+  "dialog.import_characters_from_json.title": {
+    en: "Import characters",
+    it: "Importa personaggi",
   },
 
   "dialog.remove_all_characters.cancel_text": {
