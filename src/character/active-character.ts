@@ -46,61 +46,6 @@ const activeCharacterObservable = createObservable<Character>();
 const activeCharacterUnsavedChangesStore = createMemoryStore(false);
 
 //------------------------------------------------------------------------------
-// Use Active Character Id
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterId(): string | undefined {
-  return activeCharacterIdStore.useValue();
-}
-
-//------------------------------------------------------------------------------
-// Use Switch Active Character
-//------------------------------------------------------------------------------
-
-export function useSwitchActiveCharacter(): (id: string) => void {
-  return useCallback((id: string) => {
-    const character = loadCharacter(id);
-    activeCharacterIdStore.set(character.meta.id);
-    activeCharacterStore.set(character);
-    activeCharacterObservable.notify(character);
-  }, []);
-}
-
-//------------------------------------------------------------------------------
-// Use Clear Active Character
-//------------------------------------------------------------------------------
-
-export function useClearActiveCharacter(): () => void {
-  return useCallback(() => {
-    const character = defaultCharacter();
-    activeCharacterIdStore.set(undefined);
-    activeCharacterStore.set(character);
-    activeCharacterObservable.notify(character);
-  }, []);
-}
-
-//------------------------------------------------------------------------------
-// Use Active Character Has Unsaved Changes
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterHasUnsavedChanges(): boolean {
-  return activeCharacterUnsavedChangesStore.useValue();
-}
-
-//------------------------------------------------------------------------------
-// Use Save Active Character
-//------------------------------------------------------------------------------
-
-export function useSaveActiveCharacter(): () => Character {
-  return useCallback(() => {
-    const character = activeCharacterStore.get();
-    saveCharacter(character.meta.id, character);
-    activeCharacterUnsavedChangesStore.set(false);
-    return character;
-  }, []);
-}
-
-//------------------------------------------------------------------------------
 // Use Active Character Field
 //------------------------------------------------------------------------------
 
@@ -135,10 +80,61 @@ export function useActiveCharacterField<F extends keyof Character>(
   ];
 }
 
-//------------------------------------------------------------------------------
-// Use Active Character <Field>
-//------------------------------------------------------------------------------
-
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 export const useActiveCharacterName = () => useActiveCharacterField("name");
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
+
+//------------------------------------------------------------------------------
+// Use Active Character Has Unsaved Changes
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterHasUnsavedChanges(): boolean {
+  return activeCharacterUnsavedChangesStore.useValue();
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Id
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterId(): string | undefined {
+  return activeCharacterIdStore.useValue();
+}
+
+//------------------------------------------------------------------------------
+// Use Clear Active Character
+//------------------------------------------------------------------------------
+
+export function useClearActiveCharacter(): () => void {
+  return useCallback(() => {
+    const character = defaultCharacter();
+    activeCharacterIdStore.set(undefined);
+    activeCharacterStore.set(character);
+    activeCharacterObservable.notify(character);
+  }, []);
+}
+
+//------------------------------------------------------------------------------
+// Use Save Active Character
+//------------------------------------------------------------------------------
+
+export function useSaveActiveCharacter(): () => Character {
+  return useCallback(() => {
+    const character = activeCharacterStore.get();
+    saveCharacter(character.meta.id, character);
+    activeCharacterUnsavedChangesStore.set(false);
+    return character;
+  }, []);
+}
+
+//------------------------------------------------------------------------------
+// Use Switch Active Character
+//------------------------------------------------------------------------------
+
+export function useSwitchActiveCharacter(): (id: string) => void {
+  return useCallback((id: string) => {
+    const character = loadCharacter(id);
+    activeCharacterIdStore.set(character.meta.id);
+    activeCharacterStore.set(character);
+    activeCharacterObservable.notify(character);
+  }, []);
+}
