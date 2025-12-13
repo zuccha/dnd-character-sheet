@@ -1,8 +1,9 @@
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { HStack, VStack } from "@chakra-ui/react";
 import Frame from "~/views/character-sheet-view/frame";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
 import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-saving-throws";
 import CharacterSheetExhaustion from "./fields/character-sheet-exhaustion";
+import CharacterSheetHp from "./fields/character-sheet-hp";
 import CharacterSheetHpDice from "./fields/character-sheet-hp-dice";
 import CharacterSheetLevel from "./fields/character-sheet-level";
 import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
@@ -36,7 +37,7 @@ export default function CharacterSheet() {
       <HStack w="full">
         <CharacterSheetArmorClass />
         <CharacterSheetMaxHp />
-        <Box flex={1} />
+        <CharacterSheetHp flex={1} h="full" />
         <CharacterSheetHpDice h="full" />
         <VStack align="stretch" h="full" justify="stretch">
           <CharacterSheetDeathSavingThrows flex={1} />
