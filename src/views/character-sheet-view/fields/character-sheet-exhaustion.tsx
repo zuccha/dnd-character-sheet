@@ -1,7 +1,7 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import CheckboxEmptyIcon from "~/icons/checkbox-empty-icon";
-import CheckboxSkullIcon from "~/icons/skull-icon";
+import SkullIcon from "~/icons/skull-icon";
 import Frame, { type FrameProps } from "../frame";
 
 //------------------------------------------------------------------------------
@@ -18,11 +18,11 @@ export default function CharacterSheetExhaustion(
   return (
     <Frame align="flex-start" title={t("exhaustion.label")} {...props}>
       <HStack gap={1}>
-        <CheckboxEmptyIcon size="sm" />
-        <CheckboxEmptyIcon size="sm" />
-        <CheckboxEmptyIcon size="sm" />
-        <CheckboxEmptyIcon size="sm" />
-        <CheckboxEmptyIcon size="sm" />
+        <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
+        <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
+        <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
+        <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
+        <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
         <DeathIcon />
       </HStack>
     </Frame>
@@ -36,8 +36,14 @@ export default function CharacterSheetExhaustion(
 function DeathIcon() {
   return (
     <Box position="relative">
-      <CheckboxSkullIcon left={0} opacity={0.2} position="absolute" size="sm" />
-      <CheckboxEmptyIcon size="sm" />
+      <SkullIcon
+        h="cs.checkbox"
+        left={0}
+        opacity={0.2}
+        position="absolute"
+        w="cs.checkbox"
+      />
+      <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
     </Box>
   );
 }

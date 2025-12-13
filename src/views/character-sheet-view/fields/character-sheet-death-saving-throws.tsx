@@ -1,8 +1,8 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import CheckboxEmptyIcon from "~/icons/checkbox-empty-icon";
-import CheckboxHeartIcon from "~/icons/heart-icon";
-import CheckboxSkullIcon from "~/icons/skull-icon";
+import HeartIcon from "~/icons/heart-icon";
+import SkullIcon from "~/icons/skull-icon";
 import Frame, { type FrameProps } from "../frame";
 
 //------------------------------------------------------------------------------
@@ -37,8 +37,14 @@ export default function CharacterSheetDeathSavingThrows(
 function FailureIcon() {
   return (
     <Box position="relative">
-      <CheckboxSkullIcon left={0} opacity={0.2} position="absolute" size="sm" />
-      <CheckboxEmptyIcon size="sm" />
+      <SkullIcon
+        h="cs.checkbox"
+        left={0}
+        opacity={0.2}
+        position="absolute"
+        w="cs.checkbox"
+      />
+      <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
     </Box>
   );
 }
@@ -50,14 +56,15 @@ function FailureIcon() {
 function SuccessIcon() {
   return (
     <Box position="relative">
-      <CheckboxHeartIcon
+      <HeartIcon
         color="fg.error"
+        h="cs.checkbox"
         left={0}
         opacity={0.2}
         position="absolute"
-        size="sm"
+        w="cs.checkbox"
       />
-      <CheckboxEmptyIcon size="sm" />
+      <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
     </Box>
   );
 }
