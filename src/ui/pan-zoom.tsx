@@ -40,10 +40,10 @@ export default function PanZoom({
 
     setTransform((current) => ({
       ...current,
-      x: (viewportRect.width - sheetRect.width) / 2,
-      y: (viewportRect.height - sheetRect.height) / 2,
+      x: (initialX + viewportRect.width - sheetRect.width) / 2,
+      y: (initialY + viewportRect.height - sheetRect.height) / 2,
     }));
-  }, []);
+  }, [initialX, initialY]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
