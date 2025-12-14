@@ -41,7 +41,7 @@ export default function Checkbox({
       />
 
       {children && (
-        <Box left="0.5px" pointerEvents="none" position="absolute" top="0.5px">
+        <Box left="0" pointerEvents="none" position="absolute" top="0">
           {children}
         </Box>
       )}

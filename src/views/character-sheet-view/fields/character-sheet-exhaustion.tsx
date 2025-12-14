@@ -64,12 +64,7 @@ function ExhaustCheckbox({ color, index }: ExhaustCheckboxProps) {
 
   return (
     <Checkbox checked={exhaustion[index]} onValueChange={exhaust} size="sm">
-      <DieIcon
-        color={color}
-        h="cs.checkbox"
-        opacity={opacity}
-        w="cs.checkbox"
-      />
+      <DieIcon color={color} opacity={opacity} />
     </Checkbox>
   );
 }

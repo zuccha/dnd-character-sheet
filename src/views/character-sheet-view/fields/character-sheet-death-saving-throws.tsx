@@ -63,7 +63,7 @@ type FailureCheckboxProps = {
 function FailureCheckbox({ checked, onValueChange }: FailureCheckboxProps) {
   return (
     <Checkbox checked={checked} onValueChange={onValueChange} size="sm">
-      <SkullIcon h="cs.checkbox" opacity={0.2} w="cs.checkbox" />
+      <SkullIcon opacity={0.2} />
     </Checkbox>
   );
 }
@@ -80,12 +80,7 @@ type SuccessCheckboxProps = {
 function SuccessCheckbox({ checked, onValueChange }: SuccessCheckboxProps) {
   return (
     <Checkbox checked={checked} onValueChange={onValueChange} size="sm">
-      <HeartIcon
-        color="fg.error"
-        h="cs.checkbox"
-        opacity={0.2}
-        w="cs.checkbox"
-      />
+      <HeartIcon color="fg.error" opacity={0.2} />
     </Checkbox>
   );
 }

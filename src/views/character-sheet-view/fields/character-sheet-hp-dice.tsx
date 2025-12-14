@@ -178,7 +178,7 @@ function Dice({ die }: DiceProps) {
       }
       size="sm"
     >
-      <Icon h="cs.checkbox" opacity={0.4} w="cs.checkbox" />
+      <Icon opacity={0.4} />
     </Checkbox>
   ));
 }
