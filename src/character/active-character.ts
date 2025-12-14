@@ -97,18 +97,34 @@ export function useActiveCharacterField<F extends keyof Character>(
 
 export const useActiveCharacterArmorClass = () =>
   useActiveCharacterField("armorClass");
+
 export const useActiveCharacterArmorClassShieldEquipped = () =>
   useActiveCharacterField("armorClassShieldEquipped");
+
 export const useActiveCharacterDeathSaveThrowFailures = () =>
   useActiveCharacterField("deathSaveThrowFailures");
+
 export const useActiveCharacterDeathSaveThrowSuccesses = () =>
   useActiveCharacterField("deathSaveThrowSuccesses");
+
 export const useActiveCharacterExhaustion = () =>
   useActiveCharacterField("exhaustion");
+
+export const useActiveCharacterHp = () => useActiveCharacterField("hp");
+
+export const useActiveCharacterHpTemp = () => useActiveCharacterField("hpTemp");
+
 export const useActiveCharacterHpDice = () => useActiveCharacterField("hpDice");
+
 export const useActiveCharacterMaxHp = () => useActiveCharacterField("maxHp");
+
+export const useActiveCharacterMaxHpTemp = () =>
+  useActiveCharacterField("maxHpTemp");
+
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");
+
 export const useActiveCharacterName = () => useActiveCharacterField("name");
+
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
 
 //------------------------------------------------------------------------------

@@ -39,6 +39,7 @@ export const characterSchema = z.object({
       z.boolean(),
     ])
     .default([false, false, false, false, false, false]),
+  hp: z.number().nullable().default(null),
   hpDice: z
     .object({
       d6: z.array(z.boolean()).default([]),
@@ -47,8 +48,10 @@ export const characterSchema = z.object({
       d12: z.array(z.boolean()).default([]),
     })
     .default({ d6: [], d8: [false], d10: [], d12: [] }),
+  hpTemp: z.number().nullable().default(null),
   level: z.number().default(1),
   maxHp: z.number().default(10),
+  maxHpTemp: z.number().nullable().default(null),
   name: z.string().default(""),
   title: z.string().default(""),
 });
