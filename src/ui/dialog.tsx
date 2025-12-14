@@ -14,6 +14,7 @@ export type DialogProps = Omit<ChakraDialogRootProps, "onOpenChange"> & {
   cancelText: string;
   confirmText: string;
   destructive?: boolean;
+  disabled?: boolean;
   onConfirm: () => void;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -24,6 +25,7 @@ export default function Dialog({
   children,
   confirmText,
   destructive,
+  disabled,
   onConfirm,
   onOpenChange,
   open,
@@ -54,6 +56,7 @@ export default function Dialog({
 
               <Button
                 colorPalette={destructive ? "red" : undefined}
+                disabled={disabled}
                 onClick={onConfirm}
               >
                 {confirmText}
