@@ -23,6 +23,12 @@ export const characterSchema = z.object({
 
   armorClass: z.number().default(10),
   armorClassShieldEquipped: z.boolean().default(false),
+  deathSaveThrowFailures: z
+    .tuple([z.boolean(), z.boolean(), z.boolean()])
+    .default([false, false, false]),
+  deathSaveThrowSuccesses: z
+    .tuple([z.boolean(), z.boolean(), z.boolean()])
+    .default([false, false, false]),
   hpDice: z
     .object({
       d6: z.number().default(0),
