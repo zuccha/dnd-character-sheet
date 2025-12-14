@@ -1,4 +1,5 @@
 import z from "zod";
+import { generateUUID } from "~/utils/uuid";
 
 //------------------------------------------------------------------------------
 // Character Metadata
@@ -6,7 +7,7 @@ import z from "zod";
 
 export const characterMetadataSchema = z.object({
   displayName: z.string().default(""),
-  id: z.uuid().default(() => crypto.randomUUID()),
+  id: z.uuid().default(generateUUID),
   version: z.number().default(1),
 });
 
