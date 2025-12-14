@@ -1,6 +1,8 @@
 import { Box, type BoxProps } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useGesture } from "@use-gesture/react";
+import { useRef } from "react";
 import { clamp } from "~/utils/math";
+import { isTouch } from "~/utils/window";
 
 //------------------------------------------------------------------------------
 // PanZoom
@@ -24,26 +26,33 @@ export default function PanZoom({
   ...rest
 }: PanZoomProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const sheetRef = useRef<HTMLDivElement>(null);
+  const touch = isTouch();
 
-  useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
+  useGesture(
+    {
+      // Drag (touch devices).
+      onDrag: ({ delta: [dx, dy] }) => {
+        if (!touch) return;
 
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      const rect = viewport.getBoundingClientRect();
-      const pointerX = event.clientX - rect.left;
-      const pointerY = event.clientY - rect.top;
-      const isZoomGesture = event.ctrlKey || Math.abs(event.deltaZ) > 0;
+        onTransform((prevTransform) => ({
+          ...prevTransform,
+          x: prevTransform.x + dx,
+          y: prevTransform.y + dy,
+        }));
+      },
 
-      if (isZoomGesture) {
+      // Pinch (touch devices).
+      onPinch: ({ origin: [ox, oy], offset: [d] }) => {
+        if (!touch) return;
+
+        const rect = viewportRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const pointerX = ox - rect.left;
+        const pointerY = oy - rect.top;
+
         onTransform((prevTransform) => {
-          const nextScale = clamp(
-            prevTransform.scale * Math.exp(-event.deltaY * zoomFactor),
-            minScale,
-            maxScale,
-          );
+          const nextScale = clamp(d, minScale, maxScale);
           const scaleRatio = nextScale / prevTransform.scale;
 
           return {
@@ -52,34 +61,62 @@ export default function PanZoom({
             y: pointerY - scaleRatio * (pointerY - prevTransform.y),
           };
         });
-      }
+      },
 
-      onTransform((prevTransform) => ({
-        ...prevTransform,
-        x: prevTransform.x - event.deltaX,
-        y: prevTransform.y - event.deltaY,
-      }));
-    };
+      // Wheel pan/zoom.
+      onWheel: ({ event, delta: [dx, dy], ctrlKey }) => {
+        event.preventDefault();
 
-    viewport.addEventListener("wheel", handleWheel, { passive: false });
-    return () => viewport.removeEventListener("wheel", handleWheel);
-  }, [maxScale, minScale, onTransform, zoomFactor]);
+        const rect = viewportRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const pointerX = event.clientX - rect.left;
+        const pointerY = event.clientY - rect.top;
+
+        if (ctrlKey) {
+          onTransform((prevTransform) => {
+            const nextScale = clamp(
+              prevTransform.scale * Math.exp(-dy * zoomFactor),
+              minScale,
+              maxScale,
+            );
+            const ratio = nextScale / prevTransform.scale;
+
+            return {
+              scale: nextScale,
+              x: pointerX - ratio * (pointerX - prevTransform.x),
+              y: pointerY - ratio * (pointerY - prevTransform.y),
+            };
+          });
+          return;
+        }
+
+        // Normal wheel/trackpad scroll => pan
+        onTransform((prevTransform) => ({
+          ...prevTransform,
+          x: prevTransform.x - dx,
+          y: prevTransform.y - dy,
+        }));
+      },
+    },
+    {
+      drag: { from: () => [transform.x, transform.y] },
+      eventOptions: { passive: false },
+      pinch: { scaleBounds: { max: maxScale, min: minScale } },
+      target: viewportRef,
+    },
+  );
 
   return (
     <Box
-      bgColor="bg.emphasized"
-      h="100vh"
       overflow="hidden"
       position="relative"
+      ref={viewportRef}
       touchAction="none"
       {...rest}
-      ref={viewportRef}
     >
       <Box
-        left={0}
         position="absolute"
-        ref={sheetRef}
-        top={0}
         transform={`translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`}
         transformOrigin="0 0"
       >
