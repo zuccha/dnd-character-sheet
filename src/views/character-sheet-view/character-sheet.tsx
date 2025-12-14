@@ -1,4 +1,4 @@
-import { HStack, VStack } from "@chakra-ui/react";
+import { HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 import Frame from "~/views/character-sheet-view/frame";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
 import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-saving-throws";
@@ -8,6 +8,7 @@ import CharacterSheetHpDice from "./fields/character-sheet-hp-dice";
 import CharacterSheetLevel from "./fields/character-sheet-level";
 import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
 import CharacterSheetName from "./fields/character-sheet-name";
+import CharacterSheetProficiencyBonus from "./fields/character-sheet-proficiency-bonus";
 import CharacterSheetTitle from "./fields/character-sheet-title";
 
 //------------------------------------------------------------------------------
@@ -44,6 +45,12 @@ export default function CharacterSheet() {
           <CharacterSheetExhaustion flex={1} />
         </VStack>
       </HStack>
+
+      <SimpleGrid columns={2} gap={2} w="full">
+        <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
+          <CharacterSheetProficiencyBonus />
+        </SimpleGrid>
+      </SimpleGrid>
     </VStack>
   );
 }
