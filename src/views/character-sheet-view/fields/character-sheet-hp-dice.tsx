@@ -13,6 +13,7 @@ import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import NumberInput from "~/ui/number-input";
 import { fillOrShrink } from "~/utils/array";
+import { isTouch } from "~/utils/window";
 import Frame, { type FrameProps } from "../frame";
 
 //------------------------------------------------------------------------------
@@ -36,7 +37,9 @@ export default function CharacterSheetHpDice(props: CharacterSheetHpDiceProps) {
     >
       <IconButton
         Icon={EditIcon}
-        _groupHover={{ visibility: "visible" }}
+        _focus={{ color: "fg.info" }}
+        _groupHover={{ color: "fg.info" }}
+        color={isTouch() ? undefined : "transparent"}
         colorPalette="blue"
         onClick={() => setUpdateHpDiceDialogOpen(true)}
         position="absolute"
@@ -44,7 +47,6 @@ export default function CharacterSheetHpDice(props: CharacterSheetHpDiceProps) {
         size="2xs"
         top={1}
         variant="ghost"
-        visibility="hidden"
       />
 
       <SimpleGrid columns={5} gap={1}>

@@ -17,6 +17,7 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
+import { isTouch } from "~/utils/window";
 
 //------------------------------------------------------------------------------
 // Character List Item
@@ -146,7 +147,7 @@ export default function CharacterListItem({
           _focus={{ color: "revert" }}
           _groupHover={{ color: "revert" }}
           borderRadius={4}
-          color="transparent"
+          color={isTouch() ? undefined : "transparent"}
           size="xs"
           variant="ghost"
         />
