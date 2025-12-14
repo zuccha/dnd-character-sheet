@@ -12,39 +12,53 @@ export type EditableNumberProps = Omit<
   integer?: boolean;
   max?: number;
   min?: number;
-  onChange: (value: number) => void;
-  onValidate?: (value: number) => string | undefined;
-  value: number;
-};
+} & (
+    | {
+        allowEmpty?: false;
+        onChange: (value: number) => void;
+        onValidate?: (value: number) => string | undefined;
+        value: number;
+      }
+    | {
+        allowEmpty: true;
+        onChange: (value: number | null) => void;
+        onValidate?: (value: number | null) => string | undefined;
+        value: number | null;
+      }
+  );
 
 export default function EditableNumber({
+  allowEmpty,
   integer,
   max,
   min,
   name,
   onChange,
-  onValidate = () => undefined,
+  onValidate,
   value,
   ...rest
 }: EditableNumberProps) {
   const change = useCallback(
     (text: string) => {
-      onChange(Number(text));
+      if (!text.trim() && allowEmpty) onChange(null);
+      else onChange(Number(text));
     },
-    [onChange],
+    [allowEmpty, onChange],
   );
 
   const validate = useCallback(
     (text: string): string | undefined => {
+      if (text.trim() === "")
+        return allowEmpty ? onValidate?.(null) : error(name, "nan");
+
       const nextValue = Number(text);
-      if (text.trim() === "") return error(name, "nan");
       if (Number.isNaN(nextValue)) return error(name, "nan");
       if (integer && !Number.isInteger(nextValue)) return error(name, "int");
       if (max !== undefined && nextValue > max) return error(name, "max");
       if (min !== undefined && nextValue < min) return error(name, "min");
-      return onValidate(nextValue);
+      return onValidate?.(nextValue);
     },
-    [integer, max, min, name, onValidate],
+    [allowEmpty, integer, max, min, name, onValidate],
   );
 
   return (
@@ -53,7 +67,7 @@ export default function EditableNumber({
       name={name}
       onChange={change}
       onValidate={validate}
-      value={`${value}`}
+      value={value === null ? "" : `${value}`}
     />
   );
 }
