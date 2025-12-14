@@ -1,6 +1,9 @@
-import { HStack, Text, VStack, createListCollection } from "@chakra-ui/react";
+import { HStack, VStack, createListCollection } from "@chakra-ui/react";
+import { PanelLeftIcon } from "lucide-react";
+import { useState } from "react";
 import { useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
+import IconButton from "~/ui/icon-button";
 import Select from "~/ui/select";
 import CharacterList from "./character-list";
 import SaveButton from "./save-button";
@@ -12,6 +15,20 @@ import SaveButton from "./save-button";
 export default function Sidebar() {
   const [lang, setLang] = useI18nLang();
 
+  const [collapsed, setCollapsed] = useState(false);
+
+  if (collapsed) {
+    return (
+      <IconButton
+        Icon={PanelLeftIcon}
+        m={2}
+        onClick={() => setCollapsed(false)}
+        position="absolute"
+        size="sm"
+      />
+    );
+  }
+
   return (
     <VStack
       bgColor="bg.l1"
@@ -22,12 +39,17 @@ export default function Sidebar() {
       w="20em"
     >
       <HStack align="center" w="full">
-        <Text flex={1}>D&D 5e 2024</Text>
-
-        <HStack gap={0}>
+        <HStack flex={1} gap={0}>
           <SaveButton size="sm" variant="ghost" />
           <ThemeButton size="sm" variant="ghost" />
         </HStack>
+
+        <IconButton
+          Icon={PanelLeftIcon}
+          onClick={() => setCollapsed(true)}
+          size="sm"
+          variant="ghost"
+        />
       </HStack>
 
       <Select onValueChange={setLang} options={langOptions} value={lang} />
