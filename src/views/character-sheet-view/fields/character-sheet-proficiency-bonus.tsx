@@ -5,7 +5,6 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import { formatNumber } from "~/utils/number";
 import Frame from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 
@@ -25,25 +24,21 @@ export default function CharacterSheetProficiencyBonus() {
     <Frame className="group" flexDirection="row" position="relative">
       <Span fontSize="cs.h4">{t("proficiency_bonus.label")}</Span>
 
-      {proficiencyBonus.inferred ?
-        <Span fontSize="cs.value.md">
-          {formatNumber(proficiencyBonus.value, true)}
-        </Span>
-      : <EditableNumber
-          alwaysShowSign
-          fontSize="cs.value.md"
-          integer
-          name="character-proficiency-bonus"
-          onChange={(customValue) =>
-            setProficiencyBonus((prev) => ({ ...prev, customValue }))
-          }
-          onError={error}
-          placeholder={t("proficiency_bonus.placeholder")}
-          textAlign="right"
-          value={proficiencyBonus.value}
-          w="full"
-        />
-      }
+      <EditableNumber
+        alwaysShowSign
+        disabled={proficiencyBonus.inferred}
+        fontSize="cs.value.md"
+        integer
+        name="character-proficiency-bonus"
+        onChange={(customValue) =>
+          setProficiencyBonus((prev) => ({ ...prev, customValue }))
+        }
+        onError={error}
+        placeholder={t("proficiency_bonus.placeholder")}
+        textAlign="right"
+        value={proficiencyBonus.value}
+        w="full"
+      />
 
       <InferableNumberButton
         {...touchVisibilityStyles}
