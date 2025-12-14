@@ -41,12 +41,12 @@ export const characterSchema = z.object({
     .default([false, false, false, false, false, false]),
   hpDice: z
     .object({
-      d6: z.number().default(0),
-      d8: z.number().default(1),
-      d10: z.number().default(0),
-      d12: z.number().default(0),
+      d6: z.array(z.boolean()).default([]),
+      d8: z.array(z.boolean()).default([false]),
+      d10: z.array(z.boolean()).default([]),
+      d12: z.array(z.boolean()).default([]),
     })
-    .default({ d6: 0, d8: 1, d10: 0, d12: 0 }),
+    .default({ d6: [], d8: [false], d10: [], d12: [] }),
   level: z.number().default(1),
   maxHp: z.number().default(10),
   name: z.string().default(""),

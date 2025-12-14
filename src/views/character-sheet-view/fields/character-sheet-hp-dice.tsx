@@ -1,12 +1,12 @@
-import { Box, type IconProps, SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import { useActiveCharacterHpDice } from "~/character/active-character";
+import type { Character } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
-import CheckboxFrameIcon from "~/icons/checkbox-frame-icon";
 import D10Icon from "~/icons/d10-icon";
 import D12Icon from "~/icons/d12-icon";
 import D6Icon from "~/icons/d6-icon";
 import D8Icon from "~/icons/d8-icon";
-import { range } from "~/utils/array";
+import Checkbox from "~/ui/checkbox";
 import Frame, { type FrameProps } from "../frame";
 
 //------------------------------------------------------------------------------
@@ -18,50 +18,59 @@ export type CharacterSheetHpDiceProps = FrameProps;
 export default function CharacterSheetHpDice(props: CharacterSheetHpDiceProps) {
   const { t } = useI18nLangContext(i18nContext);
 
-  const [hpDice] = useActiveCharacterHpDice();
-
   return (
     <Frame align="flex-start" title={t("hp_dice.label")} {...props}>
       <SimpleGrid columns={5} gap={1}>
-        {range(hpDice.d6).map((i) => (
-          <Die Icon={D6Icon} key={i} />
-        ))}
-        {range(hpDice.d8).map((i) => (
-          <Die Icon={D8Icon} key={i} />
-        ))}
-        {range(hpDice.d10).map((i) => (
-          <Die Icon={D10Icon} key={i} />
-        ))}
-        {range(hpDice.d12).map((i) => (
-          <Die Icon={D12Icon} key={i} />
-        ))}
+        <Dice die="d6" />
+        <Dice die="d8" />
+        <Dice die="d10" />
+        <Dice die="d12" />
       </SimpleGrid>
     </Frame>
   );
 }
 
 //------------------------------------------------------------------------------
-// Die
+// Dice
 //------------------------------------------------------------------------------
 
-type DieProps = {
-  Icon: React.FC<IconProps>;
+type DiceProps = {
+  die: keyof Character["hpDice"];
 };
 
-function Die({ Icon }: DieProps) {
-  return (
-    <Box position="relative">
-      <Icon
-        h="cs.checkbox"
-        left={0}
-        opacity={0.4}
-        position="absolute"
-        w="cs.checkbox"
-      />
-      <CheckboxFrameIcon h="cs.checkbox" w="cs.checkbox" />
-    </Box>
-  );
+function Dice({ die }: DiceProps) {
+  const [hpDice, setHpDice] = useActiveCharacterHpDice();
+
+  const Icon = dieIcons[die];
+
+  return hpDice[die].map((checked, index) => (
+    <Checkbox
+      checked={checked}
+      key={`${die}-${index}`}
+      onValueChange={(nextChecked) =>
+        setHpDice((prevHpDice) => {
+          const nextDieChecked = [...prevHpDice[die]];
+          nextDieChecked[index] = nextChecked;
+          return { ...prevHpDice, [die]: nextDieChecked };
+        })
+      }
+      size="sm"
+    >
+      <Icon h="cs.checkbox" opacity={0.4} w="cs.checkbox" />
+    </Checkbox>
+  ));
 }
+
+//------------------------------------------------------------------------------
+// Die Icons
+//------------------------------------------------------------------------------
+
+const dieIcons = {
+  d6: D6Icon,
+  d8: D8Icon,
+  d10: D10Icon,
+  d12: D12Icon,
+} as const;
 
 //------------------------------------------------------------------------------
 // I18n Context
