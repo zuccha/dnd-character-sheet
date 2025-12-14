@@ -2,6 +2,7 @@ import { HStack, Span, VStack } from "@chakra-ui/react";
 import { useCallback } from "react";
 import {
   useActiveCharacterAbilityModifier,
+  useActiveCharacterAbilitySavingThrow,
   useActiveCharacterField,
 } from "~/character/active-character";
 import type { CharacterAbility } from "~/character/character";
@@ -11,6 +12,7 @@ import { toaster } from "~/ui/toaster";
 import { touchVisibilityStyles } from "../../../theme/common-styles";
 import Frame from "../frame";
 import InferableNumberButton from "../inferable-number-button";
+import CharacterSheetSkill from "./character-sheet-skill";
 
 //------------------------------------------------------------------------------
 // Character Sheet Ability
@@ -87,7 +89,38 @@ export default function CharacterSheetAbility({
           </Frame>
         </HStack>
       </Frame>
+
+      <Frame borderTopWidth={0} py={1} w="full">
+        <CharacterSheetAbilitySavingThrow ability={ability} />
+      </Frame>
     </VStack>
+  );
+}
+
+//------------------------------------------------------------------------------
+// Character Sheet Ability Saving Throw
+//------------------------------------------------------------------------------
+
+type CharacterSheetAbilitySavingThrowProps = {
+  ability: CharacterAbility;
+};
+
+function CharacterSheetAbilitySavingThrow({
+  ability,
+}: CharacterSheetAbilitySavingThrowProps) {
+  const { t } = useI18nLangContext(i18nContext);
+
+  const [savingThrow, setSavingThrow] =
+    useActiveCharacterAbilitySavingThrow(ability);
+
+  return (
+    <CharacterSheetSkill
+      label={t("saving_throw.label")}
+      name={`${ability}-saving-throw`}
+      onChange={setSavingThrow}
+      skill={savingThrow}
+      w="full"
+    />
   );
 }
 
@@ -284,6 +317,11 @@ const i18nContext = {
   "modifier.placeholder": {
     en: "+0",
     it: "+0",
+  },
+
+  "saving_throw.label": {
+    en: "Saving Throw",
+    it: "Tiro Salvezza",
   },
 
   "score.label": {
