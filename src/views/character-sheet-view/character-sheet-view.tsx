@@ -11,11 +11,22 @@ import Sidebar from "./sidebar/sidebar";
 
 export default function CharacterSheetView() {
   const sidebarWidth = 20 * 16; // em * px
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(isTouch);
 
   return (
     <HStack gap={0} position="relative">
-      <CharacterSheetPanZoom offsetX={isTouch() ? 0 : sidebarWidth} />
-      <Sidebar left={0} position="absolute" top={0} w={`${sidebarWidth}px`} />
+      <CharacterSheetPanZoom
+        offsetX={isTouch() || sidebarCollapsed ? 0 : sidebarWidth}
+      />
+
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        left={0}
+        onCollapsedChange={setSidebarCollapsed}
+        position="absolute"
+        top={0}
+        w={`${sidebarWidth}px`}
+      />
     </HStack>
   );
 }

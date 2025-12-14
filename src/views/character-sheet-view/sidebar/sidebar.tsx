@@ -6,12 +6,10 @@ import {
   createListCollection,
 } from "@chakra-ui/react";
 import { PanelLeftIcon } from "lucide-react";
-import { useState } from "react";
 import { useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
 import IconButton from "~/ui/icon-button";
 import Select from "~/ui/select";
-import { isTouch } from "~/utils/window";
 import CharacterList from "./character-list";
 import SaveButton from "./save-button";
 
@@ -19,20 +17,25 @@ import SaveButton from "./save-button";
 // Sidebar
 //------------------------------------------------------------------------------
 
-export type SidebarProps = StackProps;
+export type SidebarProps = StackProps & {
+  collapsed: boolean;
+  onCollapsedChange: (collapsed: boolean) => void;
+};
 
-export default function Sidebar(props: SidebarProps) {
+export default function Sidebar({
+  collapsed,
+  onCollapsedChange,
+  ...rest
+}: SidebarProps) {
   const [lang, setLang] = useI18nLang();
-
-  const [collapsed, setCollapsed] = useState(isTouch);
 
   if (collapsed) {
     return (
-      <Stack {...props}>
+      <Stack {...rest}>
         <IconButton
           Icon={PanelLeftIcon}
           m={2}
-          onClick={() => setCollapsed(false)}
+          onClick={() => onCollapsedChange(false)}
           position="absolute"
           size="sm"
         />
@@ -48,7 +51,7 @@ export default function Sidebar(props: SidebarProps) {
       px={4}
       py={2}
       w="20em"
-      {...props}
+      {...rest}
     >
       <HStack align="center" w="full">
         <HStack flex={1} gap={0}>
@@ -58,7 +61,7 @@ export default function Sidebar(props: SidebarProps) {
 
         <IconButton
           Icon={PanelLeftIcon}
-          onClick={() => setCollapsed(true)}
+          onClick={() => onCollapsedChange(true)}
           size="sm"
           variant="ghost"
         />
