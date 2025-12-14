@@ -1,15 +1,21 @@
 import { HStack, Span, VStack } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import {
   useActiveCharacterAbilityModifier,
   useActiveCharacterAbilitySavingThrow,
   useActiveCharacterField,
+  useActiveCharacterSkill,
 } from "~/character/active-character";
-import type { CharacterAbility } from "~/character/character";
+import type {
+  Character,
+  CharacterAbility,
+  CharacterSkill,
+} from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import { touchVisibilityStyles } from "../../../theme/common-styles";
+import type { KeysOfType } from "~/utils/types";
 import Frame from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 import CharacterSheetSkill from "./character-sheet-skill";
@@ -30,6 +36,19 @@ export default function CharacterSheetAbility({
   const [modifier, setModifier] = useActiveCharacterAbilityModifier(ability);
 
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
+
+  const skills = useMemo(() => {
+    return skillsByAbility[ability]
+      .map((skill) => ({
+        ...skill,
+        label: t(`skill[${skill.name}].label`),
+      }))
+      .sort((skill1, skill2) => {
+        if (skill1.label < skill2.label) return -1;
+        if (skill1.label > skill2.label) return 1;
+        return 0;
+      });
+  }, [ability, t]);
 
   return (
     <VStack gap={0}>
@@ -74,7 +93,6 @@ export default function CharacterSheetAbility({
             </Span>
 
             <EditableNumber
-              alwaysShowSign
               fontSize="cs.value.sm"
               integer
               min={0}
@@ -93,6 +111,18 @@ export default function CharacterSheetAbility({
       <Frame borderTopWidth={0} py={1} w="full">
         <CharacterSheetAbilitySavingThrow ability={ability} />
       </Frame>
+
+      {skills.length > 0 && (
+        <Frame borderTopWidth={0} py={1} w="full">
+          {skills.map((skill) => (
+            <CharacterSheetAbilitySkill
+              ability={ability}
+              key={skill.id}
+              {...skill}
+            />
+          ))}
+        </Frame>
+      )}
     </VStack>
   );
 }
@@ -123,6 +153,70 @@ function CharacterSheetAbilitySavingThrow({
     />
   );
 }
+
+//------------------------------------------------------------------------------
+// Character Sheet Ability Skill
+//------------------------------------------------------------------------------
+
+type CharacterSheetAbilitySkillProps = {
+  ability: CharacterAbility;
+  id: KeysOfType<Character, CharacterSkill>;
+  label: string;
+  name: string;
+};
+
+function CharacterSheetAbilitySkill({
+  ability,
+  id,
+  label,
+  name,
+}: CharacterSheetAbilitySkillProps) {
+  const [skill, setSkill] = useActiveCharacterSkill(ability, id);
+
+  return (
+    <CharacterSheetSkill
+      label={label}
+      name={`${ability}-${name}`}
+      onChange={setSkill}
+      skill={skill}
+      w="full"
+    />
+  );
+}
+
+//------------------------------------------------------------------------------
+// Skills
+//------------------------------------------------------------------------------
+
+const skillsByAbility = {
+  cha: [
+    { id: "deception", name: "deception" },
+    { id: "intimidation", name: "intimidation" },
+    { id: "performance", name: "performance" },
+    { id: "persuasion", name: "persuasion" },
+  ],
+  con: [],
+  dex: [
+    { id: "acrobatics", name: "acrobatics" },
+    { id: "sleightOfHand", name: "sleight-of-hand" },
+    { id: "stealth", name: "stealth" },
+  ],
+  int: [
+    { id: "arcana", name: "arcana" },
+    { id: "history", name: "history" },
+    { id: "investigation", name: "investigation" },
+    { id: "nature", name: "nature" },
+    { id: "religion", name: "religion" },
+  ],
+  str: [{ id: "athletics", name: "athletics" }],
+  wis: [
+    { id: "animalHandling", name: "animal-handling" },
+    { id: "insight", name: "insight" },
+    { id: "medicine", name: "medicine" },
+    { id: "perception", name: "perception" },
+    { id: "survival", name: "survival" },
+  ],
+} as const;
 
 //------------------------------------------------------------------------------
 // I18n Context
@@ -332,5 +426,95 @@ const i18nContext = {
   "score.placeholder": {
     en: "10",
     it: "10",
+  },
+
+  "skill[acrobatics].label": {
+    en: "Acrobatics",
+    it: "Acrobazia",
+  },
+
+  "skill[animal-handling].label": {
+    en: "Animal Handling",
+    it: "Add. Animali",
+  },
+
+  "skill[arcana].label": {
+    en: "Arcana",
+    it: "Arcano",
+  },
+
+  "skill[athletics].label": {
+    en: "Athletics",
+    it: "Atletica",
+  },
+
+  "skill[deception].label": {
+    en: "Deception",
+    it: "Inganno",
+  },
+
+  "skill[history].label": {
+    en: "History",
+    it: "Storia",
+  },
+
+  "skill[insight].label": {
+    en: "Insight",
+    it: "Intuizione",
+  },
+
+  "skill[intimidation].label": {
+    en: "Intimidation",
+    it: "Intimidire",
+  },
+
+  "skill[investigation].label": {
+    en: "Investigation",
+    it: "Indagare",
+  },
+
+  "skill[medicine].label": {
+    en: "Medicine",
+    it: "Medicina",
+  },
+
+  "skill[nature].label": {
+    en: "Nature",
+    it: "Natura",
+  },
+
+  "skill[perception].label": {
+    en: "Perception",
+    it: "Percezione",
+  },
+
+  "skill[performance].label": {
+    en: "Performance",
+    it: "Intrattenere",
+  },
+
+  "skill[persuasion].label": {
+    en: "Persuasion",
+    it: "Persuasione",
+  },
+
+  "skill[religion].label": {
+    en: "Religion",
+    it: "Religione",
+  },
+
+  "skill[sleight-of-hand].label": {
+    en: "Sleight of Hand",
+    it: "Rapidità di Mano",
+  },
+
+  "skill[stealth].label": {
+    en: "Stealth",
+    it: "Furtività",
+  },
+
+  "skill[survival].label": {
+    en: "Survival",
+    it: "Sopravvivenza",
   },
 };
