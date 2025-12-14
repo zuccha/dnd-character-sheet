@@ -103,6 +103,8 @@ export const useActiveCharacterDeathSaveThrowFailures = () =>
   useActiveCharacterField("deathSaveThrowFailures");
 export const useActiveCharacterDeathSaveThrowSuccesses = () =>
   useActiveCharacterField("deathSaveThrowSuccesses");
+export const useActiveCharacterExhaustion = () =>
+  useActiveCharacterField("exhaustion");
 export const useActiveCharacterHpDice = () => useActiveCharacterField("hpDice");
 export const useActiveCharacterMaxHp = () => useActiveCharacterField("maxHp");
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");

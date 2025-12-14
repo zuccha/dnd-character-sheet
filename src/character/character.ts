@@ -29,6 +29,16 @@ export const characterSchema = z.object({
   deathSaveThrowSuccesses: z
     .tuple([z.boolean(), z.boolean(), z.boolean()])
     .default([false, false, false]),
+  exhaustion: z
+    .tuple([
+      z.boolean(),
+      z.boolean(),
+      z.boolean(),
+      z.boolean(),
+      z.boolean(),
+      z.boolean(),
+    ])
+    .default([false, false, false, false, false, false]),
   hpDice: z
     .object({
       d6: z.number().default(0),
