@@ -3,9 +3,11 @@ import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import { createObservable } from "~/utils/observable";
+import type { KeysOfType } from "~/utils/types";
 import {
   type Character,
   type CharacterAbility,
+  type CharacterSkill,
   defaultCharacter,
   loadCharacter,
   saveCharacter,
@@ -203,6 +205,30 @@ export function useActiveCharacterHasUnsavedChanges(): boolean {
 
 export function useActiveCharacterId(): string | undefined {
   return activeCharacterIdStore.useValue();
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Skill
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterSkill(
+  ability: CharacterAbility,
+  skillKey: KeysOfType<Character, CharacterSkill>,
+) {
+  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
+  const [modifier] = useActiveCharacterAbilityModifier(ability);
+  const [skill, setSkill] = useActiveCharacterField(skillKey);
+
+  const value =
+    skill.inferred ?
+      {
+        expert: modifier.value + 2 * proficiencyBonus.value,
+        none: modifier.value,
+        proficient: modifier.value + proficiencyBonus.value,
+      }[skill.proficiency]
+    : skill.customValue;
+
+  return [{ ...skill, value }, setSkill] as const;
 }
 
 //------------------------------------------------------------------------------
