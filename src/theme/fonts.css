@@ -1,4 +1,36 @@
 /******************************************************************************/
+/* Bookinsanity
+/******************************************************************************/
+
+@font-face {
+  font-family: "Bookinsanity";
+  src: url("../assets/fonts/Bookinsanity.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bookinsanity";
+  src: url("../assets/fonts/Bookinsanity Bold Italic.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bookinsanity";
+  src: url("../assets/fonts/Bookinsanity Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bookinsanity";
+  src: url("../assets/fonts/Bookinsanity Italic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/******************************************************************************/
 /* Lato
 /******************************************************************************/
 
