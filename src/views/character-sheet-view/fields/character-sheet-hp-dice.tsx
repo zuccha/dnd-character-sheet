@@ -1,7 +1,7 @@
 import { Box, type IconProps, SimpleGrid } from "@chakra-ui/react";
 import { useActiveCharacterHpDice } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
-import CheckboxEmptyIcon from "~/icons/checkbox-empty-icon";
+import CheckboxFrameIcon from "~/icons/checkbox-frame-icon";
 import D10Icon from "~/icons/d10-icon";
 import D12Icon from "~/icons/d12-icon";
 import D6Icon from "~/icons/d6-icon";
@@ -58,7 +58,7 @@ function Die({ Icon }: DieProps) {
         position="absolute"
         w="cs.checkbox"
       />
-      <CheckboxEmptyIcon h="cs.checkbox" w="cs.checkbox" />
+      <CheckboxFrameIcon h="cs.checkbox" w="cs.checkbox" />
     </Box>
   );
 }

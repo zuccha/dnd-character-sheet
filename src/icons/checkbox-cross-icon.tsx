@@ -1,13 +1,14 @@
 import { createIcon } from "@chakra-ui/react";
 
-const CheckboxCrossedIcon = createIcon({
+const CheckboxCrossIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxCrossedIcon",
+  displayName: "CheckboxCrossIcon",
   path: (
     <>
-      <rect
+      {/* Frame */}
+      {/* <rect
         fill="none"
         height="23"
         rx="1.5"
@@ -15,7 +16,9 @@ const CheckboxCrossedIcon = createIcon({
         width="23"
         x="0.5"
         y="0.5"
-      />
+      /> */}
+
+      {/* X */}
       <path
         d="M6 6L18 18"
         stroke="currentColor"
@@ -32,4 +35,4 @@ const CheckboxCrossedIcon = createIcon({
   ),
 });
 
-export default CheckboxCrossedIcon;
+export default CheckboxCrossIcon;

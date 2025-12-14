@@ -1,11 +1,12 @@
 import { createIcon } from "@chakra-ui/react";
 
-const CheckboxEmptyIcon = createIcon({
+const CheckboxFrameIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxEmptyIcon",
+  displayName: "CheckboxFrameIcon",
   path: (
+    // Frame
     <rect
       fill="none"
       height="23"
@@ -18,4 +19,4 @@ const CheckboxEmptyIcon = createIcon({
   ),
 });
 
-export default CheckboxEmptyIcon;
+export default CheckboxFrameIcon;

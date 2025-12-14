@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { type ReactNode, useCallback } from "react";
-import CheckboxEmptyIcon from "~/icons/checkbox-empty-icon";
-import CheckboxCrossedIcon from "../icons/checkbox-crossed-icon";
+import CheckboxFrameIcon from "~/icons/checkbox-frame-icon";
+import CheckboxCrossIcon from "../icons/checkbox-cross-icon";
 import IconButton, { type IconButtonProps } from "./icon-button";
 
 //------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ export default function Checkbox({
   return (
     <Box position="relative">
       <IconButton
-        Icon={CheckboxEmptyIcon}
+        Icon={CheckboxFrameIcon}
         aspectRatio={1}
         borderRadius={2}
         cursor={disabled ? "disabled" : "pointer"}
@@ -48,7 +48,7 @@ export default function Checkbox({
 
       {checked && (
         <Box left="0" pointerEvents="none" position="absolute" top="0">
-          <CheckboxCrossedIcon />
+          <CheckboxCrossIcon />
         </Box>
       )}
     </Box>

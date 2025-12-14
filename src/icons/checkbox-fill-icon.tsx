@@ -1,13 +1,14 @@
 import { createIcon } from "@chakra-ui/react";
 
-const CheckboxFilledIcon = createIcon({
+const CheckboxFillIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxFilledIcon",
+  displayName: "CheckboxFillIcon",
   path: (
     <>
-      <rect
+      {/* Frame */}
+      {/* <rect
         fill="none"
         height="23"
         rx="1.5"
@@ -15,7 +16,9 @@ const CheckboxFilledIcon = createIcon({
         width="23"
         x="0.5"
         y="0.5"
-      />
+      /> */}
+
+      {/* Fill */}
       <rect
         fill="currentColor"
         height="18.6667"
@@ -28,4 +31,4 @@ const CheckboxFilledIcon = createIcon({
   ),
 });
 
-export default CheckboxFilledIcon;
+export default CheckboxFillIcon;
