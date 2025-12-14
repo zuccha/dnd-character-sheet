@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { formatNumber } from "~/utils/number";
 import EditableText, { type EditableTextProps } from "./editable-text";
 
 //------------------------------------------------------------------------------
@@ -9,6 +10,7 @@ export type EditableNumberProps = Omit<
   EditableTextProps,
   "onChange" | "onValidate" | "value"
 > & {
+  alwaysShowSign?: boolean;
   integer?: boolean;
   max?: number;
   min?: number;
@@ -29,6 +31,7 @@ export type EditableNumberProps = Omit<
 
 export default function EditableNumber({
   allowEmpty,
+  alwaysShowSign,
   integer,
   max,
   min,
@@ -67,7 +70,7 @@ export default function EditableNumber({
       name={name}
       onChange={change}
       onValidate={validate}
-      value={value === null ? "" : `${value}`}
+      value={value === null ? "" : formatNumber(value, alwaysShowSign)}
     />
   );
 }
