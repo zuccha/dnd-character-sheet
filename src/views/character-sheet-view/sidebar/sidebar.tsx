@@ -1,4 +1,10 @@
-import { HStack, VStack, createListCollection } from "@chakra-ui/react";
+import {
+  HStack,
+  Stack,
+  type StackProps,
+  VStack,
+  createListCollection,
+} from "@chakra-ui/react";
 import { PanelLeftIcon } from "lucide-react";
 import { useState } from "react";
 import { useI18nLang } from "~/i18n/i18n-lang";
@@ -12,20 +18,24 @@ import SaveButton from "./save-button";
 // Sidebar
 //------------------------------------------------------------------------------
 
-export default function Sidebar() {
+export type SidebarProps = StackProps;
+
+export default function Sidebar(props: SidebarProps) {
   const [lang, setLang] = useI18nLang();
 
   const [collapsed, setCollapsed] = useState(false);
 
   if (collapsed) {
     return (
-      <IconButton
-        Icon={PanelLeftIcon}
-        m={2}
-        onClick={() => setCollapsed(false)}
-        position="absolute"
-        size="sm"
-      />
+      <Stack {...props}>
+        <IconButton
+          Icon={PanelLeftIcon}
+          m={2}
+          onClick={() => setCollapsed(false)}
+          position="absolute"
+          size="sm"
+        />
+      </Stack>
     );
   }
 
@@ -37,6 +47,7 @@ export default function Sidebar() {
       px={4}
       py={2}
       w="20em"
+      {...props}
     >
       <HStack align="center" w="full">
         <HStack flex={1} gap={0}>
