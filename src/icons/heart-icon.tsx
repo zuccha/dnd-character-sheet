@@ -4,7 +4,7 @@ const HeartIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "Heart",
+  displayName: "HeartIcon",
   path: (
     <>
       {/* Frame */}

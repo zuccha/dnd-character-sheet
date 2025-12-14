@@ -4,7 +4,7 @@ const D8Icon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "D8",
+  displayName: "D8Icon",
   path: (
     <>
       {/* Frame */}

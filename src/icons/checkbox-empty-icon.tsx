@@ -4,7 +4,7 @@ const CheckboxEmptyIcon = createIcon({
   defaultProps: {
     size: "md",
   },
-  displayName: "CheckboxEmpty",
+  displayName: "CheckboxEmptyIcon",
   path: (
     <rect
       fill="none"
