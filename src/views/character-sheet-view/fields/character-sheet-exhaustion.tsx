@@ -60,10 +60,16 @@ function ExhaustCheckbox({ color, index }: ExhaustCheckboxProps) {
   );
 
   const DieIcon = dieIcons[index];
+  const opacity = opacities[index];
 
   return (
     <Checkbox checked={exhaustion[index]} onValueChange={exhaust} size="sm">
-      <DieIcon color={color} h="cs.checkbox" opacity={0.2} w="cs.checkbox" />
+      <DieIcon
+        color={color}
+        h="cs.checkbox"
+        opacity={opacity}
+        w="cs.checkbox"
+      />
     </Checkbox>
   );
 }
@@ -73,6 +79,12 @@ function ExhaustCheckbox({ color, index }: ExhaustCheckboxProps) {
 //------------------------------------------------------------------------------
 
 const dieIcons = [D1Icon, D2Icon, D3Icon, D4Icon, D5Icon, SkullIcon] as const;
+
+//------------------------------------------------------------------------------
+// Opacities
+//------------------------------------------------------------------------------
+
+const opacities = [0.4, 0.4, 0.4, 0.4, 0.4, 0.2] as const;
 
 //------------------------------------------------------------------------------
 // I18n Context
