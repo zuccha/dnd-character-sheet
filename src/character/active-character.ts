@@ -51,7 +51,14 @@ const activeCharacterUnsavedChangesStore = createMemoryStore(false);
 
 export function useActiveCharacterField<F extends keyof Character>(
   field: F,
-): [Character[F], (value: Character[F]) => void] {
+): [
+  Character[F],
+  (
+    nextValueOrValueUpdater:
+      | Character[F]
+      | ((prevValue: Character[F]) => Character[F]),
+  ) => void,
+] {
   const [value, setValue] = useState(activeCharacterStore.get()[field]);
 
   useLayoutEffect(() => {
@@ -67,7 +74,15 @@ export function useActiveCharacterField<F extends keyof Character>(
   return [
     value,
     useCallback(
-      (nextValue: Character[F]) => {
+      (
+        nextValueOrValueUpdater:
+          | Character[F]
+          | ((prevValue: Character[F]) => Character[F]),
+      ) => {
+        const nextValue =
+          typeof nextValueOrValueUpdater === "function" ?
+            nextValueOrValueUpdater(activeCharacterStore.get()[field])
+          : nextValueOrValueUpdater;
         setValue(nextValue);
         activeCharacterStore.set((prev) => {
           if (prev[field] === nextValue) return prev;
