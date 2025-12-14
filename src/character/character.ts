@@ -2,6 +2,19 @@ import z from "zod";
 import { generateUUID } from "~/utils/uuid";
 
 //------------------------------------------------------------------------------
+// Inferable Number
+//------------------------------------------------------------------------------
+
+export const inferableNumberSchema = z.object({
+  customValue: z.number().default(0),
+  inferred: z.boolean().default(true),
+});
+
+export type InferableNumber = z.infer<typeof inferableNumberSchema>;
+
+const defaultInferableNumber = inferableNumberSchema.parse({});
+
+//------------------------------------------------------------------------------
 // Character Metadata
 //------------------------------------------------------------------------------
 
@@ -54,6 +67,7 @@ export const characterSchema = z.object({
   maxHp: z.number().default(10),
   maxHpTemp: z.number().nullable().default(null),
   name: z.string().default(""),
+  proficiencyBonus: inferableNumberSchema.default(defaultInferableNumber),
   title: z.string().default(""),
 });
 

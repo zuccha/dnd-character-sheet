@@ -125,6 +125,24 @@ export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 
 export const useActiveCharacterName = () => useActiveCharacterField("name");
 
+export const useActiveCharacterProficiencyBonus = () => {
+  const [level] = useActiveCharacterLevel();
+  const [proficiencyBonus, setProficiencyBonus] =
+    useActiveCharacterField("proficiencyBonus");
+
+  const value =
+    proficiencyBonus.inferred ?
+      level < 1 ? 0
+      : level < 5 ? 2
+      : level < 9 ? 3
+      : level < 13 ? 4
+      : level < 17 ? 5
+      : 6
+    : proficiencyBonus.customValue;
+
+  return [{ ...proficiencyBonus, value }, setProficiencyBonus] as const;
+};
+
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
 
 //------------------------------------------------------------------------------
