@@ -29,11 +29,30 @@ export type CharacterMetadata = z.infer<typeof characterMetadataSchema>;
 export const defaultCharacterMetadata = characterMetadataSchema.parse({});
 
 //------------------------------------------------------------------------------
+// Character Ability
+//------------------------------------------------------------------------------
+
+export type CharacterAbility = "cha" | "con" | "dex" | "int" | "str" | "wis";
+
+//------------------------------------------------------------------------------
 // Character
 //------------------------------------------------------------------------------
 
 export const characterSchema = z.object({
   meta: characterMetadataSchema.default(defaultCharacterMetadata),
+
+  cha: z.number().default(10),
+  chaModifier: inferableNumberSchema.default(defaultInferableNumber),
+  con: z.number().default(10),
+  conModifier: inferableNumberSchema.default(defaultInferableNumber),
+  dex: z.number().default(10),
+  dexModifier: inferableNumberSchema.default(defaultInferableNumber),
+  int: z.number().default(10),
+  intModifier: inferableNumberSchema.default(defaultInferableNumber),
+  str: z.number().default(10),
+  strModifier: inferableNumberSchema.default(defaultInferableNumber),
+  wis: z.number().default(10),
+  wisModifier: inferableNumberSchema.default(defaultInferableNumber),
 
   armorClass: z.number().default(10),
   armorClassShieldEquipped: z.boolean().default(false),

@@ -5,6 +5,7 @@ import { createMemoryStore } from "~/store/memory-store";
 import { createObservable } from "~/utils/observable";
 import {
   type Character,
+  type CharacterAbility,
   defaultCharacter,
   loadCharacter,
   saveCharacter,
@@ -44,6 +45,20 @@ const activeCharacterObservable = createObservable<Character>();
 //------------------------------------------------------------------------------
 
 const activeCharacterUnsavedChangesStore = createMemoryStore(false);
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Modifier
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilityModifier(ability: CharacterAbility) {
+  const [raw] = useActiveCharacterField(ability);
+  const [modifier, setModifier] = useActiveCharacterField(`${ability}Modifier`);
+
+  const value =
+    modifier.inferred ? Math.floor((raw - 10) / 2) : modifier.customValue;
+
+  return [{ ...modifier, value }, setModifier] as const;
+}
 
 //------------------------------------------------------------------------------
 // Use Active Character Field
@@ -94,6 +109,10 @@ export function useActiveCharacterField<F extends keyof Character>(
     ),
   ];
 }
+
+//------------------------------------------------------------------------------
+// Use Active Character <Field>
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterArmorClass = () =>
   useActiveCharacterField("armorClass");
