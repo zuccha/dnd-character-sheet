@@ -11,6 +11,7 @@ import { useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
 import IconButton from "~/ui/icon-button";
 import Select from "~/ui/select";
+import { isTouch } from "~/utils/window";
 import CharacterList from "./character-list";
 import SaveButton from "./save-button";
 
@@ -23,7 +24,7 @@ export type SidebarProps = StackProps;
 export default function Sidebar(props: SidebarProps) {
   const [lang, setLang] = useI18nLang();
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(isTouch);
 
   if (collapsed) {
     return (
