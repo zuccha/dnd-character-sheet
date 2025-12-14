@@ -1,4 +1,4 @@
-import { HStack, Span, type StackProps } from "@chakra-ui/react";
+import { Center, Span, type StackProps } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 import type { CharacterSkill } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
@@ -53,30 +53,32 @@ export default function CharacterSheetSkill({
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   return (
-    <HStack className="group" gap={0} position="relative" {...rest}>
-      <SkillProficiencyButton
-        onCycle={onChange}
-        proficiency={skill.proficiency}
-      />
+    <Center className="group" position="relative" {...rest}>
+      <Span gap={0} w="full">
+        <SkillProficiencyButton
+          onCycle={onChange}
+          proficiency={skill.proficiency}
+        />
 
-      <EditableNumber
-        alwaysShowSign
-        disabled={skill.inferred}
-        fontSize="cs.h5"
-        integer
-        name={`character-skill-${name}`}
-        onChange={(customValue) =>
-          onChange((prev) => ({ ...prev, customValue }))
-        }
-        onError={error}
-        placeholder={t("skill.placeholder")}
-        textAlign="center"
-        value={skill.value}
-        w="2.5em"
-      />
+        <EditableNumber
+          alwaysShowSign
+          disabled={skill.inferred}
+          fontSize="cs.h5"
+          integer
+          name={`character-skill-${name}`}
+          onChange={(customValue) =>
+            onChange((prev) => ({ ...prev, customValue }))
+          }
+          onError={error}
+          placeholder={t("skill.placeholder")}
+          textAlign="center"
+          value={skill.value}
+          w="2.5em"
+        />
 
-      <Span flex={1} fontSize="cs.h5">
-        {label}
+        <Span flex={1} fontFamily="Bookinsanity" fontSize="cs.h5">
+          {label}
+        </Span>
       </Span>
 
       <InferableNumberButton
@@ -84,9 +86,9 @@ export default function CharacterSheetSkill({
         inferred={skill.inferred}
         onClick={onChange}
         position="absolute"
-        right={-4}
-        transform="scale(60%, 60%) translateX(45%)"
+        right={-3}
+        transform="scale(60%, 60%)"
       />
-    </HStack>
+    </Center>
   );
 }
