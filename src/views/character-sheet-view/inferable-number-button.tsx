@@ -6,23 +6,25 @@ import IconButton, { type IconButtonProps } from "~/ui/icon-button";
 // Inferable Number Button
 //------------------------------------------------------------------------------
 
-export type InferButtonProps = Omit<IconButtonProps, "Icon" | "onClick"> & {
+export type InferableNumberButtonProps<IN extends InferableNumber> = Omit<
+  IconButtonProps,
+  "Icon" | "onClick"
+> & {
   inferred: boolean;
-  onClick: (update: (prev: InferableNumber) => InferableNumber) => void;
+  onClick: (update: (prev: IN) => IN) => void;
 };
 
-export default function InferableNumberButton({
+export default function InferableNumberButton<IN extends InferableNumber>({
   inferred,
   onClick,
   ...rest
-}: InferButtonProps) {
+}: InferableNumberButtonProps<IN>) {
   return (
     <IconButton
       Icon={inferred ? LinkIcon : UnlinkIcon}
       colorPalette="blue"
       onClick={() => onClick((prev) => ({ ...prev, inferred: !prev.inferred }))}
       size="2xs"
-      variant="ghost"
       {...rest}
     />
   );
