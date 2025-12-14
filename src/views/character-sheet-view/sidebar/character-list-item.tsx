@@ -14,10 +14,10 @@ import {
   useRenameCharacter,
 } from "~/character/characters";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import { touchVisibilityStyles } from "~/theme/common-styles";
 import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import Menu from "~/ui/menu";
-import { isTouch } from "~/utils/window";
 
 //------------------------------------------------------------------------------
 // Character List Item
@@ -143,11 +143,9 @@ export default function CharacterListItem({
 
       <Menu items={actions}>
         <IconButton
+          {...touchVisibilityStyles}
           Icon={EllipsisVerticalIcon}
-          _focus={{ color: "revert" }}
-          _groupHover={{ color: "revert" }}
           borderRadius={4}
-          color={isTouch() ? undefined : "transparent"}
           size="xs"
           variant="ghost"
         />

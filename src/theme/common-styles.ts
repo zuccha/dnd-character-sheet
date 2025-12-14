@@ -1,3 +1,5 @@
+import { isTouch } from "~/utils/window";
+
 //------------------------------------------------------------------------------
 // Focus Styles
 //------------------------------------------------------------------------------
@@ -39,3 +41,17 @@ export const hoverInvalidStyles = {
   outlineStyle: "solid",
   outlineWidth: 2,
 };
+
+//------------------------------------------------------------------------------
+// Touch Visibility Styles
+//------------------------------------------------------------------------------
+
+export const touchVisibilityStyles =
+  isTouch() ? undefined : (
+    {
+      _focus: { opacity: 1 },
+      _groupHover: { opacity: 1 },
+      _hover: { opacity: 1 },
+      opacity: 0,
+    }
+  );

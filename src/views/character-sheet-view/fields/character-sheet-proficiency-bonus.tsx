@@ -2,10 +2,10 @@ import { Span } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useActiveCharacterProficiencyBonus } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 import { formatNumber } from "~/utils/number";
-import { isTouch } from "~/utils/window";
 import Frame from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 
@@ -46,10 +46,7 @@ export default function CharacterSheetProficiencyBonus() {
       }
 
       <InferableNumberButton
-        _focus={visibleStyle}
-        _groupHover={visibleStyle}
-        _hover={visibleStyle}
-        {...invisibleStyle}
+        {...touchVisibilityStyles}
         inferred={proficiencyBonus.inferred}
         onClick={setProficiencyBonus}
         position="absolute"
@@ -61,13 +58,6 @@ export default function CharacterSheetProficiencyBonus() {
     </Frame>
   );
 }
-
-//------------------------------------------------------------------------------
-// Styles
-//------------------------------------------------------------------------------
-
-const visibleStyle = { opacity: 1 };
-const invisibleStyle = isTouch() ? undefined : { opacity: 0 };
 
 //------------------------------------------------------------------------------
 // I18n Context

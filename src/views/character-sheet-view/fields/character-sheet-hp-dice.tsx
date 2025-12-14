@@ -8,12 +8,12 @@ import D10Icon from "~/icons/d10-icon";
 import D12Icon from "~/icons/d12-icon";
 import D6Icon from "~/icons/d6-icon";
 import D8Icon from "~/icons/d8-icon";
+import { touchVisibilityStyles } from "~/theme/common-styles";
 import Checkbox from "~/ui/checkbox";
 import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import NumberInput from "~/ui/number-input";
 import { fillOrShrink } from "~/utils/array";
-import { isTouch } from "~/utils/window";
 import Frame, { type FrameProps } from "../frame";
 
 //------------------------------------------------------------------------------
@@ -36,17 +36,15 @@ export default function CharacterSheetHpDice(props: CharacterSheetHpDiceProps) {
       {...props}
     >
       <IconButton
+        {...touchVisibilityStyles}
         Icon={EditIcon}
-        _focus={{ color: "fg.info" }}
-        _groupHover={{ color: "fg.info" }}
-        color={isTouch() ? undefined : "transparent"}
         colorPalette="blue"
         onClick={() => setUpdateHpDiceDialogOpen(true)}
         position="absolute"
-        right={1}
+        right={0}
         size="2xs"
-        top={1}
-        variant="ghost"
+        top={0}
+        transform="translate(35%, -35%) scale(80%, 80%)"
       />
 
       <SimpleGrid columns={5} gap={1}>
