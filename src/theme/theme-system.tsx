@@ -27,7 +27,9 @@ const themeConfig = defineConfig({
         "cs.h2": { value: "1.5em" },
         "cs.h3": { value: "1.3em" },
         "cs.h4": { value: "1.1em" },
+        "cs.h5": { value: "0.8em" },
         "cs.value.md": { value: "1.7em" },
+        "cs.value.sm": { value: "1.3em" },
       },
       sizes: {
         "cs.checkbox": { value: "1.2em" },
