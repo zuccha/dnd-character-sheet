@@ -1,6 +1,7 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { useLayoutEffect, useRef, useState } from "react";
 import PanZoom from "~/ui/pan-zoom";
+import { isTouch } from "~/utils/window";
 import CharacterSheet from "./character-sheet";
 import Sidebar from "./sidebar/sidebar";
 
@@ -13,7 +14,7 @@ export default function CharacterSheetView() {
 
   return (
     <HStack gap={0} position="relative">
-      <CharacterSheetPanZoom offsetX={sidebarWidth} />
+      <CharacterSheetPanZoom offsetX={isTouch() ? 0 : sidebarWidth} />
       <Sidebar left={0} position="absolute" top={0} w={`${sidebarWidth}px`} />
     </HStack>
   );
