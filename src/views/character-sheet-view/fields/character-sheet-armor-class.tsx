@@ -35,7 +35,7 @@ export default function CharacterSheetArmorClass() {
         placeholder={t("armor_class.placeholder")}
         textAlign="center"
         value={armorClass}
-        w="2em"
+        w="full"
       />
 
       <Box bgColor="bg.cs.divider" h="1px" my={1} w="full" />
