@@ -51,13 +51,38 @@ const activeCharacterUnsavedChangesStore = createMemoryStore(false);
 //------------------------------------------------------------------------------
 
 export function useActiveCharacterAbilityModifier(ability: CharacterAbility) {
-  const [raw] = useActiveCharacterField(ability);
+  const [score] = useActiveCharacterField(ability);
   const [modifier, setModifier] = useActiveCharacterField(`${ability}Modifier`);
 
   const value =
-    modifier.inferred ? Math.floor((raw - 10) / 2) : modifier.customValue;
+    modifier.inferred ? Math.floor((score - 10) / 2) : modifier.customValue;
 
   return [{ ...modifier, value }, setModifier] as const;
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Saving Throw
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilitySavingThrow(
+  ability: CharacterAbility,
+) {
+  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
+  const [modifier] = useActiveCharacterAbilityModifier(ability);
+  const [savingThrow, setSavingThrow] = useActiveCharacterField(
+    `${ability}SavingThrow`,
+  );
+
+  const value =
+    savingThrow.inferred ?
+      {
+        expert: modifier.value + 2 * proficiencyBonus.value,
+        none: modifier.value,
+        proficient: modifier.value + proficiencyBonus.value,
+      }[savingThrow.proficiency]
+    : savingThrow.customValue;
+
+  return [{ ...savingThrow, value }, setSavingThrow] as const;
 }
 
 //------------------------------------------------------------------------------

@@ -35,6 +35,18 @@ export const defaultCharacterMetadata = characterMetadataSchema.parse({});
 export type CharacterAbility = "cha" | "con" | "dex" | "int" | "str" | "wis";
 
 //------------------------------------------------------------------------------
+// Character Skill
+//------------------------------------------------------------------------------
+
+export const characterSkillSchema = inferableNumberSchema.extend({
+  proficiency: z.enum(["none", "proficient", "expert"]).default("none"),
+});
+
+export type CharacterSkill = z.infer<typeof characterSkillSchema>;
+
+export const defaultCharacterSkill = characterSkillSchema.parse({});
+
+//------------------------------------------------------------------------------
 // Character
 //------------------------------------------------------------------------------
 
@@ -43,16 +55,22 @@ export const characterSchema = z.object({
 
   cha: z.number().default(10),
   chaModifier: inferableNumberSchema.default(defaultInferableNumber),
+  chaSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
   con: z.number().default(10),
   conModifier: inferableNumberSchema.default(defaultInferableNumber),
+  conSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
   dex: z.number().default(10),
   dexModifier: inferableNumberSchema.default(defaultInferableNumber),
+  dexSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
   int: z.number().default(10),
   intModifier: inferableNumberSchema.default(defaultInferableNumber),
+  intSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
   str: z.number().default(10),
   strModifier: inferableNumberSchema.default(defaultInferableNumber),
+  strSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
   wis: z.number().default(10),
   wisModifier: inferableNumberSchema.default(defaultInferableNumber),
+  wisSavingThrow: characterSkillSchema.default(defaultCharacterSkill),
 
   armorClass: z.number().default(10),
   armorClassShieldEquipped: z.boolean().default(false),
