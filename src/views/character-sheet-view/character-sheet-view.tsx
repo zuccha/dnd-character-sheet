@@ -14,7 +14,7 @@ export default function CharacterSheetView() {
         bgColor="bg.l2"
         h="100vh"
         initialScale={0.75}
-        initialX={320}
+        offsetX={320}
         w="full"
       >
         <CharacterSheet />

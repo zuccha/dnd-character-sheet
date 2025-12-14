@@ -12,22 +12,26 @@ export type PanZoomProps = BoxProps & {
   initialY?: number;
   maxScale?: number;
   minScale?: number;
+  offsetX?: number;
+  offsetY?: number;
   zoomFactor?: number;
 };
 
 export default function PanZoom({
   children,
   initialScale = 1,
-  initialX = 0,
-  initialY = 0,
+  initialX,
+  initialY,
   maxScale = 2.5,
   minScale = 0.5,
+  offsetX = 0,
+  offsetY = 0,
   zoomFactor = 0.01,
   ...rest
 }: PanZoomProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const initialTransform = { scale: initialScale, x: initialX, y: initialY };
+  const initialTransform = { scale: initialScale, x: 0, y: 0 };
   const [transform, setTransform] = useState<Transform>(initialTransform);
 
   useLayoutEffect(() => {
@@ -40,10 +44,10 @@ export default function PanZoom({
 
     setTransform((current) => ({
       ...current,
-      x: (initialX + viewportRect.width - sheetRect.width) / 2,
-      y: (initialY + viewportRect.height - sheetRect.height) / 2,
+      x: initialX ?? (offsetX + viewportRect.width - sheetRect.width) / 2,
+      y: initialY ?? (offsetY + viewportRect.height - sheetRect.height) / 2,
     }));
-  }, [initialX, initialY]);
+  }, [initialX, initialY, offsetX, offsetY]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
