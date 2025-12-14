@@ -22,9 +22,11 @@ export type EditableTextProps = Omit<
 };
 
 export default function EditableText({
+  disabled,
   onChange,
   onError = console.error,
   onValidate = () => undefined,
+  readOnly,
   value,
   ...rest
 }: EditableTextProps) {
@@ -53,9 +55,11 @@ export default function EditableText({
 
   return (
     <Input
-      _focus={_focus}
-      _hover={_hover}
+      _focus={disabled || readOnly ? undefined : _focus}
+      _hover={disabled || readOnly ? undefined : _hover}
       bgColor="transparent"
+      disabled={disabled}
+      readOnly={readOnly}
       spellCheck={false}
       unstyled
       {...rest}
