@@ -251,6 +251,20 @@ export function useActiveCharacterId(): string | undefined {
 }
 
 //------------------------------------------------------------------------------
+// Use Active Character Initiative
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterInitiative = () => {
+  const [dexterityModifier] = useActiveCharacterAbilityModifier("dexterity");
+  const [initiative, setInitiative] = useActiveCharacterField("initiative");
+
+  const value =
+    initiative.inferred ? dexterityModifier.value : initiative.customValue;
+
+  return [{ ...initiative, value }, setInitiative] as const;
+};
+
+//------------------------------------------------------------------------------
 // Use Active Character Level
 //------------------------------------------------------------------------------
 

@@ -217,6 +217,8 @@ export const characterSchema = z.object({
     })
     .default({ d6: [], d8: [false], d10: [], d12: [] }),
 
+  initiative: inferableNumberSchema.default(defaultInferableNumber),
+
   level: z.number().default(1),
 
   name: z.string().default(""),
