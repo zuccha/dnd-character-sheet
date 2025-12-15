@@ -15,6 +15,14 @@ export type InferableNumber = z.infer<typeof inferableNumberSchema>;
 const defaultInferableNumber = inferableNumberSchema.parse({});
 
 //------------------------------------------------------------------------------
+// Proficiency
+//------------------------------------------------------------------------------
+
+export const proficiencySchema = z.enum(["none", "proficient", "expert"]);
+
+export type Proficiency = z.infer<typeof proficiencySchema>;
+
+//------------------------------------------------------------------------------
 // Character Metadata
 //------------------------------------------------------------------------------
 
@@ -33,7 +41,7 @@ export const defaultCharacterMetadata = characterMetadataSchema.parse({});
 //------------------------------------------------------------------------------
 
 export const characterAbilityCheckSchema = inferableNumberSchema.extend({
-  proficiency: z.enum(["none", "proficient", "expert"]).default("none"),
+  proficiency: proficiencySchema.default("none"),
 });
 
 export type CharacterAbilityCheck = z.infer<typeof characterAbilityCheckSchema>;
@@ -161,6 +169,15 @@ export const characterSchema = z.object({
 
   armor_class: z.number().default(10),
   armor_class_shield_equipped: z.boolean().default(false),
+
+  armor_proficiencies: z
+    .object({
+      heavy: proficiencySchema.default("none"),
+      light: proficiencySchema.default("none"),
+      medium: proficiencySchema.default("none"),
+      shields: proficiencySchema.default("none"),
+    })
+    .default({ heavy: "none", light: "none", medium: "none", shields: "none" }),
 
   death_saving_throws: deathSavingThrowsSchema.default(
     defaultDeathSavingThrows,

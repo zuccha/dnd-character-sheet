@@ -187,6 +187,14 @@ export const useActiveCharacterArmorClassShieldEquipped = () =>
   useActiveCharacterField("armor_class_shield_equipped");
 
 //------------------------------------------------------------------------------
+// Use Active Character Armor Proficiencies
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterArmorProficiency = (
+  type: keyof Character["armor_proficiencies"],
+) => useActiveCharacterField("armor_proficiencies", type);
+
+//------------------------------------------------------------------------------
 // Use Active Character Death Saves
 //------------------------------------------------------------------------------
 
