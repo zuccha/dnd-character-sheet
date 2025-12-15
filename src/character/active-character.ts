@@ -1,9 +1,10 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback } from "react";
 import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
+import type { StorePath, StorePathValue } from "~/store/store";
 import { createObservable } from "~/utils/observable";
-import { type StateUpdate, isStateUpdater } from "~/utils/state";
+import { type StateUpdate } from "~/utils/state";
 import type { KeysOfType } from "~/utils/types";
 import {
   type Character,
@@ -92,40 +93,22 @@ export function useActiveCharacterAbilitySavingThrow(
 // Use Active Character Field
 //------------------------------------------------------------------------------
 
-export function useActiveCharacterField<F extends keyof Character>(
-  field: F,
+export function useActiveCharacterField<P extends StorePath<Character>>(
+  ...path: P
 ): [
-  Character[F],
-  (nextValueOrValueUpdater: StateUpdate<Character[F]>) => void,
+  StorePathValue<Character, P>,
+  (update: StateUpdate<StorePathValue<Character, P>>) => void,
 ] {
-  const [value, setValue] = useState(activeCharacterStore.get()[field]);
-
-  useLayoutEffect(() => {
-    const set = (character: Character) => setValue(character[field]);
-    activeCharacterStore.subscribe(set);
-    activeCharacterObservable.subscribe(set);
-    return () => {
-      activeCharacterStore.unsubscribe(set);
-      activeCharacterObservable.unsubscribe(set);
-    };
-  }, [field]);
+  const [value, setValue] = activeCharacterStore.usePath(...path);
 
   return [
     value,
     useCallback(
-      (nextValueOrValueUpdater: StateUpdate<Character[F]>) => {
-        const nextValue =
-          isStateUpdater(nextValueOrValueUpdater) ?
-            nextValueOrValueUpdater(activeCharacterStore.get()[field])
-          : nextValueOrValueUpdater;
-        setValue(nextValue);
-        activeCharacterStore.set((prev) => {
-          if (prev[field] === nextValue) return prev;
-          activeCharacterUnsavedChangesStore.set(true);
-          return { ...prev, [field]: nextValue };
-        });
+      (update: StateUpdate<StorePathValue<Character, P>>) => {
+        const nextValue = setValue(update);
+        if (value !== nextValue) activeCharacterUnsavedChangesStore.set(true);
       },
-      [field],
+      [setValue, value],
     ),
   ];
 }
