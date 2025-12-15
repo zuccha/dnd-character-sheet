@@ -325,6 +325,14 @@ export const useActiveCharacterProficiencyBonus = () => {
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
 
 //------------------------------------------------------------------------------
+// Use Active Character Weapon Proficiencies
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterWeaponProficiency = (
+  type: keyof Character["weapon_proficiencies"],
+) => useActiveCharacterField("weapon_proficiencies", type);
+
+//------------------------------------------------------------------------------
 // Use Clear Active Character
 //------------------------------------------------------------------------------
 
