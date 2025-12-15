@@ -2,6 +2,7 @@ import { HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 import Frame from "~/views/character-sheet-view/frame";
 import CharacterSheetAbility from "./fields/character-sheet-ability";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
+import CharacterSheetArmorProficiencies from "./fields/character-sheet-armor-proficiencies";
 import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-saving-throws";
 import CharacterSheetExhaustion from "./fields/character-sheet-exhaustion";
 import CharacterSheetHp from "./fields/character-sheet-hp";
@@ -48,20 +49,26 @@ export default function CharacterSheet() {
       </HStack>
 
       <SimpleGrid columns={2} gap={2} w="full">
-        <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
-          <VStack>
-            <CharacterSheetProficiencyBonus />
-            <CharacterSheetAbility abilityKey="strength" />
-            <CharacterSheetAbility abilityKey="constitution" />
-            <CharacterSheetAbility abilityKey="dexterity" />
-          </VStack>
+        <VStack gap={2}>
+          <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
+            <VStack align="stretch">
+              <CharacterSheetProficiencyBonus />
+              <CharacterSheetAbility abilityKey="strength" />
+              <CharacterSheetAbility abilityKey="constitution" />
+              <CharacterSheetAbility abilityKey="dexterity" />
+            </VStack>
 
-          <VStack>
-            <CharacterSheetAbility abilityKey="intelligence" />
-            <CharacterSheetAbility abilityKey="wisdom" />
-            <CharacterSheetAbility abilityKey="charisma" />
-          </VStack>
-        </SimpleGrid>
+            <VStack>
+              <CharacterSheetAbility abilityKey="intelligence" />
+              <CharacterSheetAbility abilityKey="wisdom" />
+              <CharacterSheetAbility abilityKey="charisma" />
+            </VStack>
+          </SimpleGrid>
+
+          <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
+            <CharacterSheetArmorProficiencies />
+          </SimpleGrid>
+        </VStack>
       </SimpleGrid>
     </VStack>
   );
