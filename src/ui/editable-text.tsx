@@ -16,17 +16,21 @@ import {
 // Editable Text
 //------------------------------------------------------------------------------
 
-type OmittedProps = "multiline" | "onBlur" | "onChange" | "onError" | "value";
+type OmittedProps = "onBlur" | "onChange" | "onError" | "value";
 
-export type EditableTextProps = (
-  | (Omit<TextareaProps, OmittedProps> & { multiline: true })
-  | (Omit<InputProps, OmittedProps> & { multiline?: false })
-) & {
+export type EditableTextCommonProps = {
   onChange: (value: string) => void;
   onError?: (error: string, value: string) => void;
   onValidate?: (value: string) => string | undefined;
   value: string;
 };
+
+export type EditableTextVariantProps =
+  | (Omit<TextareaProps, OmittedProps> & { multiline: true })
+  | (Omit<InputProps, OmittedProps> & { multiline?: false });
+
+export type EditableTextProps = EditableTextCommonProps &
+  EditableTextVariantProps;
 
 export default function EditableText({
   disabled,

@@ -1,33 +1,39 @@
 import { useCallback } from "react";
 import { formatNumber } from "~/utils/number";
-import EditableText, { type EditableTextProps } from "./editable-text";
+import EditableText, {
+  type EditableTextCommonProps,
+  type EditableTextVariantProps,
+} from "./editable-text";
 
 //------------------------------------------------------------------------------
 // Editable Number
 //------------------------------------------------------------------------------
 
-export type EditableNumberProps = Omit<
-  EditableTextProps,
-  "onChange" | "onValidate" | "value"
-> & {
+export type EditableNumberCommonProps = {
   alwaysShowSign?: boolean;
   integer?: boolean;
   max?: number;
   min?: number;
-} & (
-    | {
-        allowEmpty?: false;
-        onChange: (value: number) => void;
-        onValidate?: (value: number) => string | undefined;
-        value: number;
-      }
-    | {
-        allowEmpty: true;
-        onChange: (value: number | null) => void;
-        onValidate?: (value: number | null) => string | undefined;
-        value: number | null;
-      }
-  );
+};
+
+export type EditableNumberVariantProps =
+  | {
+      allowEmpty?: false;
+      onChange: (value: number) => void;
+      onValidate?: (value: number) => string | undefined;
+      value: number;
+    }
+  | {
+      allowEmpty: true;
+      onChange: (value: number | null) => void;
+      onValidate?: (value: number | null) => string | undefined;
+      value: number | null;
+    };
+
+export type EditableNumberProps = EditableNumberCommonProps &
+  EditableNumberVariantProps &
+  EditableTextVariantProps &
+  Omit<EditableTextCommonProps, "onChange" | "onValidate" | "value">;
 
 export default function EditableNumber({
   allowEmpty,
