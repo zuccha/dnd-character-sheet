@@ -6,7 +6,7 @@ import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 import Frame, { type FrameProps } from "../frame";
-import InferableNumberButton from "../inferable-number-button";
+import CharacterSheetInferableNumberButton from "./character-sheet-inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Initiative
@@ -43,7 +43,7 @@ export default function CharacterSheetInitiative(
         w="full"
       />
 
-      <InferableNumberButton
+      <CharacterSheetInferableNumberButton
         {...touchVisibilityStyles}
         inferred={initiative.inferred}
         onClick={setInitiative}

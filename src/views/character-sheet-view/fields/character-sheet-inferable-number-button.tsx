@@ -3,22 +3,23 @@ import type { InferableNumber } from "~/character/character";
 import IconButton, { type IconButtonProps } from "~/ui/icon-button";
 
 //------------------------------------------------------------------------------
-// Inferable Number Button
+// Character Sheet Inferable Number Button
 //------------------------------------------------------------------------------
 
-export type InferableNumberButtonProps<IN extends InferableNumber> = Omit<
-  IconButtonProps,
-  "Icon" | "onClick"
-> & {
+export type CharacterSheetInferableNumberButtonProps<
+  IN extends InferableNumber,
+> = Omit<IconButtonProps, "Icon" | "onClick"> & {
   inferred: boolean;
   onClick: (update: (prev: IN) => IN) => void;
 };
 
-export default function InferableNumberButton<IN extends InferableNumber>({
+export default function CharacterSheetInferableNumberButton<
+  IN extends InferableNumber,
+>({
   inferred,
   onClick,
   ...rest
-}: InferableNumberButtonProps<IN>) {
+}: CharacterSheetInferableNumberButtonProps<IN>) {
   return (
     <IconButton
       Icon={inferred ? LinkIcon : UnlinkIcon}

@@ -6,7 +6,7 @@ import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 import Frame, { type FrameProps } from "../frame";
-import InferableNumberButton from "../inferable-number-button";
+import CharacterSheetInferableNumberButton from "./character-sheet-inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Proficiency Bonus
@@ -44,7 +44,7 @@ export default function CharacterSheetProficiencyBonus(
         w="full"
       />
 
-      <InferableNumberButton
+      <CharacterSheetInferableNumberButton
         {...touchVisibilityStyles}
         inferred={proficiencyBonus.inferred}
         onClick={setProficiencyBonus}

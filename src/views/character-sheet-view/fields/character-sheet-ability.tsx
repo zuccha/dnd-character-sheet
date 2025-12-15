@@ -13,8 +13,8 @@ import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 import Frame from "../frame";
-import InferableNumberButton from "../inferable-number-button";
 import CharacterSheetAbilityCheck from "./character-sheet-ability-check";
+import CharacterSheetInferableNumberButton from "./character-sheet-inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Sheet Ability
@@ -72,7 +72,7 @@ export default function CharacterSheetAbility({
               w="full"
             />
 
-            <InferableNumberButton
+            <CharacterSheetInferableNumberButton
               {...touchVisibilityStyles}
               inferred={modifier.inferred}
               onClick={setModifier}
