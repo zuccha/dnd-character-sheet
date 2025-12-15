@@ -1,7 +1,11 @@
 import { HStack, SimpleGrid, Span } from "@chakra-ui/react";
-import { useActiveCharacterWeaponProficiency } from "~/character/active-character";
+import {
+  useActiveCharacterWeaponProficienciesExtra,
+  useActiveCharacterWeaponProficiency,
+} from "~/character/active-character";
 import { type Character } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import EditableText from "~/ui/editable-text";
 import { CharacterSheetProficiencyButton } from "./character-sheet-proficiency-button";
 import Frame, { type FrameProps } from "./frame";
 
@@ -16,12 +20,25 @@ export default function CharacterSheetWeaponProficiencies(
 ) {
   const { t } = useI18nLangContext(i18nContext);
 
+  const [extra, setExtra] = useActiveCharacterWeaponProficienciesExtra();
+
   return (
     <Frame align="flex-start" title={t("title")} {...props}>
       <SimpleGrid columns={2} gap={1} w="full">
         <CharacterSheetWeaponProficiency type="simple" />
         <CharacterSheetWeaponProficiency type="martial" />
       </SimpleGrid>
+
+      <EditableText
+        flex={1}
+        fontFamily="Booksanity"
+        fontSize="cs.h5"
+        multiline
+        onChange={setExtra}
+        resize="none"
+        value={extra}
+        w="full"
+      />
     </Frame>
   );
 }
