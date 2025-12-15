@@ -84,7 +84,7 @@ const i18nContext = {
   },
 
   "title": {
-    en: "Armor",
+    en: "Armors",
     it: "Armature",
   },
 };
