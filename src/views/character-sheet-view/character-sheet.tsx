@@ -7,6 +7,7 @@ import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-savi
 import CharacterSheetExhaustion from "./fields/character-sheet-exhaustion";
 import CharacterSheetHp from "./fields/character-sheet-hp";
 import CharacterSheetHpDice from "./fields/character-sheet-hp-dice";
+import CharacterSheetInitiative from "./fields/character-sheet-initiative";
 import CharacterSheetLevel from "./fields/character-sheet-level";
 import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
 import CharacterSheetName from "./fields/character-sheet-name";
@@ -53,6 +54,7 @@ export default function CharacterSheet() {
           <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
             <VStack align="stretch">
               <CharacterSheetProficiencyBonus />
+              <CharacterSheetInitiative />
               <CharacterSheetAbility abilityKey="strength" />
               <CharacterSheetAbility abilityKey="constitution" />
               <CharacterSheetAbility abilityKey="dexterity" />
