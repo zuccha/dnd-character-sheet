@@ -2,8 +2,8 @@ import { HStack, SimpleGrid, Span } from "@chakra-ui/react";
 import { useActiveCharacterArmorProficiency } from "~/character/active-character";
 import { type Character } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
-import Frame, { type FrameProps } from "../frame";
 import { CharacterSheetProficiencyButton } from "./character-sheet-proficiency-button";
+import Frame, { type FrameProps } from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Armor Proficiencies

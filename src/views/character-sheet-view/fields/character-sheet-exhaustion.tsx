@@ -10,7 +10,7 @@ import D4Icon from "~/icons/d4-icon";
 import D5Icon from "~/icons/d5-icon";
 import SkullIcon from "~/icons/skull-icon";
 import Checkbox from "~/ui/checkbox";
-import Frame, { type FrameProps } from "../frame";
+import Frame, { type FrameProps } from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Exhaustion

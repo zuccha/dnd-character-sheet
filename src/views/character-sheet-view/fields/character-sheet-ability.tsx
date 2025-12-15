@@ -12,9 +12,9 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame from "../frame";
 import CharacterSheetAbilityCheck from "./character-sheet-ability-check";
 import CharacterSheetInferableNumberButton from "./character-sheet-inferable-number-button";
+import Frame from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Ability

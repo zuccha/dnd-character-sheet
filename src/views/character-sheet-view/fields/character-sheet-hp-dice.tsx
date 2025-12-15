@@ -14,7 +14,7 @@ import Dialog from "~/ui/dialog";
 import IconButton from "~/ui/icon-button";
 import NumberInput from "~/ui/number-input";
 import { fillOrShrink } from "~/utils/array";
-import Frame, { type FrameProps } from "../frame";
+import Frame, { type FrameProps } from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Hp Dice

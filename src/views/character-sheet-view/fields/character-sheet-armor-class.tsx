@@ -8,7 +8,7 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import Checkbox from "~/ui/checkbox";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame from "../frame";
+import Frame from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Armor Class

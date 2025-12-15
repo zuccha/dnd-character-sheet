@@ -1,5 +1,5 @@
 import { HStack, SimpleGrid, VStack } from "@chakra-ui/react";
-import Frame from "~/views/character-sheet-view/frame";
+import Frame from "~/views/character-sheet-view/fields/frame";
 import CharacterSheetAbility from "./fields/character-sheet-ability";
 import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
 import CharacterSheetArmorProficiencies from "./fields/character-sheet-armor-proficiencies";

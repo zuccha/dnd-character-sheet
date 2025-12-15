@@ -7,7 +7,7 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import HeartIcon from "~/icons/heart-icon";
 import SkullIcon from "~/icons/skull-icon";
 import Checkbox from "~/ui/checkbox";
-import Frame, { type FrameProps } from "../frame";
+import Frame, { type FrameProps } from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet Death Saving Throws

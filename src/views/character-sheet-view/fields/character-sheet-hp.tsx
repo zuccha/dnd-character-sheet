@@ -7,7 +7,7 @@ import {
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame, { type FrameProps } from "../frame";
+import Frame, { type FrameProps } from "./frame";
 
 //------------------------------------------------------------------------------
 // Character Sheet HP
