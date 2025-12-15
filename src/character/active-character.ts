@@ -212,6 +212,14 @@ export const useActiveCharacterExhaustion = () =>
   useActiveCharacterField("exhaustion");
 
 //------------------------------------------------------------------------------
+// Use Active Character Has Unsaved Changes
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterHasUnsavedChanges(): boolean {
+  return activeCharacterUnsavedChangesStore.useValue();
+}
+
+//------------------------------------------------------------------------------
 // Use Active Character HP
 //------------------------------------------------------------------------------
 
@@ -233,6 +241,14 @@ export const useActiveCharacterMaxHpTemp = () =>
 
 export const useActiveCharacterHpDice = () =>
   useActiveCharacterField("hp_dice");
+
+//------------------------------------------------------------------------------
+// Use Active Character Id
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterId(): string | undefined {
+  return activeCharacterIdStore.useValue();
+}
 
 //------------------------------------------------------------------------------
 // Use Active Character Level
@@ -273,22 +289,6 @@ export const useActiveCharacterProficiencyBonus = () => {
 //------------------------------------------------------------------------------
 
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
-
-//------------------------------------------------------------------------------
-// Use Active Character Has Unsaved Changes
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterHasUnsavedChanges(): boolean {
-  return activeCharacterUnsavedChangesStore.useValue();
-}
-
-//------------------------------------------------------------------------------
-// Use Active Character Id
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterId(): string | undefined {
-  return activeCharacterIdStore.useValue();
-}
 
 //------------------------------------------------------------------------------
 // Use Clear Active Character
