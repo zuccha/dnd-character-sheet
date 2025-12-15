@@ -3,6 +3,7 @@ import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import { createObservable } from "~/utils/observable";
+import { type StateUpdate, isStateUpdater } from "~/utils/state";
 import type { KeysOfType } from "~/utils/types";
 import {
   type Character,
@@ -95,11 +96,7 @@ export function useActiveCharacterField<F extends keyof Character>(
   field: F,
 ): [
   Character[F],
-  (
-    nextValueOrValueUpdater:
-      | Character[F]
-      | ((prevValue: Character[F]) => Character[F]),
-  ) => void,
+  (nextValueOrValueUpdater: StateUpdate<Character[F]>) => void,
 ] {
   const [value, setValue] = useState(activeCharacterStore.get()[field]);
 
@@ -116,13 +113,9 @@ export function useActiveCharacterField<F extends keyof Character>(
   return [
     value,
     useCallback(
-      (
-        nextValueOrValueUpdater:
-          | Character[F]
-          | ((prevValue: Character[F]) => Character[F]),
-      ) => {
+      (nextValueOrValueUpdater: StateUpdate<Character[F]>) => {
         const nextValue =
-          typeof nextValueOrValueUpdater === "function" ?
+          isStateUpdater(nextValueOrValueUpdater) ?
             nextValueOrValueUpdater(activeCharacterStore.get()[field])
           : nextValueOrValueUpdater;
         setValue(nextValue);
