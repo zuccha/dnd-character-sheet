@@ -2,7 +2,7 @@ import { Box, HStack } from "@chakra-ui/react";
 import { useLayoutEffect, useRef, useState } from "react";
 import PanZoom from "~/ui/pan-zoom";
 import { isTouch } from "~/utils/window";
-import CharacterSheet from "./character-sheet";
+import CharacterSheet from "./fields/character-sheet";
 import Sidebar from "./sidebar/sidebar";
 
 //------------------------------------------------------------------------------

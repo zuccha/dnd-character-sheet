@@ -1,19 +1,19 @@
 import { HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 import Frame from "~/views/character-sheet-view/fields/frame";
-import CharacterSheetAbility from "./fields/character-sheet-ability";
-import CharacterSheetArmorClass from "./fields/character-sheet-armor-class";
-import CharacterSheetArmorProficiencies from "./fields/character-sheet-armor-proficiencies";
-import CharacterSheetDeathSavingThrows from "./fields/character-sheet-death-saving-throws";
-import CharacterSheetExhaustion from "./fields/character-sheet-exhaustion";
-import CharacterSheetHp from "./fields/character-sheet-hp";
-import CharacterSheetHpDice from "./fields/character-sheet-hp-dice";
-import CharacterSheetInitiative from "./fields/character-sheet-initiative";
-import CharacterSheetLevel from "./fields/character-sheet-level";
-import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
-import CharacterSheetName from "./fields/character-sheet-name";
-import CharacterSheetPassivePerception from "./fields/character-sheet-passive-perception";
-import CharacterSheetProficiencyBonus from "./fields/character-sheet-proficiency-bonus";
-import CharacterSheetTitle from "./fields/character-sheet-title";
+import CharacterSheetAbility from "./character-sheet-ability";
+import CharacterSheetArmorClass from "./character-sheet-armor-class";
+import CharacterSheetArmorProficiencies from "./character-sheet-armor-proficiencies";
+import CharacterSheetDeathSavingThrows from "./character-sheet-death-saving-throws";
+import CharacterSheetExhaustion from "./character-sheet-exhaustion";
+import CharacterSheetHp from "./character-sheet-hp";
+import CharacterSheetHpDice from "./character-sheet-hp-dice";
+import CharacterSheetInitiative from "./character-sheet-initiative";
+import CharacterSheetLevel from "./character-sheet-level";
+import CharacterSheetMaxHp from "./character-sheet-max-hp";
+import CharacterSheetName from "./character-sheet-name";
+import CharacterSheetPassivePerception from "./character-sheet-passive-perception";
+import CharacterSheetProficiencyBonus from "./character-sheet-proficiency-bonus";
+import CharacterSheetTitle from "./character-sheet-title";
 
 //------------------------------------------------------------------------------
 // Character Sheet
