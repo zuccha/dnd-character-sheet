@@ -7,7 +7,7 @@ import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
 import { type StateUpdate } from "~/utils/state";
 import InferableNumberButton from "../inferable-number-button";
-import SkillProficiencyButton from "../skill-proficiency-button";
+import { CharacterSheetProficiencyButton } from "./character-sheet-proficiency-button";
 
 //------------------------------------------------------------------------------
 // Character Sheet Ability Check
@@ -54,8 +54,11 @@ export default function CharacterSheetAbilityCheck({
   return (
     <Center className="group" position="relative" {...rest}>
       <Span gap={0} w="full">
-        <SkillProficiencyButton
-          onCycle={onChange}
+        <CharacterSheetProficiencyButton
+          allowExpertise
+          onCycle={(proficiency) =>
+            onChange((prev) => ({ ...prev, proficiency }))
+          }
           proficiency={check.proficiency}
         />
 
