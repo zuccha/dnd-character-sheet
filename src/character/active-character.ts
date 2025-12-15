@@ -187,7 +187,7 @@ export const useActiveCharacterArmorClassShieldEquipped = () =>
   useActiveCharacterField("armor_class_shield_equipped");
 
 //------------------------------------------------------------------------------
-// Use Active Character Armor Proficiencies
+// Use Active Character Armor Proficiency
 //------------------------------------------------------------------------------
 
 export const useActiveCharacterArmorProficiency = (
@@ -325,7 +325,21 @@ export const useActiveCharacterProficiencyBonus = () => {
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
 
 //------------------------------------------------------------------------------
-// Use Active Character Weapon Proficiencies
+// Use Active Character Tool Proficiencies Extra
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterToolProficienciesExtra = () =>
+  useActiveCharacterField("tool_proficiencies_extra");
+
+//------------------------------------------------------------------------------
+// Use Active Character Weapon Proficiencies Extra
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterWeaponProficienciesExtra = () =>
+  useActiveCharacterField("weapon_proficiencies_extra");
+
+//------------------------------------------------------------------------------
+// Use Active Character Weapon Proficiency
 //------------------------------------------------------------------------------
 
 export const useActiveCharacterWeaponProficiency = (

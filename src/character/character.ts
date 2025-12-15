@@ -229,12 +229,16 @@ export const characterSchema = z.object({
 
   title: z.string().default(""),
 
+  tool_proficiencies_extra: z.string().default(""),
+
   weapon_proficiencies: z
     .object({
       martial: proficiencySchema.default("none"),
       simple: proficiencySchema.default("none"),
     })
     .default({ martial: "none", simple: "none" }),
+
+  weapon_proficiencies_extra: z.string().default(""),
 });
 
 export type Character = z.infer<typeof characterSchema>;
