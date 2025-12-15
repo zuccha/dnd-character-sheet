@@ -11,6 +11,7 @@ import CharacterSheetInitiative from "./fields/character-sheet-initiative";
 import CharacterSheetLevel from "./fields/character-sheet-level";
 import CharacterSheetMaxHp from "./fields/character-sheet-max-hp";
 import CharacterSheetName from "./fields/character-sheet-name";
+import CharacterSheetPassivePerception from "./fields/character-sheet-passive-perception";
 import CharacterSheetProficiencyBonus from "./fields/character-sheet-proficiency-bonus";
 import CharacterSheetTitle from "./fields/character-sheet-title";
 
@@ -53,8 +54,11 @@ export default function CharacterSheet() {
         <VStack gap={2}>
           <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
             <VStack align="stretch">
-              <CharacterSheetProficiencyBonus />
-              <CharacterSheetInitiative />
+              <VStack flex={1} gap={2} justify="stretch">
+                <CharacterSheetProficiencyBonus />
+                <CharacterSheetInitiative />
+                <CharacterSheetPassivePerception />
+              </VStack>
               <CharacterSheetAbility abilityKey="strength" />
               <CharacterSheetAbility abilityKey="constitution" />
               <CharacterSheetAbility abilityKey="dexterity" />
