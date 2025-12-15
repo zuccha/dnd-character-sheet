@@ -14,6 +14,7 @@ import CharacterSheetName from "./character-sheet-name";
 import CharacterSheetPassivePerception from "./character-sheet-passive-perception";
 import CharacterSheetProficiencyBonus from "./character-sheet-proficiency-bonus";
 import CharacterSheetTitle from "./character-sheet-title";
+import CharacterSheetWeaponProficiencies from "./character-sheet-weapon-proficiencies";
 
 //------------------------------------------------------------------------------
 // Character Sheet
@@ -50,8 +51,8 @@ export default function CharacterSheet() {
         </VStack>
       </HStack>
 
-      <SimpleGrid columns={2} gap={2} w="full">
-        <VStack gap={2}>
+      <SimpleGrid columns={2} flex={1} gap={2} w="full">
+        <VStack flex={1} gap={2}>
           <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
             <VStack align="stretch">
               <VStack flex={1} gap={2}>
@@ -71,8 +72,11 @@ export default function CharacterSheet() {
             </VStack>
           </SimpleGrid>
 
-          <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
-            <CharacterSheetArmorProficiencies />
+          <SimpleGrid columns={2} flex={1} gap={2} w="full">
+            <VStack gap={2} w="full">
+              <CharacterSheetArmorProficiencies w="full" />
+              <CharacterSheetWeaponProficiencies flex={1} w="full" />
+            </VStack>
           </SimpleGrid>
         </VStack>
       </SimpleGrid>
