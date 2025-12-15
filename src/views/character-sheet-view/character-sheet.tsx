@@ -54,10 +54,10 @@ export default function CharacterSheet() {
         <VStack gap={2}>
           <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
             <VStack align="stretch">
-              <VStack flex={1} gap={2} justify="stretch">
-                <CharacterSheetProficiencyBonus />
-                <CharacterSheetInitiative />
-                <CharacterSheetPassivePerception />
+              <VStack flex={1} gap={2}>
+                <CharacterSheetProficiencyBonus flex={1} />
+                <CharacterSheetInitiative flex={1} />
+                <CharacterSheetPassivePerception flex={1} />
               </VStack>
               <CharacterSheetAbility abilityKey="strength" />
               <CharacterSheetAbility abilityKey="constitution" />

@@ -5,14 +5,18 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame from "../frame";
+import Frame, { type FrameProps } from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Proficiency Bonus
 //------------------------------------------------------------------------------
 
-export default function CharacterSheetProficiencyBonus() {
+export type CharacterSheetProficiencyBonusProps = FrameProps;
+
+export default function CharacterSheetProficiencyBonus(
+  props: CharacterSheetProficiencyBonusProps,
+) {
   const { t } = useI18nLangContext(i18nContext);
 
   const [proficiencyBonus, setProficiencyBonus] =
@@ -21,7 +25,7 @@ export default function CharacterSheetProficiencyBonus() {
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   return (
-    <Frame className="group" flexDirection="row" position="relative">
+    <Frame className="group" flexDirection="row" position="relative" {...props}>
       <Span fontSize="cs.h4">{t("proficiency_bonus.label")}</Span>
 
       <EditableNumber

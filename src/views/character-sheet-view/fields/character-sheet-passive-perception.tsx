@@ -5,14 +5,18 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame from "../frame";
+import Frame, { type FrameProps } from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Passive Perception
 //------------------------------------------------------------------------------
 
-export default function CharacterSheetPassivePerception() {
+export type CharacterSheetPassivePerceptionProps = FrameProps;
+
+export default function CharacterSheetPassivePerception(
+  props: CharacterSheetPassivePerceptionProps,
+) {
   const { t } = useI18nLangContext(i18nContext);
 
   const [passivePerception, setPassivePerception] =
@@ -21,7 +25,7 @@ export default function CharacterSheetPassivePerception() {
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   return (
-    <Frame className="group" flexDirection="row" position="relative">
+    <Frame className="group" flexDirection="row" position="relative" {...props}>
       <Span fontSize="cs.h4">{t("passive_perception.label")}</Span>
 
       <EditableNumber

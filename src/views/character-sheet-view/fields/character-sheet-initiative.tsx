@@ -5,14 +5,18 @@ import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import Frame from "../frame";
+import Frame, { type FrameProps } from "../frame";
 import InferableNumberButton from "../inferable-number-button";
 
 //------------------------------------------------------------------------------
 // Character Initiative
 //------------------------------------------------------------------------------
 
-export default function CharacterSheetInitiative() {
+export type CharacterSheetInitiativeProps = FrameProps;
+
+export default function CharacterSheetInitiative(
+  props: CharacterSheetInitiativeProps,
+) {
   const { t } = useI18nLangContext(i18nContext);
 
   const [initiative, setInitiative] = useActiveCharacterInitiative();
@@ -20,7 +24,7 @@ export default function CharacterSheetInitiative() {
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   return (
-    <Frame className="group" flexDirection="row" position="relative">
+    <Frame className="group" flexDirection="row" position="relative" {...props}>
       <Span fontSize="cs.h4">{t("initiative.label")}</Span>
 
       <EditableNumber
