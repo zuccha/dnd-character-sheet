@@ -1,52 +1,51 @@
 import { Center, Span, type StackProps } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
-import type { CharacterSkill } from "~/character/character";
+import { type CharacterAbilityCheck } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
+import { type StateUpdate } from "~/utils/state";
 import InferableNumberButton from "../inferable-number-button";
 import SkillProficiencyButton from "../skill-proficiency-button";
 
 //------------------------------------------------------------------------------
-// Character Skill
+// Character Sheet Ability Check
 //------------------------------------------------------------------------------
 
-export type CharacterSheetSkillProps = Omit<StackProps, "onChange"> & {
+export type CharacterSheetAbilityCheckProps = Omit<StackProps, "onChange"> & {
+  check: CharacterAbilityCheck & { value: number };
   label: string;
   name: string;
-  onChange: (
-    updateSkill: (prevSkill: CharacterSkill) => CharacterSkill,
-  ) => void;
-  skill: CharacterSkill & { value: number };
+  onChange: (update: StateUpdate<CharacterAbilityCheck>) => void;
 };
 
-export default function CharacterSheetSkill({
+export default function CharacterSheetAbilityCheck({
+  check,
   label,
   name,
-  skill,
   onChange,
   ...rest
-}: CharacterSheetSkillProps) {
-  const i18nContext = useMemo(
-    () => ({
-      [`editable_number[character-skill-${name}].error.int`]: {
-        en: `The ${label.toLocaleLowerCase()} modifier must be an integer`,
-        it: `Il modificatore di ${label.toLocaleLowerCase()} deve essere un numero intero`,
+}: CharacterSheetAbilityCheckProps) {
+  const i18nContext = useMemo(() => {
+    const lowercaseLabel = label.toLocaleLowerCase();
+    return {
+      [`editable_number[character-${name}].error.int`]: {
+        en: `The ${lowercaseLabel} modifier must be an integer`,
+        it: `Il modificatore di ${lowercaseLabel} deve essere un numero intero`,
       },
 
-      [`editable_number[character-skill-${name}].error.nan`]: {
-        en: `The ${label.toLocaleLowerCase()} modifier must be a number`,
-        it: `Il modificatore di ${label.toLocaleLowerCase()} deve essere un numero`,
+      [`editable_number[character-${name}].error.nan`]: {
+        en: `The ${lowercaseLabel} modifier must be a number`,
+        it: `Il modificatore di ${lowercaseLabel} deve essere un numero`,
       },
 
-      "skill.placeholder": {
+      "check.placeholder": {
         en: "+0",
         it: "+0",
       },
-    }),
-    [label, name],
-  );
+    };
+  }, [label, name]);
 
   const { t } = useI18nLangContext(i18nContext);
 
@@ -57,22 +56,22 @@ export default function CharacterSheetSkill({
       <Span gap={0} w="full">
         <SkillProficiencyButton
           onCycle={onChange}
-          proficiency={skill.proficiency}
+          proficiency={check.proficiency}
         />
 
         <EditableNumber
           alwaysShowSign
-          disabled={skill.inferred}
+          disabled={check.inferred}
           fontSize="cs.h5"
           integer
-          name={`character-skill-${name}`}
+          name={`character-${name}`}
           onChange={(customValue) =>
             onChange((prev) => ({ ...prev, customValue }))
           }
           onError={error}
-          placeholder={t("skill.placeholder")}
+          placeholder={t("check.placeholder")}
           textAlign="center"
-          value={skill.value}
+          value={check.value}
           w="2.5em"
         />
 
@@ -83,7 +82,7 @@ export default function CharacterSheetSkill({
 
       <InferableNumberButton
         {...touchVisibilityStyles}
-        inferred={skill.inferred}
+        inferred={check.inferred}
         onClick={onChange}
         position="absolute"
         right={-3}

@@ -164,7 +164,11 @@ export default function CharacterList() {
           >
             <SortableContext items={ids} strategy={verticalListSortingStrategy}>
               {metadata.map((meta) => (
-                <CharacterListItem key={meta.id} {...meta} />
+                <CharacterListItem
+                  displayName={meta.display_name}
+                  id={meta.id}
+                  key={meta.id}
+                />
               ))}
             </SortableContext>
           </DndContext>

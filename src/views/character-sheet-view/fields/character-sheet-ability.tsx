@@ -3,56 +3,53 @@ import { useCallback, useMemo } from "react";
 import {
   useActiveCharacterAbilityModifier,
   useActiveCharacterAbilitySavingThrow,
-  useActiveCharacterField,
-  useActiveCharacterSkill,
+  useActiveCharacterAbilityScore,
+  useActiveCharacterAbilitySkill,
+  useActiveCharacterAbilitySkillKeys,
 } from "~/character/active-character";
-import type {
-  Character,
-  CharacterAbility,
-  CharacterSkill,
-} from "~/character/character";
+import type { Character } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import { touchVisibilityStyles } from "~/theme/common-styles";
 import EditableNumber from "~/ui/editable-number";
 import { toaster } from "~/ui/toaster";
-import type { KeysOfType } from "~/utils/types";
 import Frame from "../frame";
 import InferableNumberButton from "../inferable-number-button";
-import CharacterSheetSkill from "./character-sheet-skill";
+import CharacterSheetAbilityCheck from "./character-sheet-ability-check";
 
 //------------------------------------------------------------------------------
 // Character Sheet Ability
 //------------------------------------------------------------------------------
 
 export type CharacterSheetAbilityProps = {
-  ability: CharacterAbility;
+  abilityKey: keyof Character["abilities"];
 };
 
 export default function CharacterSheetAbility({
-  ability,
+  abilityKey,
 }: CharacterSheetAbilityProps) {
   const { t } = useI18nLangContext(i18nContext);
-  const [score, setScore] = useActiveCharacterField(ability);
-  const [modifier, setModifier] = useActiveCharacterAbilityModifier(ability);
+  const [score, setScore] = useActiveCharacterAbilityScore(abilityKey);
+  const [modifier, setModifier] = useActiveCharacterAbilityModifier(abilityKey);
+  const skillKeys = useActiveCharacterAbilitySkillKeys(abilityKey);
 
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 
   const skills = useMemo(() => {
-    return skillsByAbility[ability]
-      .map((skill) => ({
-        ...skill,
-        label: t(`skill[${skill.name}].label`),
+    return skillKeys
+      .map((skillKey) => ({
+        key: skillKey,
+        label: t(`skill[${skillKey}].label`),
       }))
-      .sort((skill1, skill2) => {
-        if (skill1.label < skill2.label) return -1;
-        if (skill1.label > skill2.label) return 1;
+      .sort((s1, s2) => {
+        if (s1.label < s2.label) return -1;
+        if (s1.label > s2.label) return 1;
         return 0;
       });
-  }, [ability, t]);
+  }, [skillKeys, t]);
 
   return (
     <VStack gap={0}>
-      <Frame align="flex-start" title={t(`ability[${ability}].label`)}>
+      <Frame align="flex-start" title={t(`ability[${abilityKey}].label`)}>
         <HStack gap={0}>
           <Frame align="center" className="group" flex={1} position="relative">
             <Span fontSize="cs.h4" textAlign="center">
@@ -64,7 +61,7 @@ export default function CharacterSheetAbility({
               disabled={modifier.inferred}
               fontSize="cs.value.md"
               integer
-              name={`character-${ability}-modifier`}
+              name={`character-${abilityKey}-modifier`}
               onChange={(customValue) =>
                 setModifier((prev) => ({ ...prev, customValue }))
               }
@@ -96,7 +93,7 @@ export default function CharacterSheetAbility({
               fontSize="cs.value.sm"
               integer
               min={0}
-              name={`character-${ability}-score`}
+              name={`character-${abilityKey}-score`}
               onChange={(value) => setScore(value)}
               onError={error}
               placeholder={t("score.placeholder")}
@@ -109,16 +106,17 @@ export default function CharacterSheetAbility({
       </Frame>
 
       <Frame borderTopWidth={0} py={1} w="full">
-        <CharacterSheetAbilitySavingThrow ability={ability} />
+        <CharacterSheetAbilitySavingThrow abilityKey={abilityKey} />
       </Frame>
 
       {skills.length > 0 && (
         <Frame borderTopWidth={0} py={1} w="full">
           {skills.map((skill) => (
             <CharacterSheetAbilitySkill
-              ability={ability}
-              key={skill.id}
-              {...skill}
+              abilityKey={abilityKey}
+              key={skill.key}
+              skillKey={skill.key}
+              skillLabel={skill.label}
             />
           ))}
         </Frame>
@@ -132,123 +130,90 @@ export default function CharacterSheetAbility({
 //------------------------------------------------------------------------------
 
 type CharacterSheetAbilitySavingThrowProps = {
-  ability: CharacterAbility;
+  abilityKey: keyof Character["abilities"];
 };
 
 function CharacterSheetAbilitySavingThrow({
-  ability,
+  abilityKey,
 }: CharacterSheetAbilitySavingThrowProps) {
   const { t } = useI18nLangContext(i18nContext);
 
   const [savingThrow, setSavingThrow] =
-    useActiveCharacterAbilitySavingThrow(ability);
+    useActiveCharacterAbilitySavingThrow(abilityKey);
 
   return (
-    <CharacterSheetSkill
+    <CharacterSheetAbilityCheck
+      check={savingThrow}
       label={t("saving_throw.label")}
-      name={`${ability}-saving-throw`}
+      name={`${abilityKey}-saving_throw`}
       onChange={setSavingThrow}
-      skill={savingThrow}
       w="full"
     />
   );
 }
 
 //------------------------------------------------------------------------------
-// Character Sheet Ability Skill
+// Character Sheet Ability Skill Throw
 //------------------------------------------------------------------------------
 
 type CharacterSheetAbilitySkillProps = {
-  ability: CharacterAbility;
-  id: KeysOfType<Character, CharacterSkill>;
-  label: string;
-  name: string;
+  abilityKey: keyof Character["abilities"];
+  skillKey: string;
+  skillLabel: string;
 };
 
 function CharacterSheetAbilitySkill({
-  ability,
-  id,
-  label,
-  name,
+  abilityKey,
+  skillKey,
+  skillLabel,
 }: CharacterSheetAbilitySkillProps) {
-  const [skill, setSkill] = useActiveCharacterSkill(ability, id);
+  const [skill, setSkill] = useActiveCharacterAbilitySkill(
+    abilityKey,
+    skillKey,
+  );
 
   return (
-    <CharacterSheetSkill
-      label={label}
-      name={`${ability}-${name}`}
+    <CharacterSheetAbilityCheck
+      check={skill}
+      label={skillLabel}
+      name={`${abilityKey}-${skillKey}`}
       onChange={setSkill}
-      skill={skill}
       w="full"
     />
   );
 }
-
-//------------------------------------------------------------------------------
-// Skills
-//------------------------------------------------------------------------------
-
-const skillsByAbility = {
-  cha: [
-    { id: "deception", name: "deception" },
-    { id: "intimidation", name: "intimidation" },
-    { id: "performance", name: "performance" },
-    { id: "persuasion", name: "persuasion" },
-  ],
-  con: [],
-  dex: [
-    { id: "acrobatics", name: "acrobatics" },
-    { id: "sleightOfHand", name: "sleight-of-hand" },
-    { id: "stealth", name: "stealth" },
-  ],
-  int: [
-    { id: "arcana", name: "arcana" },
-    { id: "history", name: "history" },
-    { id: "investigation", name: "investigation" },
-    { id: "nature", name: "nature" },
-    { id: "religion", name: "religion" },
-  ],
-  str: [{ id: "athletics", name: "athletics" }],
-  wis: [
-    { id: "animalHandling", name: "animal-handling" },
-    { id: "insight", name: "insight" },
-    { id: "medicine", name: "medicine" },
-    { id: "perception", name: "perception" },
-    { id: "survival", name: "survival" },
-  ],
-} as const;
 
 //------------------------------------------------------------------------------
 // I18n Context
 //------------------------------------------------------------------------------
 
 const i18nContext = {
-  "ability[cha].label": {
+  "ability[charisma].label": {
     en: "Charisma",
     it: "Carisma",
   },
 
-  "ability[con].label": {
+  "ability[constitution].label": {
     en: "Constitution",
     it: "Costituzione",
   },
 
-  "ability[dex].label": {
+  "ability[dexterity].label": {
     en: "Dexterity",
     it: "Destrezza",
   },
 
-  "ability[int].label": {
+  "ability[intelligence].label": {
     en: "Intelligence",
     it: "Intelligenza",
   },
 
-  "ability[str].label": {
+  "ability[strength].label": {
     en: "Strength",
     it: "Forza",
   },
 
-  "ability[wis].label": {
+  "ability[wisdom].label": {
     en: "Wisdom",
     it: "Saggezza",
   },
@@ -433,7 +398,7 @@ const i18nContext = {
     it: "Acrobazia",
   },
 
-  "skill[animal-handling].label": {
+  "skill[animal_handling].label": {
     en: "Animal Handling",
     it: "Add. Animali",
   },
@@ -503,7 +468,7 @@ const i18nContext = {
     it: "Religione",
   },
 
-  "skill[sleight-of-hand].label": {
+  "skill[sleight_of_hand].label": {
     en: "Sleight of Hand",
     it: "Rapidità di Mano",
   },

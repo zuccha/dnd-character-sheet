@@ -157,7 +157,7 @@ function UpdateHpDiceDialog({ onOpenChange, open }: UpdateHpDiceDialogProps) {
 //------------------------------------------------------------------------------
 
 type DiceProps = {
-  die: keyof Character["hpDice"];
+  die: keyof Character["hp_dice"];
 };
 
 function Dice({ die }: DiceProps) {

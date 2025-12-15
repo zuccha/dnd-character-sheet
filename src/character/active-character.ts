@@ -4,11 +4,8 @@ import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import type { StorePath, StorePathValue } from "~/store/store";
 import { type StateUpdate } from "~/utils/state";
-import type { KeysOfType } from "~/utils/types";
 import {
   type Character,
-  type CharacterAbility,
-  type CharacterSkill,
   defaultCharacter,
   loadCharacter,
   saveCharacter,
@@ -54,45 +51,6 @@ const activeCharacterUnsavedChangesStore = createMemoryStore(
 );
 
 //------------------------------------------------------------------------------
-// Use Active Character Ability Modifier
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterAbilityModifier(ability: CharacterAbility) {
-  const [score] = useActiveCharacterField(ability);
-  const [modifier, setModifier] = useActiveCharacterField(`${ability}Modifier`);
-
-  const value =
-    modifier.inferred ? Math.floor((score - 10) / 2) : modifier.customValue;
-
-  return [{ ...modifier, value }, setModifier] as const;
-}
-
-//------------------------------------------------------------------------------
-// Use Active Character Ability Saving Throw
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterAbilitySavingThrow(
-  ability: CharacterAbility,
-) {
-  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
-  const [modifier] = useActiveCharacterAbilityModifier(ability);
-  const [savingThrow, setSavingThrow] = useActiveCharacterField(
-    `${ability}SavingThrow`,
-  );
-
-  const value =
-    savingThrow.inferred ?
-      {
-        expert: modifier.value + 2 * proficiencyBonus.value,
-        none: modifier.value,
-        proficient: modifier.value + proficiencyBonus.value,
-      }[savingThrow.proficiency]
-    : savingThrow.customValue;
-
-  return [{ ...savingThrow, value }, setSavingThrow] as const;
-}
-
-//------------------------------------------------------------------------------
 // Use Active Character Field
 //------------------------------------------------------------------------------
 
@@ -117,43 +75,177 @@ export function useActiveCharacterField<P extends StorePath<Character>>(
 }
 
 //------------------------------------------------------------------------------
-// Use Active Character <Field>
+// Use Active Character Ability Modifier
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilityModifier(
+  abilityKey: keyof Character["abilities"],
+) {
+  const [score] = useActiveCharacterAbilityScore(abilityKey);
+  const [modifier, setModifier] = useActiveCharacterField(
+    "abilities",
+    abilityKey,
+    "modifier",
+  );
+
+  const value =
+    modifier.inferred ? Math.floor((score - 10) / 2) : modifier.customValue;
+
+  return [{ ...modifier, value }, setModifier] as const;
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Saving Throw
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilitySavingThrow(
+  abilityKey: keyof Character["abilities"],
+) {
+  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
+  const [modifier] = useActiveCharacterAbilityModifier(abilityKey);
+  const [savingThrow, setSavingThrow] = useActiveCharacterField(
+    "abilities",
+    abilityKey,
+    "saving_throw",
+  );
+
+  const value =
+    savingThrow.inferred ?
+      {
+        expert: modifier.value + 2 * proficiencyBonus.value,
+        none: modifier.value,
+        proficient: modifier.value + proficiencyBonus.value,
+      }[savingThrow.proficiency]
+    : savingThrow.customValue;
+
+  return [{ ...savingThrow, value }, setSavingThrow] as const;
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Score
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilityScore(
+  abilityKey: keyof Character["abilities"],
+) {
+  return useActiveCharacterField("abilities", abilityKey, "score");
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Skill
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilitySkill(
+  abilityKey: keyof Character["abilities"],
+  skillKey: string,
+) {
+  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
+  const [modifier] = useActiveCharacterAbilityModifier(abilityKey);
+  const [skill, setSkill] = useActiveCharacterField(
+    "abilities",
+    abilityKey,
+    "skills",
+    skillKey,
+  );
+
+  const value =
+    skill.inferred ?
+      {
+        expert: modifier.value + 2 * proficiencyBonus.value,
+        none: modifier.value,
+        proficient: modifier.value + proficiencyBonus.value,
+      }[skill.proficiency]
+    : skill.customValue;
+
+  return [{ ...skill, value }, setSkill] as const;
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Ability Skill Keys
+//------------------------------------------------------------------------------
+
+export function useActiveCharacterAbilitySkillKeys(
+  abilityKey: keyof Character["abilities"],
+) {
+  return Object.keys(
+    activeCharacterStore.getPath(["abilities", abilityKey, "skills"]),
+  );
+}
+
+//------------------------------------------------------------------------------
+// Use Active Character Armor Class
 //------------------------------------------------------------------------------
 
 export const useActiveCharacterArmorClass = () =>
-  useActiveCharacterField("armorClass");
+  useActiveCharacterField("armor_class");
+
+//------------------------------------------------------------------------------
+// Use Active Character Armor Class Shield Equipped
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterArmorClassShieldEquipped = () =>
-  useActiveCharacterField("armorClassShieldEquipped");
+  useActiveCharacterField("armor_class_shield_equipped");
 
-export const useActiveCharacterDeathSaveThrowFailures = () =>
-  useActiveCharacterField("deathSaveThrowFailures");
+//------------------------------------------------------------------------------
+// Use Active Character Death Saves
+//------------------------------------------------------------------------------
 
-export const useActiveCharacterDeathSaveThrowSuccesses = () =>
-  useActiveCharacterField("deathSaveThrowSuccesses");
+export const useActiveCharacterDeathSavingThrowsFailures = () =>
+  useActiveCharacterField("death_saving_throws", "failures");
+
+export const useActiveCharacterDeathSavingThrowsSuccesses = () =>
+  useActiveCharacterField("death_saving_throws", "successes");
+
+//------------------------------------------------------------------------------
+// Use Active Character Exhaustion
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterExhaustion = () =>
   useActiveCharacterField("exhaustion");
 
-export const useActiveCharacterHp = () => useActiveCharacterField("hp");
+//------------------------------------------------------------------------------
+// Use Active Character HP
+//------------------------------------------------------------------------------
 
-export const useActiveCharacterHpTemp = () => useActiveCharacterField("hpTemp");
+export const useActiveCharacterCurrentHp = () =>
+  useActiveCharacterField("hp", "current");
 
-export const useActiveCharacterHpDice = () => useActiveCharacterField("hpDice");
+export const useActiveCharacterCurrentHpTemp = () =>
+  useActiveCharacterField("hp", "current_temp");
 
-export const useActiveCharacterMaxHp = () => useActiveCharacterField("maxHp");
+export const useActiveCharacterMaxHp = () =>
+  useActiveCharacterField("hp", "max");
 
 export const useActiveCharacterMaxHpTemp = () =>
-  useActiveCharacterField("maxHpTemp");
+  useActiveCharacterField("hp", "max_temp");
+
+//------------------------------------------------------------------------------
+// Use Active Character HP Dice
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterHpDice = () =>
+  useActiveCharacterField("hp_dice");
+
+//------------------------------------------------------------------------------
+// Use Active Character Level
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 
+//------------------------------------------------------------------------------
+// Use Active Character Name
+//------------------------------------------------------------------------------
+
 export const useActiveCharacterName = () => useActiveCharacterField("name");
+
+//------------------------------------------------------------------------------
+// Use Active Character Proficiency Bonus
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterProficiencyBonus = () => {
   const [level] = useActiveCharacterLevel();
   const [proficiencyBonus, setProficiencyBonus] =
-    useActiveCharacterField("proficiencyBonus");
+    useActiveCharacterField("proficiency_bonus");
 
   const value =
     proficiencyBonus.inferred ?
@@ -167,6 +259,10 @@ export const useActiveCharacterProficiencyBonus = () => {
 
   return [{ ...proficiencyBonus, value }, setProficiencyBonus] as const;
 };
+
+//------------------------------------------------------------------------------
+// Use Active Character Title
+//------------------------------------------------------------------------------
 
 export const useActiveCharacterTitle = () => useActiveCharacterField("title");
 
@@ -184,30 +280,6 @@ export function useActiveCharacterHasUnsavedChanges(): boolean {
 
 export function useActiveCharacterId(): string | undefined {
   return activeCharacterIdStore.useValue();
-}
-
-//------------------------------------------------------------------------------
-// Use Active Character Skill
-//------------------------------------------------------------------------------
-
-export function useActiveCharacterSkill(
-  ability: CharacterAbility,
-  skillKey: KeysOfType<Character, CharacterSkill>,
-) {
-  const [proficiencyBonus] = useActiveCharacterProficiencyBonus();
-  const [modifier] = useActiveCharacterAbilityModifier(ability);
-  const [skill, setSkill] = useActiveCharacterField(skillKey);
-
-  const value =
-    skill.inferred ?
-      {
-        expert: modifier.value + 2 * proficiencyBonus.value,
-        none: modifier.value,
-        proficient: modifier.value + proficiencyBonus.value,
-      }[skill.proficiency]
-    : skill.customValue;
-
-  return [{ ...skill, value }, setSkill] as const;
 }
 
 //------------------------------------------------------------------------------

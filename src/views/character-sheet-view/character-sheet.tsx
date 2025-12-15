@@ -51,15 +51,15 @@ export default function CharacterSheet() {
         <SimpleGrid columns={2} gap={2} justifyContent="stretch" w="full">
           <VStack>
             <CharacterSheetProficiencyBonus />
-            <CharacterSheetAbility ability="str" />
-            <CharacterSheetAbility ability="con" />
-            <CharacterSheetAbility ability="dex" />
+            <CharacterSheetAbility abilityKey="strength" />
+            <CharacterSheetAbility abilityKey="constitution" />
+            <CharacterSheetAbility abilityKey="dexterity" />
           </VStack>
 
           <VStack>
-            <CharacterSheetAbility ability="int" />
-            <CharacterSheetAbility ability="wis" />
-            <CharacterSheetAbility ability="cha" />
+            <CharacterSheetAbility abilityKey="intelligence" />
+            <CharacterSheetAbility abilityKey="wisdom" />
+            <CharacterSheetAbility abilityKey="charisma" />
           </VStack>
         </SimpleGrid>
       </SimpleGrid>

@@ -87,7 +87,7 @@ export function useExportCharacterToJson() {
   return useCallback((id: string) => {
     const character = loadCharacter(id);
     const json = JSON.stringify(character, null, 2);
-    downloadFile(json, `${character.meta.displayName}.json`, "json");
+    downloadFile(json, `${character.meta.display_name}.json`, "json");
   }, []);
 }
 
@@ -231,11 +231,13 @@ export function useRemoveCharacter() {
 export function useRenameCharacter() {
   return useCallback((id: string, displayName: string) => {
     characterMetadataStore.set((prev) =>
-      prev.map((meta) => (meta.id === id ? { ...meta, displayName } : meta)),
+      prev.map((meta) =>
+        meta.id === id ? { ...meta, display_name: displayName } : meta,
+      ),
     );
     saveCharacter(id, (prev) => ({
       ...prev,
-      meta: { ...prev.meta, displayName },
+      meta: { ...prev.meta, display_name: displayName },
     }));
   }, []);
 }
@@ -255,7 +257,10 @@ export function useCreateAndSaveActiveCharacter() {
       let character = saveActiveCharacter();
       if (!exists) {
         const displayName = character.name.trim() || defaultDisplayName;
-        character = { ...character, meta: { ...character.meta, displayName } };
+        character = {
+          ...character,
+          meta: { ...character.meta, display_name: displayName },
+        };
         characterIdsStore.set((prev) => [...prev, character.meta.id]);
         characterMetadataStore.set((prev) => [...prev, character.meta]);
         saveCharacter(character.meta.id, character);

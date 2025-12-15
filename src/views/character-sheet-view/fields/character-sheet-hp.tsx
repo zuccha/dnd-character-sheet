@@ -1,8 +1,8 @@
 import { Box, Span } from "@chakra-ui/react";
 import { useCallback } from "react";
 import {
-  useActiveCharacterHp,
-  useActiveCharacterHpTemp,
+  useActiveCharacterCurrentHp,
+  useActiveCharacterCurrentHpTemp,
 } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import EditableNumber from "~/ui/editable-number";
@@ -18,8 +18,8 @@ export type CharacterSheetHpProps = FrameProps;
 export default function CharacterSheetHp(props: CharacterSheetHpProps) {
   const { t } = useI18nLangContext(i18nContext);
 
-  const [hp, setHp] = useActiveCharacterHp();
-  const [hpTemp, setHpTemp] = useActiveCharacterHpTemp();
+  const [hp, setHp] = useActiveCharacterCurrentHp();
+  const [hpTemp, setHpTemp] = useActiveCharacterCurrentHpTemp();
 
   const error = useCallback((e: string) => toaster.error({ title: t(e) }), [t]);
 

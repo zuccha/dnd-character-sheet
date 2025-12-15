@@ -1,7 +1,7 @@
 import { HStack } from "@chakra-ui/react";
 import {
-  useActiveCharacterDeathSaveThrowFailures,
-  useActiveCharacterDeathSaveThrowSuccesses,
+  useActiveCharacterDeathSavingThrowsFailures,
+  useActiveCharacterDeathSavingThrowsSuccesses,
 } from "~/character/active-character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
 import HeartIcon from "~/icons/heart-icon";
@@ -20,8 +20,9 @@ export default function CharacterSheetDeathSavingThrows(
 ) {
   const { t } = useI18nLangContext(i18nContext);
 
-  const [failures, setFailures] = useActiveCharacterDeathSaveThrowFailures();
-  const [successes, setSuccesses] = useActiveCharacterDeathSaveThrowSuccesses();
+  const [failures, setFailures] = useActiveCharacterDeathSavingThrowsFailures();
+  const [successes, setSuccesses] =
+    useActiveCharacterDeathSavingThrowsSuccesses();
 
   const failure = (index: 0 | 1 | 2) => (checked: boolean) =>
     setFailures((prevFailures) => {
