@@ -1,4 +1,9 @@
-import { Input, type InputProps } from "@chakra-ui/react";
+import {
+  Input,
+  type InputProps,
+  Textarea,
+  type TextareaProps,
+} from "@chakra-ui/react";
 import { useCallback, useLayoutEffect, useState } from "react";
 import {
   focusInvalidStyles,
@@ -11,10 +16,12 @@ import {
 // Editable Text
 //------------------------------------------------------------------------------
 
-export type EditableTextProps = Omit<
-  InputProps,
-  "onBlur" | "onChange" | "onError" | "value"
-> & {
+type OmittedProps = "multiline" | "onBlur" | "onChange" | "onError" | "value";
+
+export type EditableTextProps = (
+  | (Omit<TextareaProps, OmittedProps> & { multiline: true })
+  | (Omit<InputProps, OmittedProps> & { multiline?: false })
+) & {
   onChange: (value: string) => void;
   onError?: (error: string, value: string) => void;
   onValidate?: (value: string) => string | undefined;
@@ -33,7 +40,7 @@ export default function EditableText({
   const [tempValue, setTempValue] = useState(value);
   useLayoutEffect(() => setTempValue(value), [value]);
 
-  const blur: React.FocusEventHandler<HTMLDivElement> = useCallback(() => {
+  const blur = useCallback(() => {
     const error = onValidate(tempValue);
 
     if (error) {
@@ -44,8 +51,8 @@ export default function EditableText({
     }
   }, [onChange, onError, onValidate, tempValue, value]);
 
-  const change: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => setTempValue(e.target.value),
+  const change = useCallback(
+    (e: { target: { value: string } }) => setTempValue(e.target.value),
     [],
   );
 
@@ -53,19 +60,24 @@ export default function EditableText({
   const _focus = invalid ? focusInvalidStyles : focusStyles;
   const _hover = invalid ? hoverInvalidStyles : hoverStyles;
 
-  return (
-    <Input
-      _focus={disabled || readOnly ? undefined : _focus}
-      _hover={disabled || readOnly ? undefined : _hover}
-      bgColor="transparent"
-      disabled={disabled}
-      readOnly={readOnly}
-      spellCheck={false}
-      unstyled
-      {...rest}
-      onBlur={blur}
-      onChange={change}
-      value={tempValue}
-    />
-  );
+  const preProps = {
+    _focus: disabled || readOnly ? undefined : _focus,
+    _hover: disabled || readOnly ? undefined : _hover,
+    bgColor: "transparent",
+    disabled: disabled,
+    readOnly: readOnly,
+    spellCheck: false,
+    unstyled: true,
+  };
+
+  const postProps = {
+    multiline: undefined,
+    onBlur: blur,
+    onChange: change,
+    value: tempValue,
+  };
+
+  return rest.multiline ?
+      <Textarea {...preProps} {...rest} {...postProps} />
+    : <Input {...preProps} {...rest} {...postProps} />;
 }
