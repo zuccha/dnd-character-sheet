@@ -18,7 +18,7 @@ export default function CharacterSheetArmorProficiencies(
 
   return (
     <Frame align="flex-start" title={t("title")} {...props}>
-      <SimpleGrid columns={2} gap={1} w="full">
+      <SimpleGrid columns={4} gap={1} w="full">
         <CharacterSheetArmorProficiency type="light" />
         <CharacterSheetArmorProficiency type="medium" />
         <CharacterSheetArmorProficiency type="heavy" />
@@ -84,7 +84,7 @@ const i18nContext = {
   },
 
   "title": {
-    en: "Armors",
-    it: "Armature",
+    en: "Armor Training",
+    it: "Competenza nelle Armature",
   },
 };
