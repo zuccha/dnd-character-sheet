@@ -9,7 +9,7 @@ export function createLocalStore<T>(
   defaultValue: T,
   parse: (maybeT: unknown) => T,
 ): Store<T> {
-  return createStore({
+  return createStore(id, {
     initCache: () => {
       try {
         const stringOrNull = localStorage.getItem(id);

@@ -34,6 +34,7 @@ const characterIdsStore = createLocalStore(
 //------------------------------------------------------------------------------
 
 const characterMetadataStore = createMemoryStore<CharacterMetadata[]>(
+  "character.metadata",
   characterIdsStore.get().map((id) => loadCharacter(id).meta),
 );
 

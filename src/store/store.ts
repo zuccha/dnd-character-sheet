@@ -99,14 +99,14 @@ export function setObjectPath<T, P extends readonly PropertyKey[]>(
 // Create Store
 //------------------------------------------------------------------------------
 
-export function createStore<T>({
-  initCache,
-  onCacheUpdate,
-}: {
-  initCache: () => T;
-  onCacheUpdate: (value: T) => void;
-}): Store<T> {
-  const { notify, subscribe, unsubscribe } = createObservable<T>();
+export function createStore<T>(
+  id: string,
+  {
+    initCache,
+    onCacheUpdate,
+  }: { initCache: () => T; onCacheUpdate: (value: T) => void },
+): Store<T> {
+  const { notify, subscribe, unsubscribe } = createObservable<T>(id);
 
   let cache = initCache();
 

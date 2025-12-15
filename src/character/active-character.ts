@@ -3,7 +3,6 @@ import z from "zod";
 import { createLocalStore } from "~/store/local-store";
 import { createMemoryStore } from "~/store/memory-store";
 import type { StorePath, StorePathValue } from "~/store/store";
-import { createObservable } from "~/utils/observable";
 import { type StateUpdate } from "~/utils/state";
 import type { KeysOfType } from "~/utils/types";
 import {
@@ -20,7 +19,7 @@ import {
 //------------------------------------------------------------------------------
 
 const activeCharacterIdStore = createLocalStore<string | undefined>(
-  "character.active.id",
+  "active_character.id",
   undefined,
   z.uuid().parse,
 );
@@ -40,15 +39,19 @@ function loadActiveCharacter(): Character {
 // Active Character Store
 //------------------------------------------------------------------------------
 
-const activeCharacterStore = createMemoryStore(loadActiveCharacter());
-
-const activeCharacterObservable = createObservable<Character>();
+const activeCharacterStore = createMemoryStore(
+  "active_character.data",
+  loadActiveCharacter(),
+);
 
 //------------------------------------------------------------------------------
 // Active Character Unsaved Changes Store
 //------------------------------------------------------------------------------
 
-const activeCharacterUnsavedChangesStore = createMemoryStore(false);
+const activeCharacterUnsavedChangesStore = createMemoryStore(
+  "active_character.unsaved_changes",
+  false,
+);
 
 //------------------------------------------------------------------------------
 // Use Active Character Ability Modifier
@@ -216,7 +219,6 @@ export function useClearActiveCharacter(): () => void {
     const character = defaultCharacter();
     activeCharacterIdStore.set(undefined);
     activeCharacterStore.set(character);
-    activeCharacterObservable.notify(character);
   }, []);
 }
 
@@ -242,6 +244,5 @@ export function useSwitchActiveCharacter(): (id: string) => void {
     const character = loadCharacter(id);
     activeCharacterIdStore.set(character.meta.id);
     activeCharacterStore.set(character);
-    activeCharacterObservable.notify(character);
   }, []);
 }
