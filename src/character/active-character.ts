@@ -277,6 +277,26 @@ export const useActiveCharacterLevel = () => useActiveCharacterField("level");
 export const useActiveCharacterName = () => useActiveCharacterField("name");
 
 //------------------------------------------------------------------------------
+// Use Active Character Passive Perception
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterPassivePerception = () => {
+  const [perceptionModifier] = useActiveCharacterAbilitySkill(
+    "wisdom",
+    "perception",
+  );
+  const [passivePerception, setPassivePerception] =
+    useActiveCharacterField("passive_perception");
+
+  const value =
+    passivePerception.inferred ?
+      10 + perceptionModifier.value
+    : passivePerception.customValue;
+
+  return [{ ...passivePerception, value }, setPassivePerception] as const;
+};
+
+//------------------------------------------------------------------------------
 // Use Active Character Proficiency Bonus
 //------------------------------------------------------------------------------
 

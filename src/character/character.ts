@@ -223,6 +223,8 @@ export const characterSchema = z.object({
 
   name: z.string().default(""),
 
+  passive_perception: inferableNumberSchema.default(defaultInferableNumber),
+
   proficiency_bonus: inferableNumberSchema.default(defaultInferableNumber),
 
   title: z.string().default(""),
