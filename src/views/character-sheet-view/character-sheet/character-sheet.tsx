@@ -25,6 +25,8 @@ export default function CharacterSheet() {
   return (
     <VStack
       bgColor="bg.cs.page"
+      className="light"
+      color="fg"
       cursor="default"
       fontFamily="Mr Eaves Alt"
       height="29.7cm"
