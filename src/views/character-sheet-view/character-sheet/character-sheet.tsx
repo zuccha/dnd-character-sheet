@@ -25,6 +25,7 @@ export default function CharacterSheet() {
   return (
     <VStack
       bgColor="bg.cs.page"
+      bgImage='url("/images/character-sheet-bg.png")'
       className="light"
       color="fg"
       cursor="default"
