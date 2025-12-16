@@ -220,6 +220,13 @@ export function useActiveCharacterHasUnsavedChanges(): boolean {
 }
 
 //------------------------------------------------------------------------------
+// Use Active Character Heroic Inspiration
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterHeroicInspiration = () =>
+  useActiveCharacterField("heroic_inspiration");
+
+//------------------------------------------------------------------------------
 // Use Active Character HP
 //------------------------------------------------------------------------------
 

@@ -194,6 +194,8 @@ export const characterSchema = z.object({
     ])
     .default([false, false, false, false, false, false]),
 
+  heroic_inspiration: z.boolean().default(false),
+
   hp: z
     .object({
       current: z.number().nullable().default(null),
