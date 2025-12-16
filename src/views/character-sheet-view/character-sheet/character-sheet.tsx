@@ -13,6 +13,7 @@ import CharacterSheetMaxHp from "./character-sheet-max-hp";
 import CharacterSheetName from "./character-sheet-name";
 import CharacterSheetPassivePerception from "./character-sheet-passive-perception";
 import CharacterSheetProficiencyBonus from "./character-sheet-proficiency-bonus";
+import CharacterSheetSpeeds from "./character-sheet-speeds";
 import CharacterSheetTitle from "./character-sheet-title";
 import CharacterSheetToolProficiencies from "./character-sheet-tool-proficiencies";
 import CharacterSheetWeaponProficiencies from "./character-sheet-weapon-proficiencies";
@@ -83,6 +84,10 @@ export default function CharacterSheet() {
               <CharacterSheetToolProficiencies flex={1} w="full" />
             </SimpleGrid>
           </VStack>
+        </VStack>
+
+        <VStack flex={1} w="full">
+          <CharacterSheetSpeeds />
         </VStack>
       </SimpleGrid>
     </VStack>
