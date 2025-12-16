@@ -2,6 +2,7 @@ import { SimpleGrid, Span } from "@chakra-ui/react";
 import { useActiveCharacterSpeed } from "~/character/active-character";
 import type { Character } from "~/character/character";
 import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import { useI18nUnitSystemContext } from "~/i18n/i18n-unit-system-context";
 import EditableNumber from "~/ui/editable-number";
 import Frame from "./frame";
 
@@ -30,6 +31,7 @@ type CharacterSheetSpeedProps = {
 
 function CharacterSheetSpeed({ type }: CharacterSheetSpeedProps) {
   const { t } = useI18nLangContext(i18nContext);
+  const { squaresToUnits } = useI18nUnitSystemContext();
   const [speed, setSpeed] = useActiveCharacterSpeed(type);
 
   return (
@@ -45,7 +47,7 @@ function CharacterSheetSpeed({ type }: CharacterSheetSpeedProps) {
         w="full"
       />
 
-      <Span fontSize="cs.h5">{speed * 1.5} m</Span>
+      <Span fontSize="cs.h5">{squaresToUnits(speed, true)}</Span>
     </Frame>
   );
 }
