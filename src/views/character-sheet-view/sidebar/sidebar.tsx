@@ -1,12 +1,6 @@
-import {
-  HStack,
-  Stack,
-  type StackProps,
-  VStack,
-  createListCollection,
-} from "@chakra-ui/react";
+import { HStack, Stack, type StackProps, VStack } from "@chakra-ui/react";
 import { PanelLeftIcon } from "lucide-react";
-import { useI18nLang } from "~/i18n/i18n-lang";
+import { i18nLangs, useI18nLang } from "~/i18n/i18n-lang";
 import ThemeButton from "~/theme/theme-button";
 import IconButton from "~/ui/icon-button";
 import Select from "~/ui/select";
@@ -78,9 +72,7 @@ export default function Sidebar({
 // Lang Options
 //------------------------------------------------------------------------------
 
-const langOptions = createListCollection({
-  items: [
-    { label: "EN", value: "en" },
-    { label: "IT", value: "it" },
-  ] as [{ label: string; value: "en" }, { label: string; value: "it" }],
-});
+const langOptions = i18nLangs.map((lang) => ({
+  label: lang.toUpperCase(),
+  value: lang,
+}));
