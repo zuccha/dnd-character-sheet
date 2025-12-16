@@ -319,6 +319,13 @@ export const useActiveCharacterProficiencyBonus = () => {
 };
 
 //------------------------------------------------------------------------------
+// Use Active Character Speed
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterSpeed = (type: keyof Character["speeds"]) =>
+  useActiveCharacterField("speeds", type);
+
+//------------------------------------------------------------------------------
 // Use Active Character Title
 //------------------------------------------------------------------------------
 

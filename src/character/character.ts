@@ -227,6 +227,15 @@ export const characterSchema = z.object({
 
   proficiency_bonus: inferableNumberSchema.default(defaultInferableNumber),
 
+  speeds: z
+    .object({
+      climb: z.number().default(0),
+      fly: z.number().default(0),
+      swim: z.number().default(0),
+      walking: z.number().default(6),
+    })
+    .default({ climb: 0, fly: 0, swim: 0, walking: 6 }),
+
   title: z.string().default(""),
 
   tool_proficiencies_extra: z.string().default(""),
