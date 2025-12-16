@@ -5,6 +5,7 @@ import CharacterSheetArmorClass from "./character-sheet-armor-class";
 import CharacterSheetArmorProficiencies from "./character-sheet-armor-proficiencies";
 import CharacterSheetDeathSavingThrows from "./character-sheet-death-saving-throws";
 import CharacterSheetExhaustion from "./character-sheet-exhaustion";
+import CharacterSheetHeroicInspiration from "./character-sheet-heroic-inspiration";
 import CharacterSheetHp from "./character-sheet-hp";
 import CharacterSheetHpDice from "./character-sheet-hp-dice";
 import CharacterSheetInitiative from "./character-sheet-initiative";
@@ -87,6 +88,10 @@ export default function CharacterSheet() {
         </VStack>
 
         <VStack flex={1} w="full">
+          <SimpleGrid columns={3} gap={2} w="full">
+            <CharacterSheetHeroicInspiration />
+          </SimpleGrid>
+
           <CharacterSheetSpeeds />
         </VStack>
       </SimpleGrid>
