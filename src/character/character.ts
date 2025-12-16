@@ -179,6 +179,23 @@ export const characterSchema = z.object({
     })
     .default({ heavy: "none", light: "none", medium: "none", shields: "none" }),
 
+  bardic_inspiration: z
+    .object({
+      dice: z
+        .object({
+          d6: z.boolean().default(false),
+          d8: z.boolean().default(false),
+          d10: z.boolean().default(false),
+          d12: z.boolean().default(false),
+        })
+        .default({ d6: false, d8: false, d10: false, d12: false }),
+      max_one_at_a_time: z.boolean().default(true),
+    })
+    .default({
+      dice: { d6: false, d8: false, d10: false, d12: false },
+      max_one_at_a_time: true,
+    }),
+
   death_saving_throws: deathSavingThrowsSchema.default(
     defaultDeathSavingThrows,
   ),

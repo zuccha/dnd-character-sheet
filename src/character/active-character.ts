@@ -195,6 +195,13 @@ export const useActiveCharacterArmorProficiency = (
 ) => useActiveCharacterField("armor_proficiencies", type);
 
 //------------------------------------------------------------------------------
+// Use Active Character Bardic Inspiration
+//------------------------------------------------------------------------------
+
+export const useActiveCharacterBardicInspiration = () =>
+  useActiveCharacterField("bardic_inspiration");
+
+//------------------------------------------------------------------------------
 // Use Active Character Death Saves
 //------------------------------------------------------------------------------
 
