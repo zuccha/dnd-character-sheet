@@ -3,6 +3,7 @@ import Frame from "~/views/character-sheet-view/character-sheet/frame";
 import CharacterSheetAbility from "./character-sheet-ability";
 import CharacterSheetArmorClass from "./character-sheet-armor-class";
 import CharacterSheetArmorProficiencies from "./character-sheet-armor-proficiencies";
+import CharacterSheetBardicInspiration from "./character-sheet-bardic-inspiration";
 import CharacterSheetDeathSavingThrows from "./character-sheet-death-saving-throws";
 import CharacterSheetExhaustion from "./character-sheet-exhaustion";
 import CharacterSheetHeroicInspiration from "./character-sheet-heroic-inspiration";
@@ -90,6 +91,7 @@ export default function CharacterSheet() {
         <VStack flex={1} w="full">
           <SimpleGrid columns={3} gap={2} w="full">
             <CharacterSheetHeroicInspiration />
+            <CharacterSheetBardicInspiration />
           </SimpleGrid>
 
           <CharacterSheetSpeeds />
