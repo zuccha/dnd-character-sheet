@@ -1,5 +1,6 @@
 import type { Proficiency } from "~/character/character";
 import ProficiencyExpertIcon from "~/icons/proficiency-expert-icon";
+import ProficiencyHalfProficientIcon from "~/icons/proficiency-half-proficient-icon";
 import ProficiencyNoneIcon from "~/icons/proficiency-none-icon";
 import ProficiencyProficientIcon from "~/icons/proficiency-proficient-icon";
 import IconButton, { type IconButtonProps } from "~/ui/icon-button";
@@ -12,13 +13,13 @@ export type CharacterSheetProficiencyButtonProps = Omit<
   IconButtonProps,
   "Icon" | "onClick"
 > & {
-  allowExpertise?: boolean;
+  complex?: boolean;
   proficiency: Proficiency;
   onCycle: (proficiency: Proficiency) => void;
 };
 
 export function CharacterSheetProficiencyButton({
-  allowExpertise,
+  complex,
   proficiency,
   onCycle,
   ...rest
@@ -30,9 +31,9 @@ export function CharacterSheetProficiencyButton({
       m={-1}
       onClick={() =>
         onCycle(
-          allowExpertise ?
-            nextProficienciesWithExpertise[proficiency]
-          : nextProficienciesWithoutExpertise[proficiency],
+          complex ?
+            nextProficienciesComplex[proficiency]
+          : nextProficienciesSimple[proficiency],
         )
       }
       size="2xs"
@@ -49,23 +50,26 @@ export function CharacterSheetProficiencyButton({
 //------------------------------------------------------------------------------
 
 const icons = {
-  expert: ProficiencyExpertIcon,
-  none: ProficiencyNoneIcon,
-  proficient: ProficiencyProficientIcon,
+  "expert": ProficiencyExpertIcon,
+  "half-proficient": ProficiencyHalfProficientIcon,
+  "none": ProficiencyNoneIcon,
+  "proficient": ProficiencyProficientIcon,
 } as const;
 
 //------------------------------------------------------------------------------
 // Next Proficiencies
 //------------------------------------------------------------------------------
 
-const nextProficienciesWithExpertise = {
-  expert: "none",
-  none: "proficient",
-  proficient: "expert",
+const nextProficienciesComplex = {
+  "expert": "none",
+  "half-proficient": "proficient",
+  "none": "half-proficient",
+  "proficient": "expert",
 } as const;
 
-const nextProficienciesWithoutExpertise = {
-  expert: "none",
-  none: "proficient",
-  proficient: "none",
+const nextProficienciesSimple = {
+  "expert": "none",
+  "half-proficient": "proficient",
+  "none": "proficient",
+  "proficient": "none",
 } as const;

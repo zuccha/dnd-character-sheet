@@ -18,7 +18,12 @@ const defaultInferableNumber = inferableNumberSchema.parse({});
 // Proficiency
 //------------------------------------------------------------------------------
 
-export const proficiencySchema = z.enum(["none", "proficient", "expert"]);
+export const proficiencySchema = z.enum([
+  "none",
+  "half-proficient",
+  "proficient",
+  "expert",
+]);
 
 export type Proficiency = z.infer<typeof proficiencySchema>;
 

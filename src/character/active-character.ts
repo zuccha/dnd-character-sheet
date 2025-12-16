@@ -112,10 +112,11 @@ export function useActiveCharacterAbilitySavingThrow(
   const value =
     savingThrow.inferred ?
       {
-        expert: modifier.value + 2 * proficiencyBonus.value,
-        none: modifier.value,
-        proficient: modifier.value + proficiencyBonus.value,
-      }[savingThrow.proficiency]
+        "expert": 2 * proficiencyBonus.value,
+        "half-proficient": Math.floor(0.5 * proficiencyBonus.value),
+        "none": 0,
+        "proficient": proficiencyBonus.value,
+      }[savingThrow.proficiency] + modifier.value
     : savingThrow.customValue;
 
   return [{ ...savingThrow, value }, setSavingThrow] as const;
@@ -151,10 +152,11 @@ export function useActiveCharacterAbilitySkill(
   const value =
     skill.inferred ?
       {
-        expert: modifier.value + 2 * proficiencyBonus.value,
-        none: modifier.value,
-        proficient: modifier.value + proficiencyBonus.value,
-      }[skill.proficiency]
+        "expert": 2 * proficiencyBonus.value,
+        "half-proficient": Math.floor(0.5 * proficiencyBonus.value),
+        "none": 0,
+        "proficient": proficiencyBonus.value,
+      }[skill.proficiency] + modifier.value
     : skill.customValue;
 
   return [{ ...skill, value }, setSkill] as const;

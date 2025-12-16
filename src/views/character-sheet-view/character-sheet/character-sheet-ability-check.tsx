@@ -55,7 +55,7 @@ export default function CharacterSheetAbilityCheck({
     <Center className="group" position="relative" {...rest}>
       <Span gap={0} w="full">
         <CharacterSheetProficiencyButton
-          allowExpertise
+          complex
           onCycle={(proficiency) =>
             onChange((prev) => ({ ...prev, proficiency }))
           }
