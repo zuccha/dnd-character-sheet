@@ -98,6 +98,6 @@ export default function CharacterSheetBardicInspiration() {
 const i18nContext = {
   "bardic_inspiration.label": {
     en: "Bardic Inspiration",
-    it: "Ispirazione Eroica",
+    it: "Ispirazione Bardica",
   },
 };
