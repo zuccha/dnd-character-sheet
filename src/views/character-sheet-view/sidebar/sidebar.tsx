@@ -1,6 +1,9 @@
 import { HStack, Stack, type StackProps, VStack } from "@chakra-ui/react";
 import { PanelLeftIcon } from "lucide-react";
+import { useMemo } from "react";
 import { i18nLangs, useI18nLang } from "~/i18n/i18n-lang";
+import { useI18nLangContext } from "~/i18n/i18n-lang-context";
+import { i18nUnitSystems, useI18nUnitSystem } from "~/i18n/i18n-unit-system";
 import ThemeButton from "~/theme/theme-button";
 import IconButton from "~/ui/icon-button";
 import Select from "~/ui/select";
@@ -21,7 +24,28 @@ export default function Sidebar({
   onCollapsedChange,
   ...rest
 }: SidebarProps) {
+  const { t } = useI18nLangContext(i18nContext);
+
   const [lang, setLang] = useI18nLang();
+  const [unitSystem, setUnitSystem] = useI18nUnitSystem();
+
+  const langOptions = useMemo(
+    () =>
+      i18nLangs.map((lang) => ({
+        label: t(`lang[${lang}]`),
+        value: lang,
+      })),
+    [t],
+  );
+
+  const unitSystemOptions = useMemo(
+    () =>
+      i18nUnitSystems.map((unitSystem) => ({
+        label: t(`unit_system[${unitSystem}]`),
+        value: unitSystem,
+      })),
+    [t],
+  );
 
   if (collapsed) {
     return (
@@ -61,7 +85,14 @@ export default function Sidebar({
         />
       </HStack>
 
-      <Select onValueChange={setLang} options={langOptions} value={lang} />
+      <HStack w="full">
+        <Select onValueChange={setLang} options={langOptions} value={lang} />
+        <Select
+          onValueChange={setUnitSystem}
+          options={unitSystemOptions}
+          value={unitSystem}
+        />
+      </HStack>
 
       <CharacterList />
     </VStack>
@@ -69,10 +100,27 @@ export default function Sidebar({
 }
 
 //------------------------------------------------------------------------------
-// Lang Options
+// I18n Context
 //------------------------------------------------------------------------------
 
-const langOptions = i18nLangs.map((lang) => ({
-  label: lang.toUpperCase(),
-  value: lang,
-}));
+const i18nContext = {
+  "lang[en]": {
+    en: "EN",
+    it: "EN",
+  },
+
+  "lang[it]": {
+    en: "IT",
+    it: "IT",
+  },
+
+  "unit_system[imperial]": {
+    en: "Imperial",
+    it: "Imperiale",
+  },
+
+  "unit_system[metric]": {
+    en: "Metric",
+    it: "Metrico",
+  },
+};
